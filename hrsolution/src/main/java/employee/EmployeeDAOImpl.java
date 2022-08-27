@@ -10,6 +10,7 @@ import com.util.DBConn;
 public class EmployeeDAOImpl implements EmployeeDAO{
 	private Connection conn = DBConn.getConnection();
 
+	// 로그인 기능에 사용
 	@Override
 	public EmployeeDTO readMember(String id) {
 		EmployeeDTO empdto = null;
@@ -52,5 +53,6 @@ public class EmployeeDAOImpl implements EmployeeDAO{
 		
 		return empdto;
 	}
+	
 
 }
