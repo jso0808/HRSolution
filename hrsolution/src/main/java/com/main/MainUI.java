@@ -5,10 +5,15 @@ import java.io.InputStreamReader;
 
 import com.util.DBConn;
 
+import attendance.AttendanceUI;
 import employee.EmployeeDAO;
 import employee.EmployeeDAOImpl;
 import employee.EmployeeDTO;
 import employee.EmployeeUI;
+import evaluation.EvaluationUI;
+import management.ManagementUI;
+import recruit.RecruitUI;
+import salary.SalaryUI;
 
 // 시작메뉴, 메인메뉴 UI
 // UI 꾸미기 필요
@@ -18,7 +23,12 @@ public class MainUI {
 	// private Login login = new Login();
 	// private LoginProcess loginprocess = new LoginProcess(login);
 	private EmployeeDAO empdao = new EmployeeDAOImpl();
-	private EmployeeUI employeemenu = new EmployeeUI();
+	private EmployeeUI employeeUI = new EmployeeUI();
+	private AttendanceUI attendanceUI = new AttendanceUI();
+	private EvaluationUI evaluationUI = new EvaluationUI();
+	private ManagementUI managementUI = new ManagementUI();
+	private RecruitUI recruitUI = new RecruitUI();
+	private SalaryUI salaryUI = new SalaryUI();
 	// private EmployeeDAO empDAO = new EmployeeUI();
 	private EmployeeDTO loginEmp = null;
 	
@@ -101,13 +111,23 @@ public class MainUI {
 			
 			switch(ch) {
 			case 1: 
-				employeemenu.employeemenu(loginEmp);
+				employeeUI.employeemenu(loginEmp);
 				break;
-			case 2: break;
-			case 3: break;
-			case 4: break;
-			case 5: break;
-			case 6: break;
+			case 2: 
+				salaryUI.salarymenu(loginEmp);
+				break;
+			case 3: 
+				recruitUI.recruitmenu(loginEmp);
+				break;
+			case 4: 
+				managementUI.managementmenu(loginEmp);
+				break;
+			case 5: 
+				evaluationUI.evaluationmenu(loginEmp);
+				break;
+			case 6: 
+				attendanceUI.attendancemenu(loginEmp);
+				break;
 			case 7: 
 				loginEmp = null;
 				System.out.println(); 
