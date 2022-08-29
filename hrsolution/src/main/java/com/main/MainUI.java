@@ -8,7 +8,6 @@ import com.util.DBConn;
 import attendance.AttendanceUI;
 import employee.EmployeeDAO;
 import employee.EmployeeDAOImpl;
-import employee.EmployeeDTO;
 import employee.EmployeeUI;
 import evaluation.EvaluationUI;
 import management.ManagementUI;
@@ -20,20 +19,18 @@ import salary.SalaryUI;
 public class MainUI {
 	private BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	
-	// private Login login = new Login();
-	// private LoginProcess loginprocess = new LoginProcess(login);
-	private EmployeeDAO empdao = new EmployeeDAOImpl();
+	private LoginProcess loginprocess = new LoginProcess();
+	
 	private EmployeeUI employeeUI = new EmployeeUI();
 	private AttendanceUI attendanceUI = new AttendanceUI();
 	private EvaluationUI evaluationUI = new EvaluationUI();
 	private ManagementUI managementUI = new ManagementUI();
 	private RecruitUI recruitUI = new RecruitUI();
 	private SalaryUI salaryUI = new SalaryUI();
-	// private EmployeeDAO empDAO = new EmployeeUI();
-	private EmployeeDTO loginEmp = null;
+	
+	private LoginDTO loginEmp = null;
 	
 	
-
 	public void menu() {
 		while(true) {
 			if(loginEmp == null) {
@@ -81,17 +78,14 @@ public class MainUI {
 			System.out.println("패스워드 ? ");
 			pwd = br.readLine();
 
-			EmployeeDTO empdto = empdao.readMember(id);
+			LoginDTO logindto = loginprocess.readEmp(id,pwd);
 
-			if (empdto == null) {
-				System.out.println("사번이 존재하지 않습니다. ");
-				return;
-			} else if (!empdto.getPwd().equals(pwd)) {
-				System.out.println("패스워드가 일치하지 않습니다. ");
+			if (logindto == null) {
+				System.out.println("사번 또는 패스워드가 틀립니다. ");
 				return;
 			}
 			
-			loginEmp = empdto;
+			loginEmp = logindto;
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -111,22 +105,22 @@ public class MainUI {
 			
 			switch(ch) {
 			case 1: 
-				employeeUI.employeemenu(loginEmp);
+				//employeeUI.employeemenu(loginEmp);
 				break;
 			case 2: 
 				salaryUI.salarymenu(loginEmp);
 				break;
 			case 3: 
-				recruitUI.recruitmenu(loginEmp);
+				//recruitUI.recruitmenu(loginEmp);
 				break;
 			case 4: 
-				managementUI.managementmenu(loginEmp);
+				//managementUI.managementmenu(loginEmp);
 				break;
 			case 5: 
-				evaluationUI.evaluationmenu(loginEmp);
+				//evaluationUI.evaluationmenu(loginEmp);
 				break;
 			case 6: 
-				attendanceUI.attendancemenu(loginEmp);
+				//attendanceUI.attendancemenu(loginEmp);
 				break;
 			case 7: 
 				loginEmp = null;
