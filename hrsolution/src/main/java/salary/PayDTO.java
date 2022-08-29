@@ -7,7 +7,7 @@ public class PayDTO {
 	private String payDate; // 급여년월일
 	private int paynormal; // 기본급
 	private int paymeal; // 식대
-	private int paywelfare; // 복리후생비
+	private int paywelfare; // 복리후생비=식대,주유비,통신비 등
 	private int payextra; // 기타지급
 	private int bonus; // 상여금
 	private int payover; // 시간외수당
