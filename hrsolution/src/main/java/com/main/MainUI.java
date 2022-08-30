@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
 import com.util.DBConn;
-
+import com.main.LoginDTO; 
 import attendance.AttendanceUI;
 import employee.EmployeeDAO;
 import employee.EmployeeDAOImpl;
@@ -108,13 +108,13 @@ public class MainUI {
 				//employeeUI.employeemenu(loginEmp);
 				break;
 			case 2: 
-				salaryUI.salarymenu(loginEmp);
+				//salaryUI.salarymenu(loginEmp);
 				break;
 			case 3: 
 				//recruitUI.recruitmenu(loginEmp);
 				break;
 			case 4: 
-				//managementUI.managementmenu(loginEmp);
+				managementUI.managementmenu(loginEmp);
 				break;
 			case 5: 
 				//evaluationUI.evaluationmenu(loginEmp);
