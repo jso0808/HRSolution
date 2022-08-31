@@ -5,9 +5,6 @@ import java.io.InputStreamReader;
 import java.util.List;
 
 import com.main.LoginDTO;
-import com.main.MainUI;
-
-import employee.EmployeeDTO;
 
 public class ManagementUI {
 	private BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -25,8 +22,7 @@ public class ManagementUI {
 				ch = Integer.parseInt(br.readLine());
 				
 				if(ch ==6) {
-					MainUI MainUI = new MainUI();
-					MainUI.startmenu();
+					return;
 				}
 				
 				switch(ch) {
@@ -53,14 +49,15 @@ public class ManagementUI {
 	
 	private void totEmployeeList() {
 		System.out.println("\n 전체 사원 리스트 ");
-		System.out.println("----------------------------");
-		System.out.println("사번\t이름\t전화번호\t\t이메일\t\t신분(정규직/계약직)");
+		System.out.println("------------------------------------------------------------");
+		System.out.println("사번\t이름\t부서\t전화번호\t\t이메일\t\t신분(정규직/계약직)");
 		try {
 			List<ManagementDTO> list = dao.totEmpList();
 			
 			for(ManagementDTO dto : list) {
 				System.out.print(dto.getId() + "\t");
 				System.out.print(dto.getName() + "\t");
+				System.out.print(dto.getDept() + "\t");
 				System.out.print(dto.getTel() + "\t");
 				System.out.print(dto.getEmail() + "\t");
 				if(dto.getEmail().length()<=15)
@@ -75,8 +72,8 @@ public class ManagementUI {
 	
 	private void deptEmployeeList() {
 		System.out.println("\n 부서별 사원 리스트 ");
-		System.out.println("----------------------------");
-		System.out.println("부서\t사번\t이름\t전화번호\t직급\t\t이메일\t\t신분(정규직/계약직)");
+		System.out.println("------------------------------------------------------------");
+		System.out.println("부서\t사번\t이름\t전화번호\t\t직급\t이메일\t\t신분(정규직/계약직)");
 		
 		try {
 			List<ManagementDTO> list = dao.deptEmpList();
@@ -100,11 +97,11 @@ public class ManagementUI {
 	}
 	private void recruitList() {
 		System.out.println("\n 채용담당자 리스트 ");
-		System.out.println("----------------------------");
+		System.out.println("------------------------------------------------------------");
 		System.out.println("직급\t사번\t이름\t직급\t전화번호\t\t이메일\t\t신분(정규직/계약직)");
 		
 		try {
-			List<ManagementDTO> list = dao.deptEmpList();
+			List<ManagementDTO> list = dao.recList();
 			for(ManagementDTO dto : list) {
 				System.out.print(dto.getPos() + "\t");
 				System.out.print(dto.getId() + "\t");
@@ -125,7 +122,7 @@ public class ManagementUI {
 
 	private void rankEmployeeList() {
 		System.out.println("\n 직급별 사원 리스트 ");
-		System.out.println("----------------------------");
+		System.out.println("------------------------------------------------------------");
 		System.out.println("직급\t사번\t이름\t직급\t전화번호\t\t이메일\t\t신분(정규직/계약직)");
 		
 		try {
@@ -150,7 +147,18 @@ public class ManagementUI {
 	}
 
 	private void organization() {
+		System.out.println("\n 조직도 리스트 ");
+		System.out.println("------------------------------------------------------------");
+
+		try {
+			List<ManagementDTO> list = dao.organ();
+			for(ManagementDTO dto : list) {
+				System.out.println(dto.getDept());
+			}
+		} catch (Exception e) {
+		}
 		
+		System.out.println();
 	}
 
 }
