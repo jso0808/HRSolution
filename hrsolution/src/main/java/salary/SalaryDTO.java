@@ -2,7 +2,10 @@ package salary;
 
 // 연봉 테이블 객체
 public class SalaryDTO {
+	private String name;
 	private String id;
+	private String dept;
+	private String position; // 직급
 	private String salNo; // 연봉 번호
 	private String sal; // 연봉
 	private String salStart;
@@ -44,6 +47,24 @@ public class SalaryDTO {
 	}
 	public void setMemo(String memo) {
 		this.memo = memo;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getDept() {
+		return dept;
+	}
+	public void setDept(String dept) {
+		this.dept = dept;
+	}
+	public String getPosition() {
+		return position;
+	}
+	public void setPosition(String position) {
+		this.position = position;
 	}
 	
 

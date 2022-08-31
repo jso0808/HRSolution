@@ -15,6 +15,7 @@ public class SalaryDAOImpl implements SalaryDAO{
 	private Connection conn = DBConn.getConnection();
 	private List<PayDTO> plist = new ArrayList<>();
 
+
 	// 급여 지급
 	@Override
 	public void insertPay(PayDTO pdto) throws SQLException{
@@ -96,16 +97,148 @@ public class SalaryDAOImpl implements SalaryDAO{
 		
 	}
 
+	// 연봉 수정
 	@Override
-	public void updateSalary(String id) {
-		// TODO Auto-generated method stub
+	public void updateSalary(SalaryDTO sdto) throws SQLException {
+		PreparedStatement pstmt = null;
+		int rs = 0;
+		String sql = null;
+		
+		
+		try {	
+			// 자동 커밋되지 않도록
+			conn.setAutoCommit(false);
+			// 업데이트 전 마지막 연봉 정보 가져와서 연봉종료일을 업데이트 연봉시작일로.
+			sql = "UPDATE Salary SET salEnd=? "
+					+ "WHERE salno = (SELECT MAX(salNo) FROM Salary WHERE id=?)";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, sdto.getSalStart());
+			pstmt.setString(2, sdto.getId());
+			
+			rs = pstmt.executeUpdate();
+			pstmt.close();
+			
+			
+			// 새로운 연봉 정보 추가
+			sql = "INSERT INTO Salary(id,salNo,sal,salStart,memo) VALUES(?,sal_seq.NEXTVAL,?,?,?)";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, sdto.getId());
+			pstmt.setString(2, sdto.getSal());
+			pstmt.setString(3, sdto.getSalStart());
+			pstmt.setString(4, sdto.getMemo());
+			
+			rs = pstmt.executeUpdate();
+			pstmt.close();
+			
+			// 커밋 
+			conn.commit();
+			
+		} catch (SQLIntegrityConstraintViolationException e) {
+			try {
+				conn.rollback();
+			} catch (Exception e2) {
+			}
+			
+			// 기본키 제약 위반, NOT NULL 등의 제약 위반 - 무결성 제약 위반시 발생
+			if(e.getErrorCode() == 1400) { // NOT NULL
+				System.out.println("필수 입력 사항을 입력하지 않았습니다. ");
+			} else {
+				System.out.println(e.toString());
+			}
+			
+			throw e;
+				
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+				}
+			}
+			
+			try {
+				conn.setAutoCommit(true);
+			} catch (Exception e2) {
+			}
+		}
 		
 	}
 
+	// 전체 연봉 리스트
 	@Override
 	public List<SalaryDTO> listSalaryAll() {
-		// TODO Auto-generated method stub
-		return null;
+		List<SalaryDTO> findList = new ArrayList<>();
+		SalaryDTO saldto = new SalaryDTO();
+		
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql;
+		
+		try {
+			/*
+			sql = "SELECT name, s.id, salNo, sal, TO_CHAR(salStart,'YYYY-MM-DD')salstart, memo"
+					+" FROM (SELECT id, ROW_NUMBER() OVER(PARTITION BY id ORDER BY Salstart DESC) as rn,"
+					+" salNo, sal, salStart, NVL(memo,' ')memo FROM Salary) s JOIN Employee e ON e.id = s.id" 
+					+" WHERE rn=1";
+			*/
+			
+			sql = " SELECT name, s.id, position, dept, salNo, sal, TO_CHAR(salstart,'YYYY-MM')salstart, memo"
+					+ " FROM("
+					+ "    SELECT id, ROW_NUMBER() OVER(PARTITION BY id ORDER BY Salstart DESC) as st,"
+					+ "    salNo, sal, salstart, NVL(memo, ' ')memo"
+					+ "    FROM Salary"
+					+ " ) s "
+					+ " LEFT OUTER JOIN (SELECT paNo, id, paDate, deptNo, positionNo, "
+					+ "        ROW_NUMBER() OVER(PARTITION BY id ORDER BY paDate DESC) as pd"
+					+ "        FROM Employee_history"
+					+ "        )emp_his ON emp_his.id = s.id"
+					+ " LEFT OUTER JOIN Employee e ON e.id=s.id"
+					+ " LEFT OUTER JOIN position p ON p.positionNo = emp_his.positionNo"
+					+ " LEFT OUTER JOIN department d ON d.deptNum = emp_his.deptNo"
+					+ " WHERE pd=1 AND st=1";
+			
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				saldto = new SalaryDTO();
+				
+				saldto.setName(rs.getString("name"));
+				saldto.setId(rs.getString("id"));
+				saldto.setDept(rs.getString("dept"));
+				saldto.setPosition(rs.getString("position"));
+				saldto.setSalNo(rs.getString("salNo"));
+				saldto.setSal(rs.getString("sal"));
+				saldto.setSalStart(rs.getString("salStart"));
+				saldto.setMemo(rs.getString("memo"));
+				
+				findList.add(saldto);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(pstmt!=null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+				}
+			}
+			
+			if(rs!=null) {
+				try {
+					rs.close();
+				} catch (Exception e2) {
+				}
+			}
+		}
+		return findList;
 	}
 
 	// 특정 사원 연봉 정보
@@ -160,43 +293,44 @@ public class SalaryDAOImpl implements SalaryDAO{
 		return saldto;
 	}
 
+	// 전체 사원 월별 급여 리스트
 	@Override
-	public List<PayDTO> listPayAll() { 
-		return plist;
-	}
-
-	@Override
-	public List<PayDTO> listPayEmp(String id) {
-		List<PayDTO> findList = new ArrayList<>();
+	public List<PayDTO> listPayAll(String month) { 
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		String sql;
+		int tot;
 		
 		try {
-			/*
-			sql = "SELECT id, payno, payDate, payNormal,nationpen,medicinsur,longinsur,employeeinsur,"
-					+ " paymeal,paywelfare,payextra,bonus,payover,gapfee,citizenfee,accidantinsur"
-					+ " FROM Pay WHERE id=?";
-			*/
 			
-			sql = "SELECT id, payno, payDate, payNormal,NVL(nationpen,0)nationpen, NVL(medicinsur,0)medicinsur, "
+			sql = "SELECT emp_his.id, name, dept, position, paDate, payNo,paydate,paynormal,"
+					+ " NVL(nationpen,0)nationpen, NVL(medicinsur,0)medicinsur,"
 					+ " NVL(longinsur,0)longinsur,NVL(employeeinsur,0)employeeinsur,NVL(paymeal,0)paymeal,"
 					+ " NVL(paywelfare,0)paywelfare,NVL(payextra,0)payextra, NVL(bonus,0)bonus,"
-					+ " NVL(payover,0)payover ,NVL(gapfee,0)gapfee,"
+					+ " NVL(payover,0)payover,NVL(gapfee,0)gapfee,"
 					+ " NVL(citizenfee,0)citizenfee, NVL(accidantinsur,0)accidantinsur"
-					+ " FROM pay WHERE id=? ";
+					+ " FROM("
+					+ "    SELECT paNo, id, paDate, deptNo, positionNo,"
+					+ "        ROW_NUMBER() OVER(PARTITION BY id ORDER BY paDate DESC) as pd"
+					+ "    FROM Employee_history"
+					+ " )emp_his JOIN Employee e ON e.id = emp_his.id"
+					+ " JOIN department d ON d.deptNum = emp_his.deptNo"
+					+ " JOIN position p ON p.positionNo = emp_his.positionNo"
+					+ " RIGHT OUTER JOIN Pay pay ON pay.id = emp_his.id"
+					+ " WHERE pd=1 AND TO_CHAR(payDate,'YYYY-MM')= ? ";
 			
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, id);
 			
+			pstmt.setString(1, month);
 			rs = pstmt.executeQuery();
 			
 			while(rs.next()) {
 				PayDTO paydto = new PayDTO();
-				System.out.println(rs.getString("payNo"));
-				// 가져와짐. 리스트에 추가가 안되는 듯
 				
 				paydto.setId(rs.getString("id"));
+				paydto.setName(rs.getString("name"));
+				paydto.setPosition(rs.getString("position"));
+				paydto.setDept(rs.getString("dept"));
 				paydto.setPayno(rs.getString("payNo"));
 				paydto.setPayDate(rs.getString("payDate"));
 				paydto.setPaynormal(rs.getInt("paynormal"));
@@ -212,6 +346,14 @@ public class SalaryDAOImpl implements SalaryDAO{
 				paydto.setAccidantinsur(rs.getInt("accidantinsur"));
 				paydto.setLonginsur(rs.getInt("longinsur"));
 				paydto.setCitizenfee(rs.getInt("citizenfee"));
+				// 총 지급 금액 계산
+				// + 기본급,식대,복리후생비,기타지급,상여금,시간외수당 (6ea)
+				// - 갑근세(소득세),4대보험,산재보험,주민세 (7ea)
+				tot = paydto.getPaynormal()+paydto.getPaymeal()+paydto.getPaywelfare()+paydto.getPayextra()
+					+paydto.getBonus()+paydto.getPayover() - paydto.getGapfee()-paydto.getMedicinsur()-paydto.getNationpen()
+					-paydto.getEmployeeinsur()-paydto.getAccidantinsur()-paydto.getLonginsur()-paydto.getCitizenfee();
+				
+				paydto.setTot(tot);
 				
 				plist.add(paydto);
 			}
@@ -235,8 +377,108 @@ public class SalaryDAOImpl implements SalaryDAO{
 
 		}
 		
-		return findList;
+		return plist;
 	}
 
+	// 특정 사원 전체 급여 리스트
+	@Override
+	public List<PayDTO> listPayEmp(String id) {
+		List<PayDTO> findList = new ArrayList<>();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql;
+		int tot;
+		
+		try {
+			/*
+			sql = "SELECT id, payno, payDate, payNormal,nationpen,medicinsur,longinsur,employeeinsur,"
+					+ " paymeal,paywelfare,payextra,bonus,payover,gapfee,citizenfee,accidantinsur"
+					+ " FROM Pay WHERE id=?";
+			*/
+			/*
+			sql = "SELECT id, payno, payDate, payNormal,NVL(nationpen,0)nationpen, NVL(medicinsur,0)medicinsur, "
+					+ " NVL(longinsur,0)longinsur,NVL(employeeinsur,0)employeeinsur,NVL(paymeal,0)paymeal,"
+					+ " NVL(paywelfare,0)paywelfare,NVL(payextra,0)payextra, NVL(bonus,0)bonus,"
+					+ " NVL(payover,0)payover ,NVL(gapfee,0)gapfee,"
+					+ " NVL(citizenfee,0)citizenfee, NVL(accidantinsur,0)accidantinsur"
+					+ " FROM pay WHERE id=? ";
+			*/
+			sql = "SELECT emp_his.id, name, dept, position, paDate, payNo,paydate,paynormal,"
+					+ " NVL(nationpen,0)nationpen, NVL(medicinsur,0)medicinsur,"
+					+ " NVL(longinsur,0)longinsur,NVL(employeeinsur,0)employeeinsur,NVL(paymeal,0)paymeal,"
+					+ " NVL(paywelfare,0)paywelfare,NVL(payextra,0)payextra, NVL(bonus,0)bonus,"
+					+ " NVL(payover,0)payover,NVL(gapfee,0)gapfee,"
+					+ " NVL(citizenfee,0)citizenfee, NVL(accidantinsur,0)accidantinsur"
+					+ " FROM("
+					+ "    SELECT paNo, id, paDate, deptNo, positionNo,"
+					+ "        ROW_NUMBER() OVER(PARTITION BY id ORDER BY paDate DESC) as pd"
+					+ "    FROM Employee_history"
+					+ " )emp_his JOIN Employee e ON e.id = emp_his.id"
+					+ " JOIN department d ON d.deptNum = emp_his.deptNo"
+					+ " JOIN position p ON p.positionNo = emp_his.positionNo"
+					+ " RIGHT OUTER JOIN Pay pay ON pay.id = emp_his.id"
+					+ " WHERE pd=1 AND emp_his.id=? ";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, id);
+			
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				PayDTO paydto = new PayDTO();
+				
+				paydto.setId(rs.getString("id"));
+				paydto.setName(rs.getString("name"));
+				paydto.setPosition(rs.getString("position"));
+				paydto.setDept(rs.getString("dept"));
+				paydto.setPayno(rs.getString("payNo"));
+				paydto.setPayDate(rs.getString("payDate"));
+				paydto.setPaynormal(rs.getInt("paynormal"));
+				paydto.setPaymeal(rs.getInt("paymeal"));
+				paydto.setPaywelfare(rs.getInt("paywelfare"));
+				paydto.setPayextra(rs.getInt("payextra"));
+				paydto.setBonus(rs.getInt("bonus"));
+				paydto.setPayover(rs.getInt("payover"));
+				paydto.setGapfee(rs.getInt("gapfee"));
+				paydto.setMedicinsur(rs.getInt("medicinsur"));
+				paydto.setNationpen(rs.getInt("nationpen"));
+				paydto.setEmployeeinsur(rs.getInt("employeeinsur"));
+				paydto.setAccidantinsur(rs.getInt("accidantinsur"));
+				paydto.setLonginsur(rs.getInt("longinsur"));
+				paydto.setCitizenfee(rs.getInt("citizenfee"));
+				// 총 지급 금액 계산
+				// + 기본급,식대,복리후생비,기타지급,상여금,시간외수당 (6ea)
+				// - 갑근세(소득세),4대보험,산재보험,주민세 (7ea)
+				tot = paydto.getPaynormal()+paydto.getPaymeal()+paydto.getPaywelfare()+paydto.getPayextra()
+					+paydto.getBonus()+paydto.getPayover() - paydto.getGapfee()-paydto.getMedicinsur()-paydto.getNationpen()
+					-paydto.getEmployeeinsur()-paydto.getAccidantinsur()-paydto.getLonginsur()-paydto.getCitizenfee();
+				
+				paydto.setTot(tot);
+				
+				findList.add(paydto);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(rs != null) {
+				try {
+					rs.close();
+				} catch (Exception e2) {
+				}
+			}
+			
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+				}
+			}
+
+		}
+		
+		return findList;
+	}
+	
 
 }
