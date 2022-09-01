@@ -3,6 +3,8 @@ package evaluation;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.util.DBConn;
 
@@ -193,6 +195,58 @@ public class EvaluationDAOImpl implements EvaluationDAO {
 			}
 		}
 		return null;
+	}
+	
+	@Override
+	public List<EvaluationDTO> GradeList(String  id) {
+		List<EvaluationDTO> list = new ArrayList<>();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql;
+		try {
+			sql = "SELECT  peryear, id, perGrade, percontent,perdate, perid FROM evaluation WHERE id = ? "
+					+ "order by peryear desc ";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, id);
+			
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()){
+				EvaluationDTO dto = new EvaluationDTO();
+				
+				dto.setYear(Integer.parseInt(rs.getString("peryear")));
+				dto.setId(rs.getString("id"));
+				dto.setGrade(Integer.parseInt(rs.getString("pergrade")));
+				dto.setContent(rs.getString("percontent"));
+				dto.setContent(rs.getString("perdate"));
+				dto.setPerid(rs.getString("perid"));
+				
+				list.add(dto);
+			}
+			
+		} catch (Exception e) {
+			System.out.println("평가삭제 에러");
+			e.printStackTrace();
+		}finally {
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+
+				}
+			}
+			
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (Exception e2) {
+
+				}
+			}
+		}
+		return list;
 	}
 
 }

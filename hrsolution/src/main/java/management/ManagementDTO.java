@@ -10,8 +10,49 @@ public class ManagementDTO {
 	private String pos;
 	private String email;
 	private String ft;
+	private String workNo;
+	private String proTitle;
+	private String proStart;
+	private String proEnd;
+	private String proRate;
+	private String project;
 	
-	
+	public String getWorkNo() {
+		return workNo;
+	}
+	public void setWorkNo(String workNo) {
+		this.workNo = workNo;
+	}
+	public String getProTitle() {
+		return proTitle;
+	}
+	public void setProTitle(String proTitle) {
+		this.proTitle = proTitle;
+	}
+	public String getProStart() {
+		return proStart;
+	}
+	public void setProStart(String proStart) {
+		this.proStart = proStart;
+	}
+	public String getProEnd() {
+		return proEnd;
+	}
+	public void setProEnd(String proEnd) {
+		this.proEnd = proEnd;
+	}
+	public String getProRate() {
+		return proRate;
+	}
+	public void setProRate(String proRate) {
+		this.proRate = proRate;
+	}
+	public String getProject() {
+		return project;
+	}
+	public void setProject(String project) {
+		this.project = project;
+	}
 	//전체사원리스트 : id, name,tel, email, ft
 	//부서별 사원리스트 : dept, id, name, pos,tel,email, ft
 	//직급별 사원리스트 : pos, id, name, dept tel, email, ft

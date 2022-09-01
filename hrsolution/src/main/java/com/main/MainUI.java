@@ -117,7 +117,7 @@ public class MainUI {
 				managementUI.managementmenu(loginEmp);
 				break;
 			case 5: 
-				//evaluationUI.evaluationmenu(loginEmp);
+				evaluationUI.evaluationmenu(loginEmp);
 				break;
 			case 6: 
 				//attendanceUI.attendancemenu(loginEmp);
