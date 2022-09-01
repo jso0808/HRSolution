@@ -280,12 +280,7 @@ public class SalaryUI {
 		try {
 			PayDTO paydto = new PayDTO();
 			SalaryDTO saldto = new SalaryDTO();
-			String id, m, payDate;
-			int normal; // 월급 (연봉/12)
-			int nationpen, medicinsur, longinsur, employeeinsur;
-			int meal = 100_000; // 식대
-			int chk; // 4대보험 이외의 공제내역 체크
-			String nowyear = new SimpleDateFormat("yyyy").format(new Date());
+			String id, m;
 			String payNo = null; // 급여지급번호
 
 			System.out.print("급여를 수정할 사번 ? ");
