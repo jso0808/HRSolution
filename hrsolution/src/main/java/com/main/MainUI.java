@@ -97,7 +97,7 @@ public class MainUI {
 		int ch;
 		
 		try {
-			System.out.println("\n[사용자: "+loginEmp.getId()+"] 님");
+			System.out.println("\n사용자: ["+loginEmp.getId()+"] 님");
 			do {
 				System.out.println("1.사원관리 2.급여관리 3.채용공고 4.종합정보 5.평가관리 6.근태관리 7.로그아웃");
 				ch = Integer.parseInt(br.readLine());
@@ -108,7 +108,7 @@ public class MainUI {
 				//employeeUI.employeemenu(loginEmp);
 				break;
 			case 2: 
-				//salaryUI.salarymenu(loginEmp);
+				salaryUI.salarymenu(loginEmp);
 				break;
 			case 3: 
 				//recruitUI.recruitmenu(loginEmp);
