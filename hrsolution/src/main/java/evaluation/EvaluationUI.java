@@ -2,9 +2,9 @@ package evaluation;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.List;
 
 import com.main.LoginDTO;
-import com.main.MainUI;
 
 public class EvaluationUI {
 	private BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -18,12 +18,11 @@ public class EvaluationUI {
 
 		while (true) {
 			try {
-				System.out.println("1.평가등급 검색 2. 사원 평가 등록 3. 사원 평가 수정 4. 사원 평가 삭제 5. 메인메뉴 =>");
+				System.out.println("1.평가등급 검색 2. 사원 평가 등록 3. 사원 평가 수정 4. 사원 평가 삭제 5.사원 1인 평가리스트 6. 메인메뉴 =>");
 				ch = Integer.parseInt(br.readLine());
 
-				if (ch == 5) {
-					MainUI MainUI = new MainUI();
-					MainUI.startmenu();
+				if (ch == 6) {
+					return;
 				}
 				switch (ch) {
 				case 1:
@@ -53,11 +52,41 @@ public class EvaluationUI {
 						System.out.println("인사부만 접근할 수 있습니다.");
 					}
 					break;
-
+				case 5:
+					if (loginEmp.getDeptno().equals("200")) {
+						GradelistUI();
+					} else {
+						System.out.println("인사부만 접근할 수 있습니다.");
+					}
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+		}
+	}
+
+	private void GradelistUI() {
+		System.out.println("\n 사원 1인 전체평가리스트");
+		String id;
+		try {
+			System.out.println("평가살 사번 ?");
+			System.out.println("평가연도\t사번\t평가점수\t평가시기\t\t\t평가자");
+			
+			id = br.readLine();
+			System.out.println("------------------------------------------------------------");
+
+			
+			List<EvaluationDTO> list =dao.GradeList(id);
+		
+			for(EvaluationDTO dto : list) {
+				
+				System.out.print(dto.getYear() + "\t");
+				System.out.print(dto.getId() + "\t");
+				System.out.print(EvalScore(dto.getGrade()) + "\t");
+				System.out.print(dto.getContent() + "\t");
+				System.out.println(dto.getPerid() + "\t");				
+			}
+		} catch (Exception e) {
 		}
 	}
 
