@@ -83,7 +83,7 @@ public  class RecruitDAOImpl implements RecruitDAO{
 		
 		try {
 			sql = "UPDATE  posting SET posNum=?, pos=?, posStart=?,posEnd=?, posMeans=?, PosPro=?, deptNo=?, id=?, posTitle=? WHERE posNo=?";
-//TO_CHAR(posStart,'YYYY-MM-DD'),posStart,TO_CHAR(posEnd,'YYYY-MM-DD')
+
 			pstmt = conn.prepareStatement(sql);
 		
 			    pstmt.setInt(1, dto.getPosNum());
@@ -164,7 +164,7 @@ public  class RecruitDAOImpl implements RecruitDAO{
 		return result;
 	}
    @Override
-   //public  RecruitDTO readRecruit(String posTitle) {
+ 
    public   List<RecruitDTO> listRecruitTitle(String posTitle) {
 		//posNo
 	   List<RecruitDTO> list = new ArrayList<>();
@@ -172,16 +172,10 @@ public  class RecruitDAOImpl implements RecruitDAO{
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		String sql;
-		//List<RecruitDTO> list = new ArrayList<>();
+	
 		try {
 		
-			/*
-			sql = "SELECT po.posNo, posNum, pos, TO_CHAR(posStart,'YYYY-MM-DD')posStart,TO_CHAR(posEnd,'YYYY-MM-DD')posEnd, posMeans, posPro, deptNo, id, posTitle, "
-					+ "apNo, apName, TO_CHAR(apBirth,'YYYY-MM-DD')apBirth, TO_CHAR(apDate,'YYYY-MM-DD')apDate, TO_CHAR(apInterview,'YYYY-MM-DD')apInterview, apRoute, apResult1, apResult2, apResult3, apTel"
-					+ " From Posting po"
-					+ " LEFT OUTER JOIN Applicant ap ON po.posNo=ap.posNo"// + " WHERE po.posNo=?";
-			        + " WHERE INSTR(posTitle, ?)>=1";
-*/
+			
 			sql = "SELECT po.posNo, posNum, pos, TO_CHAR(posStart,'YYYY-MM-DD')posStart,TO_CHAR(posEnd,'YYYY-MM-DD')posEnd, posMeans, posPro, deptNo, po.id poid, posTitle, "
 					+ " ap.apNo, apName, TO_CHAR(apBirth,'YYYY-MM-DD')apBirth, TO_CHAR(apDate,'YYYY-MM-DD')apDate, TO_CHAR(apInterview,'YYYY-MM-DD')apInterview, apRoute, apResult1, apResult2, apResult3, apTel, "
 					+ " evNo, ev.id evid, evGrade1, evGrade2, evGrade3, evReason"
@@ -194,7 +188,6 @@ public  class RecruitDAOImpl implements RecruitDAO{
 			pstmt.setString(1, posTitle);
 
 			rs = pstmt.executeQuery();
-//if에서 while로바꿈
 			while (rs.next()) {
 				dto = new RecruitDTO();
 
@@ -247,7 +240,7 @@ public  class RecruitDAOImpl implements RecruitDAO{
 			}
 		}
 
-		//return dto;
+		
 		return list;
 	
 	}
@@ -260,12 +253,6 @@ public  class RecruitDAOImpl implements RecruitDAO{
 		String sql;
 		
 		try {
-			/*
-			sql = "SELECT po.posNo, posNum, pos, TO_CHAR(posStart,'YYYY-MM-DD')posStart,TO_CHAR(posEnd,'YYYY-MM-DD')posEnd, posMeans, posPro, deptNo, id, posTitle, "
-					+ "apNo, apName, TO_CHAR(apBirth,'YYYY-MM-DD')apBirth, TO_CHAR(apDate,'YYYY-MM-DD')apDate, TO_CHAR(apInterview,'YYYY-MM-DD')apInterview, apRoute, apResult1, apResult2, apResult3, apTel"
-					+ " From Posting po"
-					+ " LEFT OUTER JOIN Applicant ap ON po.posNo=ap.posNo";
-				*/	
 			
 			 sql = "SELECT po.posNo, posNum, pos, TO_CHAR(posStart,'YYYY-MM-DD')posStart,TO_CHAR(posEnd,'YYYY-MM-DD')posEnd, posMeans, posPro, deptNo, po.id poid, posTitle, "
 					+ " ap.apNo, apName, TO_CHAR(apBirth,'YYYY-MM-DD')apBirth, TO_CHAR(apDate,'YYYY-MM-DD')apDate, TO_CHAR(apInterview,'YYYY-MM-DD')apInterview, apRoute, apResult1, apResult2, apResult3, apTel, "
@@ -340,13 +327,6 @@ public  class RecruitDAOImpl implements RecruitDAO{
 		String sql;
 
 		try {
-			/*
-			sql = "SELECT po.posNo, posNum, pos, TO_CHAR(posStart,'YYYY-MM-DD')posStart,TO_CHAR(posEnd,'YYYY-MM-DD')posEnd, posMeans, posPro, deptNo, id, posTitle, "
-					+ "apNo, apName, TO_CHAR(apBirth,'YYYY-MM-DD')apBirth, TO_CHAR(apDate,'YYYY-MM-DD')apDate, TO_CHAR(apInterview,'YYYY-MM-DD')apInterview, apRoute, apResult1, apResult2, apResult3, apTel"
-					+ " From Posting po"
-					+ " LEFT OUTER JOIN Applicant ap ON po.posNo=ap.posNo" 
-					+ " WHERE INSTR(apName, ?)>=1";
-					*/
 			 sql = "SELECT po.posNo, posNum, pos, TO_CHAR(posStart,'YYYY-MM-DD')posStart,TO_CHAR(posEnd,'YYYY-MM-DD')posEnd, posMeans, posPro, deptNo, po.id poid, posTitle, "
 						+ " ap.apNo, apName, TO_CHAR(apBirth,'YYYY-MM-DD')apBirth, TO_CHAR(apDate,'YYYY-MM-DD')apDate, TO_CHAR(apInterview,'YYYY-MM-DD')apInterview, apRoute, apResult1, apResult2, apResult3, apTel, "
 						+ " evNo, ev.id evid, evGrade1, evGrade2, evGrade3, evReason"
@@ -422,9 +402,8 @@ public  class RecruitDAOImpl implements RecruitDAO{
 		String sql;
 		try {
 			sql = "INSERT INTO applicant(apNo, apName, apBirth, apDate, apRoute, posNo, apTel) VALUES ( APP_SEQ.NEXTVAL, ?, ?, ?, ?, ?,?)";
-			//TO_CHAR(posStart,'YYYY-MM-DD'),TO_CHAR(posEnd,'YYYY-MM-DD') pos_seq.NEXTVL <-?
+			
 			pstmt = conn.prepareStatement(sql);
-			//pstmt.setString(1, dto.getApNo());
 			pstmt.setString(1, dto.getApName());
 			pstmt.setString(2, dto.getApBirth());
 			pstmt.setString(3, dto.getApDate());

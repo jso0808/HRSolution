@@ -242,8 +242,7 @@ public class RecruitUI {
 			System.out.print(dto.getApResult1()+"\t");
 			System.out.print(dto.getApResult2()+"\t");
 			System.out.print(dto.getApResult3()+"\t");
-			System.out.println(dto.getApTel());
-			
+			System.out.println(dto.getApTel());			
 			System.out.println();
 			System.out.println("사번 \t 채용접수번호 \t 서류평가점수 \t1차평가점수 \t2차평가점수 \t평가사유  " );
 			System.out.print(dto.getId()+"\t");
