@@ -116,7 +116,7 @@ public class MainUI {
 			
 			switch(ch) {
 			case 1: 
-				//employeeUI.employeemenu(loginEmp);
+				employeeUI.employeemenu(loginEmp);
 				break;
 			case 2: 
 				salaryUI.salarymenu(loginEmp);
