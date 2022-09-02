@@ -8,4 +8,7 @@ public interface ManagementDAO {
 	public List<ManagementDTO> rankEmpList();
 	public List<ManagementDTO> recList();
 	public List<ManagementDTO> organ();
+	public List<ManagementDTO> totWorking(String id);
+	public List<ManagementDTO> nowWorking();
+	
 }

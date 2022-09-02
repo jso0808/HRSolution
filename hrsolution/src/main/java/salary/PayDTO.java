@@ -2,7 +2,10 @@ package salary;
 
 // 급여 테이블 객체
 public class PayDTO {
+	private String name;
 	private String id;
+	private String dept;
+	private String position; // 직급
 	private String payno; // 급여번호
 	private String payDate; // 급여년월일
 	private int paynormal; // 기본급
@@ -11,13 +14,14 @@ public class PayDTO {
 	private int payextra; // 기타지급
 	private int bonus; // 상여금
 	private int payover; // 시간외수당
-	private int gapfee; // 갑근세
-	private int medicinsur; // 의료보험
+	private int gapfee; // 갑근세 = 소득세
+	private int medicinsur; // 의료보험=건강보험
 	private int nationpen; // 국민연금
 	private int employeeinsur; // 고용보험
 	private int accidantinsur; // 산재보험
 	private int longinsur; // 장기요양보험
-	private int citizenfee; // 주민세
+	private int citizenfee; // 주민세 = 지방소득세
+	private int tot; 
 	
 	public String getId() {
 		return id;
@@ -114,6 +118,30 @@ public class PayDTO {
 	}
 	public void setCitizenfee(int citizenfee) {
 		this.citizenfee = citizenfee;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getDept() {
+		return dept;
+	}
+	public void setDept(String dept) {
+		this.dept = dept;
+	}
+	public String getPosition() {
+		return position;
+	}
+	public void setPosition(String position) {
+		this.position = position;
+	}
+	public int getTot() {
+		return tot;
+	}
+	public void setTot(int tot) {
+		this.tot = tot;
 	}
 	
 	

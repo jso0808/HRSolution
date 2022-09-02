@@ -1,3 +1,5 @@
+참고: https://www.nodong.kr/AnnuaIncomeCal?gclid=CjwKCAjwx7GYBhB7EiwA0d8oe090TlkjpMmnZnfIGASi1l8kyBSRppYr9zqPqOOtf37Sq7wVK8wHLhoCsbAQAvD_BwE
+
 월소득액 = 급여액-비과세액(식대 10만원)
 
 1.복리후생비
@@ -9,4 +11,10 @@
 고용보험 = 월소득액 x 0.9%
 산재보험 = 일반회사=0
 
-주민세 계산식 추가
+소득세 계산식 추가
+간이세액표 엑셀 파일 가져와서 계산하기
+	- 엑셀 파일 반영 질문
+		-> 전부 반영X 엇비슷하게 반영
+200만원부터 50만원씩 600만까지 공제대상가족수2인기준. 그 이상은 기본급/10
+
+주민세(지방소득세) = 소득세 x 10%
