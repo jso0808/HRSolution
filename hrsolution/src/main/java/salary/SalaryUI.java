@@ -21,8 +21,8 @@ public class SalaryUI {
 		int ch, ch1, ch2;
 
 		try {
-			System.out.println("\n\n-----------------------------------------");
-			System.out.println("[연봉 관리 메뉴 실행]");
+			System.out.println("\n");
+			System.out.println("\t[연봉 관리 메뉴 실행]");
 			System.out.println("사용자: [" + empdto.getId() + "] 님");
 			
 			while (true) {
@@ -31,7 +31,7 @@ public class SalaryUI {
 				ch2 = 0;
 
 				do {
-					System.out.print("1.연봉관리 2.급여관리 3.메인메뉴 -> ");
+					System.out.print("1.연봉관리   2.급여관리   3.메인메뉴 > ");
 					ch = Integer.parseInt(br.readLine());
 				} while (ch < 1 || ch > 3);
 
@@ -43,9 +43,9 @@ public class SalaryUI {
 				switch (ch) {
 				case 1:
 					while (true) {
-						System.out.println("\t[연봉 관리 메뉴]");
+						System.out.println("\n\t[연봉 관리 메뉴]");
 						do {
-							System.out.print("1.연봉협상(등록) 2.연봉수정 3.사원연봉정보 4.전체연봉리스트 5.직급별연봉리스트 6.부서별연봉리스트 7.돌아가기  -> ");
+							System.out.print("1.연봉협상(등록) 2.연봉수정 3.사원연봉정보 4.전체연봉리스트 5.직급별연봉리스트 6.부서별연봉리스트 7.돌아가기  > ");
 							ch1 = Integer.parseInt(br.readLine());
 						} while (ch1 < 1 || ch1 > 7);
 						
@@ -102,8 +102,8 @@ public class SalaryUI {
 				case 2:
 					while (true) {
 						do {
-							System.out.println("\t[급여 관리 메뉴]");
-							System.out.print("1.급여지급(등록) 2.급여수정 3.사원급여명세서 4.월별급여명세서 5.돌아가기  -> ");
+							System.out.println("\n\t[급여 관리 메뉴]");
+							System.out.print("1.급여지급(등록) 2.급여수정 3.사원급여명세서 4.월별급여명세서 5.돌아가기  > ");
 							ch2 = Integer.parseInt(br.readLine());
 						} while (ch2 < 1 || ch2 > 5);
 
@@ -185,7 +185,7 @@ public class SalaryUI {
 			System.out.println(payNo);
 
 			do {
-				System.out.println("4대보험 이외에 입력할 공제내역 존재 ? [없으면 0, 있으면 1]");
+				System.out.print("4대보험 이외에 입력할 공제내역 존재 ? [없으면 0, 있으면 1] > ");
 				chk = Integer.parseInt(br.readLine());
 			} while (chk < 0 || chk > 1);
 
@@ -274,7 +274,7 @@ public class SalaryUI {
 
 	// 1-2
 	public void updatePay() {
-		System.out.println("\t\t[급여 정보 수정] \n");
+		System.out.println("\t\t[급여 정보 수정]");
 		System.out.println("\t\t[4대보험 이외의 공제내역, 추가수당 수정] \n");
 
 		try {
@@ -343,7 +343,7 @@ public class SalaryUI {
 
 	// 1-3
 	public void findByPay() {
-		System.out.println("[사원 급여 명세서] \n");
+		System.out.println("\t[사원 급여 명세서] \n");
 		// System.out.println(logindto.getId());
 
 		try {
@@ -410,7 +410,7 @@ public class SalaryUI {
 	// 1-4
 	public void listMonthPay() {
 		System.out.println();
-		System.out.println("\t\t[월별 급여 명세서]");
+		System.out.println("\t[월별 급여 명세서]");
 		String month;
 
 		try {
@@ -457,7 +457,7 @@ public class SalaryUI {
 
 	// 2-1
 	public void insertSal() {
-		System.out.println("\t\t[연봉 협상] \n");
+		System.out.println("\t[연봉 협상] \n");
 
 		try {
 			SalaryDTO saldto = new SalaryDTO();
@@ -487,7 +487,7 @@ public class SalaryUI {
 
 	// 2-2
 	public void updateSal() {
-		System.out.println("\t\t[연봉 수정] \n");
+		System.out.println("\t[연봉 수정] \n");
 
 		try {
 			String id;
@@ -538,7 +538,7 @@ public class SalaryUI {
 	// 2-3 사원 연봉 정보
 	public void findBySal() {
 		System.out.println();
-		System.out.print("\t\t[사원 연봉 정보] \n");
+		System.out.print("\t[사원 연봉 정보] \n");
 
 		try {
 			String id;

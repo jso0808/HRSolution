@@ -47,21 +47,18 @@ public class MainUI {
 	
 	
 	public void startmenu() {
-		System.out.println("시작 메뉴");
+		System.out.println("\t[HR 인사관리 프로그램]");
+		System.out.println();
 		
 		int ch;
 		
 		do {
 			ch = 0;
 			try {
-				/*
-				System.out.print("1.로그인 2.종료 => ");
-				ch = Integer.parseInt(br.readLine());	
-				*/
-				  
-				System.out.print("1.로그인 2.입사 지원하기 3.종료 => ");
+				System.out.print("1.로그인   2.입사지원하기   3.종료   > ");
 				ch = Integer.parseInt(br.readLine());
-				//2 게스트 UI만들어서 해야할듯 	
+				
+				System.out.println();
 				 
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -75,20 +72,19 @@ public class MainUI {
 		
 		switch(ch) {
 		case 1: login();  break;
-		
 		case 2: applicant();  break;
 		}
 	}
 	
 	public void login() {
-		System.out.println("로그인 메뉴 실행");
+		System.out.println("\t [로그인 메뉴 실행]");
 		String id, pwd;
 
 		try {
-			System.out.println("사번 ? ");
+			System.out.print("사번 > ");
 			id = br.readLine();
 
-			System.out.println("패스워드 ? ");
+			System.out.print("패스워드 > ");
 			pwd = br.readLine();
 
 			LoginDTO logindto = loginprocess.readEmp(id,pwd);
@@ -110,9 +106,11 @@ public class MainUI {
 		int ch;
 		
 		try {
-			System.out.println("\n사용자: ["+loginEmp.getId()+"] 님");
+			System.out.println("\t현재 사용자: ["+loginEmp.getId()+"] 님");
 			do {
-				System.out.println("1.사원관리 2.급여관리 3.채용공고 4.종합정보 5.평가관리 6.근태관리 7.로그아웃");
+				System.out.println("1.사원관리   2.급여관리   3.채용공고   4.종합정보");
+				System.out.println("5.평가관리   6.근태관리   7.로그아웃");
+				System.out.print("> ");
 				ch = Integer.parseInt(br.readLine());
 			} while(ch<1 || ch>7);
 			
@@ -156,22 +154,22 @@ public class MainUI {
 			//System.out.println("접수번호");
 			//dto.setApNo(br.readLine());
 			
-			System.out.println("이름");
+			System.out.print("이름 ? ");
 			dto.setApName(br.readLine());
 			
-			System.out.println("생년월일");
+			System.out.print("생년월일 ? ");
 			dto.setApBirth(br.readLine());
 			
-			System.out.println("접수일자");
+			System.out.print("접수일자 ? ");
 			dto.setApDate(br.readLine());
 			
-			System.out.println("지원경로");
+			System.out.print("지원경로 ? ");
 			dto.setApRoute(br.readLine());
 			
-			System.out.println("채용공고번호");
+			System.out.print("채용공고번호 ? ");
 			dto.setPosNo(br.readLine());
 			
-			System.out.println("전화번호");
+			System.out.print("전화번호 ? ");
 			dto.setApTel(br.readLine());
 			
 			dao.insertApplicant(dto);
