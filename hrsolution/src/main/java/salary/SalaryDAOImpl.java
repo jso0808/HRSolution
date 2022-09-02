@@ -10,7 +10,6 @@ import java.util.List;
 
 import com.util.DBConn;
 
-
 public class SalaryDAOImpl implements SalaryDAO{
 	private Connection conn = DBConn.getConnection();
 	private List<PayDTO> plist = new ArrayList<>();
@@ -71,10 +70,12 @@ public class SalaryDAOImpl implements SalaryDAO{
 			
 			// 기본키 제약 위반, NOT NULL 등의 제약 위반 - 무결성 제약 위반시 발생
 			if(e.getErrorCode() == 1) { // ORA-00001, 기본키 중복
-				System.out.println("급여 번호 중복으로 등록 불가능합니다. ");
+				System.out.println("이미 지급된 급여입니다. ");
 			} else if(e.getErrorCode() == 1400) { // NOT NULL
 				System.out.println("필수 입력 사항을 입력하지 않았습니다. ");
-			} else {
+			} else if(e.getErrorCode() == 1840 || e.getErrorCode()==1861) { // 날짜 입력 오류
+				System.out.println("날짜 형식 오류입니다. ");
+			}  else {
 				System.out.println(e.toString());
 			}
 			
@@ -144,14 +145,18 @@ public class SalaryDAOImpl implements SalaryDAO{
 			}
 			
 			// 기본키 제약 위반, NOT NULL 등의 제약 위반 - 무결성 제약 위반시 발생
-			if(e.getErrorCode() == 1400) {
+			if (e.getErrorCode() == 1) { // ORA-00001, 기본키 중복
+				System.out.println("이미 지급된 급여입니다. ");
+			} else if (e.getErrorCode() == 1400) { // NOT NULL
 				System.out.println("필수 입력 사항을 입력하지 않았습니다. ");
+			} else if (e.getErrorCode() == 1840 || e.getErrorCode() == 1861) { // 날짜 입력 오류
+				System.out.println("날짜 형식 오류입니다. ");
 			} else {
 				System.out.println(e.toString());
 			}
-			
+
 			throw e;
-				
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -214,14 +219,18 @@ public class SalaryDAOImpl implements SalaryDAO{
 				conn.rollback();
 			} catch (Exception e2) {
 			}
-			
+
 			// 기본키 제약 위반, NOT NULL 등의 제약 위반 - 무결성 제약 위반시 발생
-			if(e.getErrorCode() == 1400) { // NOT NULL
+			if (e.getErrorCode() == 1) { // ORA-00001, 기본키 중복
+				System.out.println("이미 지급된 급여입니다. ");
+			} else if (e.getErrorCode() == 1400) { // NOT NULL
 				System.out.println("필수 입력 사항을 입력하지 않았습니다. ");
+			} else if (e.getErrorCode() == 1840 || e.getErrorCode() == 1861) { // 날짜 입력 오류
+				System.out.println("날짜 형식 오류입니다. ");
 			} else {
 				System.out.println(e.toString());
 			}
-			
+
 			throw e;
 				
 		} catch (Exception e) {
@@ -280,13 +289,17 @@ public class SalaryDAOImpl implements SalaryDAO{
 			} catch (Exception e2) {
 			}
 			
-			
-			if(e.getErrorCode() == 1400) { // NOT NULL
+			// 기본키 제약 위반, NOT NULL 등의 제약 위반 - 무결성 제약 위반시 발생
+			if (e.getErrorCode() == 1) { // ORA-00001, 기본키 중복
+				System.out.println("이미 지급된 급여입니다. ");
+			} else if (e.getErrorCode() == 1400) { // NOT NULL
 				System.out.println("필수 입력 사항을 입력하지 않았습니다. ");
+			} else if (e.getErrorCode() == 1840 || e.getErrorCode() == 1861) { // 날짜 입력 오류
+				System.out.println("날짜 형식 오류입니다. ");
 			} else {
 				System.out.println(e.toString());
 			}
-			
+
 			throw e;
 				
 		} catch (Exception e) {
@@ -418,25 +431,25 @@ public class SalaryDAOImpl implements SalaryDAO{
 					
 					findList.add(saldto);
 				}
-				
+
 			} catch (Exception e) {
 				e.printStackTrace();
 			} finally {
-				if(pstmt!=null) {
+				if (pstmt != null) {
 					try {
 						pstmt.close();
 					} catch (Exception e2) {
 					}
 				}
-				
-				if(rs!=null) {
+
+				if (rs != null) {
 					try {
 						rs.close();
 					} catch (Exception e2) {
 					}
 				}
 			}
-			
+
 			return findList;
 		}
 

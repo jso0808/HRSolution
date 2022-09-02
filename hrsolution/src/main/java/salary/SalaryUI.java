@@ -147,6 +147,7 @@ public class SalaryUI {
 
 		} catch (Exception e) {
 			e.printStackTrace();
+			
 		}
 	}
 
@@ -215,13 +216,12 @@ public class SalaryUI {
 			 * 국민연금 = 월소득액 x 4.5%, 건강보험 = 월소득액 x 3.495% 장기요양보험 = 건강보험 x 12.27% 고용보험 = 월소득액
 			 * x0.9% 산재보험 = 일반회사=0
 			 */
-			normal = (Integer.parseInt(saldto.getSal()) / 12) - meal;
+			normal = (Integer.parseInt(saldto.getSal()) / 12);
 			nationpen = (int) (normal * 0.045);
 			medicinsur = (int) (normal * 0.03495);
 			longinsur = (int) (medicinsur * 0.1227);
 			employeeinsur = (int) (normal * 0.009);
 
-			// 공제대상가족수 2인 기준
 			if (normal <= 2_000_000) {
 				gapfee = 20_560;
 			} else if (normal <= 2_500_000) {
