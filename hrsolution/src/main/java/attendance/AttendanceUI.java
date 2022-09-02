@@ -13,13 +13,13 @@ public class AttendanceUI {
 	
 	public void attendancemenu(LoginDTO loginEmp) {
 		logindto = loginEmp;
-		System.out.println("※근태 관리 메뉴 실행※");
-		System.out.println(loginEmp.getId() + " 님");
 		int ch;
 		
 		while (true) {
 			ch = 0;
 			do {
+				System.out.println("\n※근태 관리 메뉴 실행※");
+				System.out.println(loginEmp.getId() + " 님");
 				System.out.println("1.출퇴근시간 등록 2.출퇴근시간 수정 3.출퇴근시간 삭제 4.전체 근로내역 출력 5.개인별 근무이력 확인 6.메인메뉴 => ");
 				try {
 					ch = Integer.parseInt(br.readLine());
@@ -32,17 +32,14 @@ public class AttendanceUI {
 				}
 			} while (ch < 1 || ch > 5);
 
-			
-				
-			
 		
 		switch(ch){
 		case 1:
 			if (loginEmp.getDeptno().equals("300")) {
 				insertattendance();
 			} else {
-				System.out.println("접근 권한이 없습니다.");
-				return;
+				System.out.println("접근 권한이 없습니다.\n");
+				continue;
 			}
 			break;
 			
@@ -50,8 +47,8 @@ public class AttendanceUI {
 			if (loginEmp.getDeptno().equals("300")) {
 				updateattendance();
 			} else {
-				System.out.println("접근 권한이 없습니다.");
-				return;
+				System.out.println("접근 권한이 없습니다.\n");
+				continue;
 			}
 			break;
 			
@@ -59,8 +56,8 @@ public class AttendanceUI {
 			if (loginEmp.getDeptno().equals("300")) {
 				deleteattendance();
 			} else {
-				System.out.println("접근 권한이 없습니다.");
-				return;
+				System.out.println("접근 권한이 없습니다.\n");
+				continue;
 			}
 			break;
 			
@@ -69,8 +66,8 @@ public class AttendanceUI {
 			if (loginEmp.getDeptno().equals("300")) {
 				workhistory();
 			} else {
-				System.out.println("접근 권한이 없습니다.");
-				return;
+				System.out.println("접근 권한이 없습니다.\n");
+				continue;
 			}
 			break;
 			
@@ -125,6 +122,9 @@ public class AttendanceUI {
 			
 			System.out.print("퇴근시간을 새로 입력하세요(YYYYMMDD HH24:MI) => "); 
 			dto.setCOUT(br.readLine());
+			
+			System.out.print("기타 사항이 있습니까? (외출, 외출복귀, 휴가, 조퇴 / 없으면 생략 가능 ) => ");
+			dto.setMEMO(br.readLine());
 		
 			int result = dao.updateAttendance(dto);
 			if(result == 0) {
@@ -142,7 +142,7 @@ public class AttendanceUI {
 	}
 	
 	public void deleteattendance() {
-		System.out.println("[출퇴근시간 삭제]");
+		System.out.println("\n[출퇴근시간 삭제]");
 		String attNo;
 		
 		try {
@@ -165,12 +165,11 @@ public class AttendanceUI {
 	
 	
 	private void workhistory(){
-		System.out.println("[전체 근로자 근무이력 출력]");
+		System.out.println("\n[전체 근로자 근무이력 출력]");
 		String date;
-		//List<AttendanceDTO> list = new ArrayList<>();
 		
 		try {
-			System.out.println("조회할 연도와 월을 입력하세요[yyyy-mm] => ");
+			System.out.print("조회할 연도와 월을 입력하세요[yyyy-mm] => ");
 			date = br.readLine();
 			// 202208이라고 입력해도 조회가 되면 좋겠는데..
 			List<AttendanceDTO> list = dao.listAttendance(date);
@@ -180,8 +179,8 @@ public class AttendanceUI {
 				return;
 			}
 			// 근태번호 오름차순 정렬하는데 왜 이렇게 이상하게 나오는지 모르겠네 
-			System.out.println("근태번호\t사번\t이름\t출근일시\t\t퇴근일시\t기타사항"); // 이름같이 출력
-			System.out.println("--------------------------------------------------");
+			System.out.println("\n근태번호\t사번\t이름\t출근일시     \t\t퇴근일시     \t\t기타사항");
+			System.out.println("---------------------------------------------------------------------------------------");
 			
 			for(AttendanceDTO dto : list) {
 				System.out.print(dto.getAttNo() + "\t");
@@ -200,13 +199,13 @@ public class AttendanceUI {
 	}
 	
 	public void workinghours() {
-		System.out.println("[개인별 근무이력 및 월간 총 근무시간 출력]");
+		System.out.println("\n[개인별 근무이력 및 월간 총 근무시간 출력]");
 		
 		try {
 			String id, date;
 			int workingMins= 0;
 
-			System.out.println("사번을 입력하세요 => ");
+			System.out.print("사번을 입력하세요 => ");
 			id = br.readLine();
 			
 			if (!(logindto.getId().equals(id) || (logindto.getDeptno().equals("300")))) {
@@ -214,13 +213,14 @@ public class AttendanceUI {
 				return;
 			}
 			
-			System.out.println("조회할 연도와 월을 입력하세요[yyyy-mm] => ");
+			System.out.print("조회할 연도와 월을 입력하세요[yyyy-mm] => ");
 			date = br.readLine();
 			
 			workingMins = dao.readWorkinghours(id, date);
 			
 			if(workingMins == 0) {
 				System.out.println("조회할 내역이 없습니다.");
+				System.out.println();
 				return;
 			} 
 			
@@ -230,8 +230,8 @@ public class AttendanceUI {
 			
 			System.out.println("\n" + id + "님은 " + date.substring(0,4) + "년 " + date.substring(5) + "월에 총 " + hour + "시간 " + min + "분 근무하였습니다.");
 			
-			System.out.println("\n근태번호\t출근일시\t\t퇴근일시\t\t기타사항");
-			System.out.println("--------------------------------------------------");
+			System.out.println("\n근태번호    \t출근일시     \t\t퇴근일시     \t기타사항");
+			System.out.println("----------------------------------------------------------------------");
 			
 			List<AttendanceDTO> list = dao.readAttendacne(id, date);
 			for(AttendanceDTO dto : list) {

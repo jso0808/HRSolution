@@ -21,7 +21,7 @@ public class AttendanceDAOImpl implements AttendanceDAO{
 		String sql;
 		
 		try {
-			sql = "INSERT INTO ATTENDANCE2(ID, ATTNO, CIN, COUT, MEMO) "
+			sql = "INSERT INTO ATTENDANCE(ID, ATTNO, CIN, COUT, MEMO) "
 					+ " VALUES(?, ATT2_SEQ.NEXTVAL, TO_DATE(?,'YYYY-MM-DD hh24:mi') , TO_DATE(?,'YYYY-MM-DD hh24:mi'), ?) ";
 			
 			pstmt = conn.prepareStatement(sql);
@@ -40,6 +40,11 @@ public class AttendanceDAOImpl implements AttendanceDAO{
 				System.out.println("형식에 맞게 날짜를 입력하세요.");
 			} else {
 				System.out.println(e.toString());
+			}
+			throw e;
+		} catch (SQLIntegrityConstraintViolationException e) {
+			if (e.getErrorCode() == 1400) {
+				System.out.println("필수 입력 사항을 입력 하지 않았습니다.");
 			}
 			throw e;
 		} catch (SQLException e) {
@@ -68,13 +73,15 @@ public class AttendanceDAOImpl implements AttendanceDAO{
 		String sql;
 
 		try {
-			sql = "UPDATE ATTENDANCE2 SET CIN = TO_DATE(?, 'YYYY-MM-DD hh24:mi'), COUT = TO_DATE(?, 'YYYY-MM-DD hh24:mi')"
-					+ " WHERE ATTNO = ?";
+			sql = " UPDATE ATTENDANCE SET CIN = TO_DATE(?, 'YYYY-MM-DD hh24:mi'), "
+					+ " COUT = TO_DATE(?, 'YYYY-MM-DD hh24:mi'), MEMO = ? "
+					+ " WHERE ATTNO = ? ";
 			pstmt = conn.prepareStatement(sql);
 			
 			pstmt.setString(1, dto.getCIN());
 			pstmt.setString(2, dto.getCOUT());
-			pstmt.setString(3, dto.getAttNo());
+			pstmt.setString(3, dto.getMEMO());
+			pstmt.setString(4, dto.getAttNo());
 			
 			result = pstmt.executeUpdate();
 		
@@ -118,7 +125,7 @@ public class AttendanceDAOImpl implements AttendanceDAO{
 
 		try {
 			
-			sql = " DELETE FROM ATTENDANCE2 WHERE attNo = ? ";
+			sql = " DELETE FROM ATTENDANCE WHERE attNo = ? ";
 			
 			pstmt = conn.prepareStatement(sql);
 			
@@ -150,7 +157,7 @@ public class AttendanceDAOImpl implements AttendanceDAO{
 		try {
 			sql = "SELECT ATTNO, A.ID, E.name, TO_CHAR(CIN, 'YYYY-MM-DD HH24:MI') CIN, TO_CHAR(COUT, 'YYYY-MM-DD HH24:MI') COUT,"
 					+ " NVL(MEMO, '-') MEMO"
-					+ " FROM ATTENDANCE2 A " 
+					+ " FROM ATTENDANCE A " 
 					+ " LEFT OUTER JOIN Employee E ON A.ID = E.id "
 					+ " WHERE TO_CHAR(CIN, 'YYYY-MM') = ? "
 					+ " ORDER BY ATTNO" ;
@@ -210,7 +217,7 @@ public class AttendanceDAOImpl implements AttendanceDAO{
 		String sql;
 		
 		try {
-			sql = "SELECT ID, ATTNO, CIN, COUT, NVL(MEMO, '-') MEMO FROM ATTENDANCE2 "
+			sql = "SELECT ID, ATTNO, CIN, COUT, NVL(MEMO, '-') MEMO FROM ATTENDANCE "
 					+ "WHERE id = ? AND TO_CHAR(CIN, 'YYYY-MM') = ?"
 					+ "ORDER BY ATTNO" ; 
 			pstmt = conn.prepareStatement(sql);
@@ -265,7 +272,7 @@ public class AttendanceDAOImpl implements AttendanceDAO{
 			// 정상출근
 			sql = " SELECT ROUND(SUM(workingMins)) working "
 					+ "	FROM ( "
-					+ "	 SELECT id, ((COUT-CIN) * 24 * 60) workingMins FROM ATTENDANCE2 "
+					+ "	 SELECT id, ((COUT-CIN) * 24 * 60) workingMins FROM ATTENDANCE "
 					+ "	 WHERE id = ? AND TO_CHAR(CIN,'YYYY-MM') = ? "
 					+ " ) " ;
 			pstmt = conn.prepareStatement(sql);
@@ -285,7 +292,7 @@ public class AttendanceDAOImpl implements AttendanceDAO{
 			rs.close();
 			
 			// 점심시간 계산 : 퇴근시각이 12:00 이후이면 카운트 -> 카운트 결과에 * 60 = 분으로 환산
-			sql = " SELECT (COUNT(*) * 60) lunch FROM ATTENDANCE2 "
+			sql = " SELECT (COUNT(*) * 60) lunch FROM ATTENDANCE "
 					+ "WHERE TO_CHAR(COUT, 'HH24:MI') > '12:00' AND id =  ?"
 					+ " AND TO_CHAR(CIN,'YYYY-MM') = ? " ;
 			
