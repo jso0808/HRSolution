@@ -79,8 +79,8 @@ public class EmployeeUI {
 			dto.setEmail(br.readLine());
 
 			System.out.print("전화번호를 입력하세요");
-			dto.setTel(br.readLine());
 			tel = br.readLine();
+			dto.setTel(tel);
 			emp = tel;
 			
 		    dto.setPwd(emp.substring(9));
