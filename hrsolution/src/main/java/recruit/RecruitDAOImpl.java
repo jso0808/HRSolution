@@ -42,7 +42,10 @@ public  class RecruitDAOImpl implements RecruitDAO{
 			result = pstmt.executeUpdate();
 		
 		} catch (SQLIntegrityConstraintViolationException e) {
-			if(e.getErrorCode()==1400){ 
+			// 기본키 제약 위반, NOT NULL 등의 제약 위반 - 무결성 제약 위반시 발생
+						if(e.getErrorCode() == 1) { // ORA-00001, 기본키 중복
+							System.out.println("급여 번호 중복으로 등록 불가능합니다. ");
+						}else if(e.getErrorCode()==1400){ 
 				System.out.println("필수 입력사항을 입력하지 않았습니다.");
 			} else {
 				System.out.println(e.toString());
@@ -100,7 +103,9 @@ public  class RecruitDAOImpl implements RecruitDAO{
 			result = pstmt.executeUpdate();
 
 		} catch (SQLIntegrityConstraintViolationException e) {
-			if(e.getErrorCode()==1400){ 
+			if(e.getErrorCode() == 1) { // ORA-00001, 기본키 중복
+				System.out.println("급여 번호 중복으로 등록 불가능합니다. ");
+			}else if(e.getErrorCode()==1400){ 
 				System.out.println("필수 입력사항을 입력하지 않았습니다.");
 			} else {
 				System.out.println(e.toString());
@@ -431,7 +436,9 @@ public  class RecruitDAOImpl implements RecruitDAO{
 			result = pstmt.executeUpdate();
 		
 		} catch (SQLIntegrityConstraintViolationException e) {
-			if(e.getErrorCode()==1400){ 
+			if(e.getErrorCode() == 1) { // ORA-00001, 기본키 중복
+				System.out.println("급여 번호 중복으로 등록 불가능합니다. ");
+			}else if(e.getErrorCode()==1400){ 
 				System.out.println("필수 입력사항을 입력하지 않았습니다.");
 			} else {
 				System.out.println(e.toString());
