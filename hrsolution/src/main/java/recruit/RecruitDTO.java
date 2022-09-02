@@ -26,10 +26,10 @@ private String ApTel;
 
 private String evNo;
 
-private String evGrade1;
+private int evGrade1;
 private int evGrade2;
 private int evGrade3;
-private int evReason;
+private String evReason;
 
 private String idRe;
 private String ReNo;
@@ -52,10 +52,10 @@ public String getEvNo() {
 public void setEvNo(String evNo) {
 	this.evNo = evNo;
 }
-public String getEvGrade1() {
+public int getEvGrade1() {
 	return evGrade1;
 }
-public void setEvGrade1(String evGrade1) {
+public void setEvGrade1(int evGrade1) {
 	this.evGrade1 = evGrade1;
 }
 public int getEvGrade2() {
@@ -70,10 +70,10 @@ public int getEvGrade3() {
 public void setEvGrade3(int evGrade3) {
 	this.evGrade3 = evGrade3;
 }
-public int getEvReason() {
+public String getEvReason() {
 	return evReason;
 }
-public void setEvReason(int evReason) {
+public void setEvReason(String evReason) {
 	this.evReason = evReason;
 }
 public String getApNo() {

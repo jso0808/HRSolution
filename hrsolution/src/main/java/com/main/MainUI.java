@@ -11,9 +11,12 @@ import employee.EmployeeDAOImpl;
 import employee.EmployeeUI;
 import evaluation.EvaluationUI;
 import management.ManagementUI;
+
+import recruit.RecruitDAO;
+import recruit.RecruitDAOImpl;
+import recruit.RecruitDTO;
 import recruit.RecruitUI;
 import salary.SalaryUI;
-
 // 시작메뉴, 메인메뉴 UI
 // UI 꾸미기 필요
 public class MainUI {
@@ -27,9 +30,10 @@ public class MainUI {
 	private ManagementUI managementUI = new ManagementUI();
 	private RecruitUI recruitUI = new RecruitUI();
 	private SalaryUI salaryUI = new SalaryUI();
-	
+	private RecruitDAO dao=new RecruitDAOImpl();
 	private LoginDTO loginEmp = null;
-	
+
+	//private LoginDTO loginEmp = new LoginDTO();
 	
 	public void menu() {
 		while(true) {
@@ -50,20 +54,29 @@ public class MainUI {
 		do {
 			ch = 0;
 			try {
+				/*
 				System.out.print("1.로그인 2.종료 => ");
 				ch = Integer.parseInt(br.readLine());	
+				*/
+				  
+				System.out.print("1.로그인 2.입사 지원하기 3.종료 => ");
+				ch = Integer.parseInt(br.readLine());
+				//2 게스트 UI만들어서 해야할듯 	
+				 
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		} while(ch<1 || ch>2);
+		} while(ch<1 || ch>3);
 		
-		if(ch==2) {
+		if(ch==3) {
 			DBConn.close();
 			System.exit(0);
 		}
 		
 		switch(ch) {
 		case 1: login();  break;
+		
+		case 2: applicant();  break;
 		}
 	}
 	
@@ -111,7 +124,7 @@ public class MainUI {
 				//salaryUI.salarymenu(loginEmp);
 				break;
 			case 3: 
-				//recruitUI.recruitmenu(loginEmp);
+				recruitUI.recruitmenu(loginEmp);
 				break;
 			case 4: 
 				managementUI.managementmenu(loginEmp);
@@ -135,4 +148,38 @@ public class MainUI {
 		
 	}
 	
+	public void applicant() {
+		System.out.println("입사 지원 등록");
+		
+		try {
+			RecruitDTO dto=new RecruitDTO();
+			//System.out.println("접수번호");
+			//dto.setApNo(br.readLine());
+			
+			System.out.println("이름");
+			dto.setApName(br.readLine());
+			
+			System.out.println("생년월일");
+			dto.setApBirth(br.readLine());
+			
+			System.out.println("접수일자");
+			dto.setApDate(br.readLine());
+			
+			System.out.println("지원경로");
+			dto.setApRoute(br.readLine());
+			
+			System.out.println("채용공고번호");
+			dto.setPosNo(br.readLine());
+			
+			System.out.println("전화번호");
+			dto.setApTel(br.readLine());
+			
+			dao.insertApplicant(dto);
+					
+			System.out.println("접수가 완료되었습니다");
+		} catch (Exception e) {
+			System.out.println("접수가 실패했습니다");
+		}
+		System.out.println();
+	}
 }
