@@ -133,7 +133,7 @@ public class MainUI {
 				evaluationUI.evaluationmenu(loginEmp);
 				break;
 			case 6: 
-				//attendanceUI.attendancemenu(loginEmp);
+				attendanceUI.attendancemenu(loginEmp);
 				break;
 			case 7: 
 				loginEmp = null;
