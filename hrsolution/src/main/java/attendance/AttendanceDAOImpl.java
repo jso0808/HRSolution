@@ -22,7 +22,7 @@ public class AttendanceDAOImpl implements AttendanceDAO{
 		
 		try {
 			sql = "INSERT INTO ATTENDANCE(ID, ATTNO, CIN, COUT, MEMO) "
-					+ " VALUES(?, ATT2_SEQ.NEXTVAL, TO_DATE(?,'YYYY-MM-DD hh24:mi') , TO_DATE(?,'YYYY-MM-DD hh24:mi'), ?) ";
+					+ " VALUES(?, ATT_SEQ.NEXTVAL, TO_DATE(?,'YYYY-MM-DD hh24:mi') , TO_DATE(?,'YYYY-MM-DD hh24:mi'), ?) ";
 			
 			pstmt = conn.prepareStatement(sql);
 			
@@ -45,6 +45,8 @@ public class AttendanceDAOImpl implements AttendanceDAO{
 		} catch (SQLIntegrityConstraintViolationException e) {
 			if (e.getErrorCode() == 1400) {
 				System.out.println("필수 입력 사항을 입력 하지 않았습니다.");
+			} else if (e.getErrorCode() == 2290) {
+				System.out.println("퇴근시간을 출근시간 이후로 설정하세요.");
 			}
 			throw e;
 		} catch (SQLException e) {
@@ -160,7 +162,7 @@ public class AttendanceDAOImpl implements AttendanceDAO{
 					+ " FROM ATTENDANCE A " 
 					+ " LEFT OUTER JOIN Employee E ON A.ID = E.id "
 					+ " WHERE TO_CHAR(CIN, 'YYYY-MM') = ? "
-					+ " ORDER BY ATTNO" ;
+					+ " ORDER BY A.ID, CIN " ;
 			pstmt = conn.prepareStatement(sql);
 			
 			pstmt.setString(1, date);
@@ -178,14 +180,6 @@ public class AttendanceDAOImpl implements AttendanceDAO{
 				
 				list.add(dto);
 			}
-		} catch (SQLDataException e) {
-			if(e.getErrorCode() == 1840 || e.getErrorCode() == 1861) {
-				System.out.println("형식에 맞게 날짜를 입력하세요.");
-			} else {
-				System.out.println(e.toString());
-			}
-			
-			throw e;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (Exception e) {
@@ -210,14 +204,14 @@ public class AttendanceDAOImpl implements AttendanceDAO{
 	}
 
 	@Override
-	public List<AttendanceDTO> readAttendacne(String id, String date) {
+	public List<AttendanceDTO> readAttendacne(String id, String date) throws SQLException {
 		List<AttendanceDTO> list = new ArrayList<>();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		String sql;
 		
 		try {
-			sql = "SELECT ID, ATTNO, CIN, COUT, NVL(MEMO, '-') MEMO FROM ATTENDANCE "
+			sql = "SELECT ID, ATTNO, TO_CHAR(CIN, 'YYYY-MM-DD HH24:MI') CIN, TO_CHAR(COUT, 'YYYY-MM-DD HH24:MI') COUT, NVL(MEMO, '-') MEMO FROM ATTENDANCE "
 					+ "WHERE id = ? AND TO_CHAR(CIN, 'YYYY-MM') = ?"
 					+ "ORDER BY ATTNO" ; 
 			pstmt = conn.prepareStatement(sql);
@@ -238,6 +232,8 @@ public class AttendanceDAOImpl implements AttendanceDAO{
 				list.add(adto);
 			}
 			
+		} catch (SQLException e) {
+			throw e;	
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -265,8 +261,9 @@ public class AttendanceDAOImpl implements AttendanceDAO{
 		
 		String sql;
 		int workingMins = 0;
-		int lunch = 0;
 		int working = 0;
+		int lunch = 0;
+		int afternoon = 0;
 		
 		try {
 			// 정상출근
@@ -282,7 +279,7 @@ public class AttendanceDAOImpl implements AttendanceDAO{
 			
 			rs = pstmt.executeQuery();
 			
-			if (rs.next()) { // rs.next() 는 if랑 반드시 써야함 
+			if (rs.next()) { // rs.next() 는 if/while 반드시 써야함 
 				if(rs.getString("working")!= null) { // 문자열하고 null 비교
 					working = Integer.parseInt(rs.getString("working"));
 				}
@@ -291,10 +288,10 @@ public class AttendanceDAOImpl implements AttendanceDAO{
 			pstmt.close();
 			rs.close();
 			
-			// 점심시간 계산 : 퇴근시각이 12:00 이후이면 카운트 -> 카운트 결과에 * 60 = 분으로 환산
+			// 점심시간 계산
 			sql = " SELECT (COUNT(*) * 60) lunch FROM ATTENDANCE "
-					+ "WHERE TO_CHAR(COUT, 'HH24:MI') > '12:00' AND id =  ?"
-					+ " AND TO_CHAR(CIN,'YYYY-MM') = ? " ;
+					+ " WHERE id = ? AND TO_CHAR(CIN,'YYYY-MM') = ? "
+					+ " AND TO_CHAR(CIN, 'HH24:MI') <= '12:00' AND TO_CHAR(COUT, 'HH24:MI') >= '13:00' " ;
 			
 				pstmt = conn.prepareStatement(sql);
 
@@ -304,15 +301,13 @@ public class AttendanceDAOImpl implements AttendanceDAO{
 				rs = pstmt.executeQuery();
 				
 			
-				if (rs.next()) { // rs.next() 는 if랑 반드시 써야함
+				if (rs.next()) { 
 					if (rs.getString("lunch") != null) {
 						lunch = Integer.parseInt(rs.getString("lunch"));
 					}
 				}
 				
 			workingMins = working - lunch;
-			
-			// 근무일수 계산
 			
 		} catch (NumberFormatException e) {
 			e.printStackTrace();

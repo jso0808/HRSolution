@@ -8,12 +8,14 @@ import java.util.Date;
 import java.util.List;
 
 import com.main.LoginDTO;
+import com.main.ValidCheck;
 
 public class SalaryUI {
 	private BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	private SalaryDAO saldao = new SalaryDAOImpl();
 	private LoginDTO logindto = null;
-
+	private ValidCheck valchk = new ValidCheck(); 
+	
 	DecimalFormat money = new DecimalFormat("###,### 원");
 
 	public void salarymenu(LoginDTO empdto) {
@@ -222,27 +224,29 @@ public class SalaryUI {
 			longinsur = (int) (medicinsur * 0.1227);
 			employeeinsur = (int) (normal * 0.009);
 
-			if (normal <= 2_000_000) {
-				gapfee = 20_560;
-			} else if (normal <= 2_500_000) {
-				gapfee = 45_530;
-			} else if (normal <= 3_000_000) {
-				gapfee = 87_880;
-			} else if (normal <= 3_500_000) {
+			if (Integer.parseInt(saldto.getSal()) <= 12_000_000) {
+				gapfee = (int) (Integer.parseInt(saldto.getSal())*0.006);
+			} else if (Integer.parseInt(saldto.getSal()) <= 46_000_000) {
+				gapfee = (int) (720_000+(Integer.parseInt(saldto.getSal())-12_000_000)*0.015);
+			} else if (Integer.parseInt(saldto.getSal()) <= 88_000_000) {
+				gapfee = (int) (5_820_000+(Integer.parseInt(saldto.getSal())-12_000_000)*0.024);
+			} else if (Integer.parseInt(saldto.getSal()) <= 3_500_000) {
 				gapfee = 146_560;
-			} else if (normal <= 4_000_000) {
+			} else if (Integer.parseInt(saldto.getSal()) <= 4_000_000) {
 				gapfee = 214_810;
-			} else if (normal <= 4_500_000) {
+			} else if (Integer.parseInt(saldto.getSal()) <= 4_500_000) {
 				gapfee = 285_440;
-			} else if (normal <= 5_000_000) {
+			} else if (Integer.parseInt(saldto.getSal()) <= 5_000_000) {
 				gapfee = 335_190;
-			} else if (normal <= 5_500_000) {
+			} else if (Integer.parseInt(saldto.getSal()) <= 5_500_000) {
 				gapfee = 424_940;
-			} else if (normal <= 6_000_000) {
+			} else if (Integer.parseInt(saldto.getSal()) <= 6_000_000) {
 				gapfee = 562_350;
 			} else {
 				gapfee = normal / 10;
 			}
+			
+			gapfee /= 12;
 			// 주민세 = 소득세 x 10%
 			citizenfee = gapfee / 10;
 
@@ -543,11 +547,25 @@ public class SalaryUI {
 		try {
 			String id;
 
-			System.out.print("연봉을 확인할 사번 ? ");
-			id = br.readLine();
+			while(true) {
+				System.out.print("연봉을 확인할 사번 ? ");
+				id = br.readLine();
+				
+				if(valchk.isNumber(id)==false) {
+					System.out.println("숫자만 입력 가능합니다. 다시 입력해주세요. \n");
+				} else {
+					break;
+				}
+			}
+			
 
 			SalaryDTO sdto = saldao.listSalaryNowEmp(id);
 
+			if(sdto==null ) {
+				System.out.println("데이터가 존재하지 않습니다. ");
+				return;
+			}
+			
 			System.out.println("사번\t이름\t직급\t부서\t현재연봉\t\t연봉시작일\t\t메모");
 			System.out.println("------------------------------------------------------------------------");
 			System.out.print(sdto.getId() + "\t");

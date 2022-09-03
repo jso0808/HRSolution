@@ -87,7 +87,7 @@ public class AttendanceUI {
 			
 			System.out.print("등록할 사번을 입력하세요 => ");
 			dto.setId(br.readLine());
-			// 추가 : 출근일시 < 퇴근일시
+
 			System.out.print("출근시간을 입력하세요(YYYYMMDD HH24:MI) => ");
 			dto.setCIN(br.readLine());
 			
@@ -102,7 +102,6 @@ public class AttendanceUI {
 			System.out.println("출퇴근시간이 등록되었습니다.");
 			
 		} catch (Exception e) {
-			System.out.println("등록이 실패하였습니다.");
 		}
 		System.out.println();
 		
@@ -128,7 +127,7 @@ public class AttendanceUI {
 		
 			int result = dao.updateAttendance(dto);
 			if(result == 0) {
-				System.out.println("근태번호가 올바르지 않습니다.");
+				System.out.println("조회되는 근태번호가 없습니다. ");
 			} else {
 				System.out.println("근무시간이 수정되었습니다.");
 			}
@@ -152,7 +151,7 @@ public class AttendanceUI {
 			int result = dao.deleteAttendance(attNo);
 			
 			if(result == 0) {
-				System.out.println("등록된 정보가 아닙니다.");
+				System.out.println("조회되는 근태번호가 없습니다.");
 			} else {
 				System.out.println("근무시간이 삭제되었습니다. ");
 			}
@@ -178,7 +177,8 @@ public class AttendanceUI {
 				System.out.println("조회할 근로이력이 없습니다.\n");
 				return;
 			}
-			// 근태번호 오름차순 정렬하는데 왜 이렇게 이상하게 나오는지 모르겠네 
+			// 근태번호를 출력해야할까?
+			// 소연님 요청으로 사번, 일자별로 GROUP BY했는데 -> 일자로만 하는건 어떨까요
 			System.out.println("\n근태번호\t사번\t이름\t출근일시     \t\t퇴근일시     \t\t기타사항");
 			System.out.println("---------------------------------------------------------------------------------------");
 			
