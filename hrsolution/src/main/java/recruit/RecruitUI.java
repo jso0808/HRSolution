@@ -81,7 +81,7 @@ public class RecruitUI {
 	public void insert() {
 		System.out.println("채용공고등록");
 	    String id;
-		
+		//int null;
 		
 		try {
 			
