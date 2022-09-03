@@ -13,7 +13,8 @@ public class EvaluationUI {
 
 	public void evaluationmenu(LoginDTO loginEmp) {
 		System.out.println();
-		System.out.println("------------------------------------------------------------------------------------------------------------------------");
+		System.out.println(
+				"------------------------------------------------------------------------------------------------------------------------");
 		System.out.println();
 		System.out.println("평가 관리 메뉴 실행");
 		System.out.println(loginEmp.getId() + " 님");
@@ -23,7 +24,8 @@ public class EvaluationUI {
 		while (true) {
 			try {
 				System.out.println();
-				System.out.println("------------------------------------------------------------------------------------------------------------------------");
+				System.out.println(
+						"------------------------------------------------------------------------------------------------------------------------");
 				System.out.println();
 				System.out.println("1.평가등급 검색 2. 사원 평가 등록 3. 사원 평가 수정 4. 사원 평가 삭제 5.사원 1인 평가리스트 6. 메인메뉴 =>");
 				ch = Integer.parseInt(br.readLine());
@@ -80,21 +82,39 @@ public class EvaluationUI {
 
 	private void GradelistUI() {
 		System.out.println();
-		System.out.println("------------------------------------------------------------------------------------------------------------------------");
+		System.out.println(
+				"------------------------------------------------------------------------------------------------------------------------");
 		System.out.println("\n 사원 1인 전체평가리스트");
 		String id;
+		
 		try {
-			System.out.println("평가살 사번 ?");
+			while (true) {
+				try {
+					System.out.println("평가사번 ?");
+					id = br.readLine();
+				
+					break;
+				} catch (Exception e) {
+					System.out.println("일치하는 정보가 없습니다.");
+					System.out.println("다시 입력하세요");
+					continue;
+				}
+			}
+			
+			
+		try {
+			List<EvaluationDTO> list =dao.GradeList(id);
+
+			if (list.isEmpty()) {
+				System.out.println("일치하는 정보가 없습니다.\n");
+				return;
+			}
+
+			System.out.println(
+					"------------------------------------------------------------------------------------------------------------------------");
 			System.out.println("평가연도\t사번\t평가점수\t평가시기\t\t\t평가자");
 			
-			id = br.readLine();
-			System.out.println("------------------------------------------------------------");
-
-			
-			List<EvaluationDTO> list =dao.GradeList(id);
-		
 			for(EvaluationDTO dto : list) {
-				
 				System.out.print(dto.getYear() + "\t");
 				System.out.print(dto.getId() + "\t");
 				System.out.print(EvalScore(dto.getGrade()) + "\t");
@@ -102,18 +122,22 @@ public class EvaluationUI {
 				System.out.println(dto.getPerid() + "\t");	
 			}
 			System.out.println();
-			System.out.println("------------------------------------------------------------------------------------------------------------------------");
+			System.out.println(
+					"------------------------------------------------------------------------------------------------------------------------");
 			System.out.println();
-		}catch (IOException e) {
-			System.out.println("일치하는 사번이 없습니다.");
-			e.printStackTrace();
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
+	}catch (Exception e) {
+		System.out.println("\n 사원 1인 전체평가리스트");
+		e.printStackTrace();
+	}
 	}
 
 	private void readGrade() {
 		System.out.println();
-		System.out.println("------------------------------------------------------------------------------------------------------------------------");
+		System.out.println(
+				"------------------------------------------------------------------------------------------------------------------------");
 		System.out.println("\n 평가등급 검색");
 		int year;
 		String id;
@@ -144,8 +168,9 @@ public class EvaluationUI {
 			}
 			System.out.println("\n 사원 평가 내역 ");
 			System.out.println("평가연도\t사번\t이름\t평가등급\t평가날짜\t\t\t평가내용\t\t평가자");
-			System.out.println("------------------------------------------------------------");
-
+			System.out.println(
+					"------------------------------------------------------------------------------------------------------------------------");
+			
 			System.out.print(dto.getYear() + "\t");
 			System.out.print(dto.getId() + "\t");
 			System.out.print(dto.getName() + "\t");
@@ -154,7 +179,8 @@ public class EvaluationUI {
 			System.out.print(dto.getContent() + "\t");
 			System.out.print(dto.getPerid() + "\t");
 			System.out.println();
-			System.out.println("------------------------------------------------------------------------------------------------------------------------");
+			System.out.println(
+					"------------------------------------------------------------------------------------------------------------------------");
 			System.out.println();
 		} catch (NumberFormatException e) {
 			System.out.println("일치하는 사번이 없습니다.");
@@ -193,7 +219,8 @@ public class EvaluationUI {
 	// 사원번호, 이름, 년도별 등급
 	private void insertGrade() {
 		System.out.println();
-		System.out.println("------------------------------------------------------------------------------------------------------------------------");
+		System.out.println(
+				"------------------------------------------------------------------------------------------------------------------------");
 		System.out.println("\n 평가등급 등록");
 		try {
 			EvaluationDTO dto = new EvaluationDTO();
@@ -232,7 +259,8 @@ public class EvaluationUI {
 					System.out.println("평가자 사번 ?");
 					dto.setPerid(br.readLine());
 					System.out.println();
-					System.out.println("------------------------------------------------------------------------------------------------------------------------");
+					System.out.println(
+							"------------------------------------------------------------------------------------------------------------------------");
 					System.out.println();
 					break;					
 				 
@@ -259,7 +287,8 @@ public class EvaluationUI {
 
 	private void updateGrade() {
 		System.out.println();
-		System.out.println("------------------------------------------------------------------------------------------------------------------------");
+		System.out.println(
+				"------------------------------------------------------------------------------------------------------------------------");
 		System.out.println("\n 평가등급 수정");
 		try {
 			EvaluationDTO dto = new EvaluationDTO();
@@ -298,7 +327,8 @@ public class EvaluationUI {
 
 			System.out.println("평가등급 수정 완료!!!");
 			System.out.println();
-			System.out.println("------------------------------------------------------------------------------------------------------------------------");
+			System.out.println(
+					"------------------------------------------------------------------------------------------------------------------------");
 			System.out.println();
 		} catch (Exception e) {
 			System.out.println("평가등급 수정 UI 에러");
@@ -309,7 +339,8 @@ public class EvaluationUI {
 
 	private void deleteGrade() {
 		System.out.println();
-		System.out.println("------------------------------------------------------------------------------------------------------------------------");
+		System.out.println(
+				"------------------------------------------------------------------------------------------------------------------------");
 		System.out.println("\n 평가등급 삭제");
 		int year;
 		String id;
@@ -326,7 +357,8 @@ public class EvaluationUI {
 
 			System.out.println("평가등급 삭제 완료!!!");
 			System.out.println();
-			System.out.println("------------------------------------------------------------------------------------------------------------------------");
+			System.out.println(
+					"------------------------------------------------------------------------------------------------------------------------");
 			System.out.println();
 		}catch (NumberFormatException e) {
 			System.out.println("일치하는 평가연도가 없습니다.");

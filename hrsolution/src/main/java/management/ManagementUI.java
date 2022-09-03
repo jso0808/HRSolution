@@ -65,14 +65,20 @@ public class ManagementUI {
 	private void totWorkingList() {
 		System.out.println("역대 프로젝트를 검색할 사번을 입력하세요");
 		System.out.println();
-		System.out.println("\n 역대프로젝트 검색결과");
-		System.out.println(
-				"------------------------------------------------------------------------------------------------------------------------");
-		System.out.println("사번\t이름\t직위\t프로젝트 시작일\t\t프로젝트 종료일\t프로젝트 제목\t\t프로젝트 진행률\t프로젝트 번호\t프로젝트 내용");
 		try {
 			String id;
 			id = br.readLine();
 			List<ManagementDTO> list = dao.totWorking(id);
+			if (list.isEmpty()) {
+				System.out.println("해당하는 정보가 존재하지 않습니다. ");
+				return;
+			}
+			System.out.println(
+					"------------------------------------------------------------------------------------------------------------------------");
+			System.out.println();
+			System.out.println("\n 역대프로젝트 검색결과");
+			System.out.println("사번\t이름\t직위\t프로젝트 시작일\t\t프로젝트 종료일\t프로젝트 제목\t\t프로젝트 진행률\t프로젝트 번호\t프로젝트 내용");
+			
 
 			for (ManagementDTO dto : list) {
 				System.out.print(dto.getId() + "\t");
@@ -80,14 +86,14 @@ public class ManagementUI {
 				System.out.print(dto.getPos() + "\t");
 
 				System.out.print(dto.getProStart() + "\t");
-				if (dto.getProEnd().length() <= 3) {
+				if (dto.getProEnd().length()<= 3 ) {
 					System.out.print("진행중입니다." + "\t");
 				} else {
 					System.out.print(dto.getProEnd() + "\t");
 				}
 				if (dto.getProTitle().length() <= 5) {
 					System.out.print(dto.getProTitle() + "\t\t\t");
-				} else if (dto.getProTitle().length() <= 8) {
+				} else if (dto.getProTitle().length() <= 11) {
 					System.out.print(dto.getProTitle() + "\t\t");
 				} else {
 					System.out.print(dto.getProTitle() + "\t");
@@ -116,11 +122,15 @@ public class ManagementUI {
 		System.out.println();
 		System.out.println(
 				"------------------------------------------------------------------------------------------------------------------------");
-		System.out.println("\n 현재 프로젝트 진행중인 사원리스트 ");
-		System.out.println("사번\t이름\t직위\t프로젝트 시작일\t\t프로젝트 제목\t\t\t진행률\t프로젝트내용\t\t\t프로젝트 번호 ");
 		try {
 			List<ManagementDTO> list = dao.nowWorking();
-
+			if (list.isEmpty()) {
+				System.out.println("해당하는 정보가 존재하지 않습니다. ");
+				return;
+			}
+			System.out.println("\n 현재 프로젝트 진행중인 사원리스트 ");
+			System.out.println("사번\t이름\t직위\t프로젝트 시작일\t\t프로젝트 제목\t\t\t진행률\t프로젝트내용\t\t\t프로젝트 번호 ");
+			
 			for (ManagementDTO dto : list) {
 				System.out.print(dto.getId() + "\t");
 				System.out.print(dto.getName() + "\t");
@@ -128,9 +138,9 @@ public class ManagementUI {
 				System.out.print(dto.getProStart() + "\t");
 				if (dto.getProTitle().length() <= 4) {
 					System.out.print(dto.getProTitle() + "\t\t\t\t");
-				} else if (dto.getProTitle().length() <= 10) {
+				} else if (dto.getProTitle().length() <= 11) {
 					System.out.print(dto.getProTitle() + "\t\t\t");
-				} else if (dto.getProTitle().length() <= 15) {
+				} else if (dto.getProTitle().length() <= 17) {
 					System.out.print(dto.getProTitle() + "\t\t");
 				} else
 					System.out.print(dto.getProTitle() + "\t");
@@ -139,7 +149,7 @@ public class ManagementUI {
 					System.out.print(dto.getProject() + "\t\t\t\t");
 				} else if (dto.getProject().length() <= 11) {
 					System.out.print(dto.getProject() + "\t\t\t");
-				} else if (dto.getProject().length() <= 15) {
+				} else if (dto.getProject().length() <= 17) {
 					System.out.print(dto.getProject() + "\t\t");
 				} else
 					System.out.print(dto.getProject() + "\t");
@@ -257,7 +267,6 @@ public class ManagementUI {
 
 		try {
 			List<ManagementDTO> list = dao.rankEmpList();
-			// position, em.id, name,dept,tel,email,ft
 			for (ManagementDTO dto : list) {
 				System.out.print(dto.getPos() + "\t");
 				System.out.print(dto.getId() + "\t");
