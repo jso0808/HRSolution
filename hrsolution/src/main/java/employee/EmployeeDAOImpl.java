@@ -148,20 +148,20 @@ public int updateEmployee(EmployeeDTO dto) throws SQLException {
 
 	try {
 		// UPDATE 테이블명 SET 컬럼=값, 컬럼=값 WHERE 조건
-		sql = "UPDATE Employee SET pwd = ?, name =?,rrn =?,email =?,tel=?,ft=?,hireDate=?,leaveDate=?,noWorking=? where id = ? "; //물음표 위치가 틀리면 안돼 
+		sql = "UPDATE Employee SET name =?,rrn =?,email =?,tel=?,ft=?,hireDate=?,leaveDate=?,noWorking=? where id = ? "; //물음표 위치가 틀리면 안돼 
 
 		pstmt = conn.prepareStatement(sql);
 		
-		pstmt.setString(1,dto.getPwd());
-		pstmt.setString(2,dto.getName());
-		pstmt.setString(3,dto.getRrn());
-		pstmt.setString(4,dto.getEmail());
-		pstmt.setString(5,dto.getTel());
-		pstmt.setString(6,dto.getFt());
-		pstmt.setString(7,dto.getHireDate());
-		pstmt.setString(8,dto.getLeaveDate());
-		pstmt.setString(9,dto.getNoWorking());
-		pstmt.setString(10,dto.getId());
+		
+		pstmt.setString(1,dto.getName());
+		pstmt.setString(2,dto.getRrn());
+		pstmt.setString(3,dto.getEmail());
+		pstmt.setString(4,dto.getTel());
+		pstmt.setString(5,dto.getFt());
+		pstmt.setString(6,dto.getHireDate());
+		pstmt.setString(7,dto.getLeaveDate());
+		pstmt.setString(8,dto.getNoWorking());
+		pstmt.setString(9,dto.getId());
 		result = pstmt.executeUpdate();
 		pstmt.close();
 		pstmt = null;

@@ -123,9 +123,6 @@ public class EmployeeUI {
 				return;
 			}
 
-			System.out.print("새로운 비밀번호를 입력하세요.");
-			dto.setPwd(br.readLine());
-
 			System.out.print("새로운 이름을 입력하세요.");
 			dto.setName(br.readLine());
 
