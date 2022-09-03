@@ -11,14 +11,15 @@ import java.util.List;
 
 import com.util.DBConn;
 
+
 public class AttendanceDAOImpl implements AttendanceDAO{
 	private Connection conn = DBConn.getConnection();
 
 	@Override
 	public int insertAttendance(AttendanceDTO dto) throws SQLException {
-		int result = 0;
 		PreparedStatement pstmt = null;
 		String sql;
+		int result = 0;
 		
 		try {
 			sql = "INSERT INTO ATTENDANCE(ID, ATTNO, CIN, COUT, MEMO) "
@@ -33,7 +34,6 @@ public class AttendanceDAOImpl implements AttendanceDAO{
 			
 			result = pstmt.executeUpdate();
 			pstmt.close();
-			
 			
 		} catch (SQLDataException e) {
 			if(e.getErrorCode() == 1840 || e.getErrorCode() == 1861) {
@@ -89,7 +89,7 @@ public class AttendanceDAOImpl implements AttendanceDAO{
 		
 		} catch (SQLIntegrityConstraintViolationException e) {
 			if(e.getErrorCode() == 14000) {
-				System.out.println("필수 사항을 입력하세요.");
+				System.out.println("필수 입력 사항을 입력 하지 않았습니다.");
 			} else {
 				System.out.println(e.toString());
 			}
@@ -168,6 +168,7 @@ public class AttendanceDAOImpl implements AttendanceDAO{
 			pstmt.setString(1, date);
 			
 			rs = pstmt.executeQuery();
+			
 			// rs.next() 가 무엇인지 제대로 이해
 			while(rs.next()) {
 				AttendanceDTO dto = new AttendanceDTO();
@@ -263,7 +264,6 @@ public class AttendanceDAOImpl implements AttendanceDAO{
 		int workingMins = 0;
 		int working = 0;
 		int lunch = 0;
-		int afternoon = 0;
 		
 		try {
 			// 정상출근

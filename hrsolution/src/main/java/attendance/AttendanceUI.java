@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.main.LoginDTO;
 
+
 public class AttendanceUI {
 	private BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	private AttendanceDAO dao = new AttendanceDAOImpl();
@@ -170,7 +171,7 @@ public class AttendanceUI {
 		try {
 			System.out.print("조회할 연도와 월을 입력하세요[yyyy-mm] => ");
 			date = br.readLine();
-			// 202208이라고 입력해도 조회가 되면 좋겠는데..
+		
 			List<AttendanceDTO> list = dao.listAttendance(date);
 			
 			if(list.isEmpty()) { 
