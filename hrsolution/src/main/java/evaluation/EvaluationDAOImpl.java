@@ -3,6 +3,8 @@ package evaluation;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLDataException;
+import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,19 +46,19 @@ public class EvaluationDAOImpl implements EvaluationDAO {
 				System.out.println("진행중");
 			}
 		} catch (SQLIntegrityConstraintViolationException e) {
-			try {
-				conn.rollback();
-			} catch (Exception e2) {
-			}
-
-			// 기본키 제약 위반, NOT NULL 등의 제약 위반 - 무결성 제약 위반시 발생
-			if (e.getErrorCode() == 1400) {
+			if (e.getErrorCode() == 1) { // ORA-00001, 기본키 중복
+				System.out.println("이미 입력된 정보입니다. ");
+			} else if (e.getErrorCode() == 1400) { // NOT NULL
 				System.out.println("필수 입력 사항을 입력하지 않았습니다. ");
+			} else if (e.getErrorCode() == 1840 || e.getErrorCode() == 1861) { // 날짜 입력 오류
+				System.out.println("날짜 형식 오류입니다. ");
 			} else {
 				System.out.println(e.toString());
 			}
+		} catch (SQLException e) {
+			e.printStackTrace();
 		} catch (NumberFormatException e) {
-			System.out.println("숫자만 입력가능");
+			System.out.println("숫자만 입력가능합니다.");
 		} catch (Exception e) {
 			System.out.println("평가입력 에러");
 			e.printStackTrace();
@@ -81,9 +83,9 @@ public class EvaluationDAOImpl implements EvaluationDAO {
 	}
 
 	@Override
-	public EvaluationDTO insertGrade(EvaluationDTO dto) {
+	public int insertGrade(EvaluationDTO dto) throws SQLException {
 		PreparedStatement pstmt = null;
-		ResultSet rs = null;
+		int result = 0;
 		String sql;
 		try {
 			sql = "INSERT INTO evaluation(perYear, id, perGrade, perContent,perDate, perid) "
@@ -97,13 +99,9 @@ public class EvaluationDAOImpl implements EvaluationDAO {
 			pstmt.setString(5, dto.getDate());
 			pstmt.setString(6, dto.getPerid());
 
-			rs = pstmt.executeQuery();
+			result = pstmt.executeUpdate();
 
 		} catch (SQLIntegrityConstraintViolationException e) {
-			try {
-				conn.rollback();
-			} catch (Exception e2) {
-			}
 
 			// 기본키 제약 위반, NOT NULL 등의 제약 위반 - 무결성 제약 위반시 발생
 			if (e.getErrorCode() == 1400) {
@@ -111,9 +109,22 @@ public class EvaluationDAOImpl implements EvaluationDAO {
 			} else {
 				System.out.println(e.toString());
 			}
+			throw e;
+		} catch (SQLDataException e) {
+
+			if (e.getErrorCode() == 1840 || e.getErrorCode() == 1861) {
+				System.out.println("날짜 입력 형식 오류입니다.");
+			} else {
+				System.out.println(e.toString());
+			}
+			throw e;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
 		} catch (Exception e) {
 			System.out.println("평가입력 에러");
 			e.printStackTrace();
+			throw e;
 
 		} finally {
 			if (pstmt != null) {
@@ -123,30 +134,20 @@ public class EvaluationDAOImpl implements EvaluationDAO {
 
 				}
 			}
-
-			if (rs != null) {
-				try {
-					rs.close();
-				} catch (Exception e2) {
-
-				}
-			}
 		}
-
-		return null;
-
+		return result;
 	}
 
 	@Override
-	public EvaluationDTO updateGrade(EvaluationDTO dto) {
+	public int updateGrade(EvaluationDTO dto) throws SQLException {
 		PreparedStatement pstmt = null;
-		ResultSet rs = null;
+		int result = 0;
 		String sql;
 		try {
 			sql = "UPDATE evaluation SET " + " perGrade = ?, perContent = ?,"
 					+ " perDate =TO_DATE(?,'YYYY-MM-DD') , perid = ? " + " WHERE perYear = ? AND id = ? ";
 			pstmt = conn.prepareStatement(sql);
-			//
+
 			pstmt.setInt(1, dto.getGrade());
 			pstmt.setString(2, dto.getContent());
 			pstmt.setString(3, dto.getDate());
@@ -154,48 +155,52 @@ public class EvaluationDAOImpl implements EvaluationDAO {
 			pstmt.setInt(5, dto.getYear());
 			pstmt.setString(6, dto.getId());
 
-			rs = pstmt.executeQuery();
+			result = pstmt.executeUpdate();
 
 		} catch (SQLIntegrityConstraintViolationException e) {
-			try {
-				conn.rollback();
-			} catch (Exception e2) {
-			}
 
-			// 기본키 제약 위반, NOT NULL 등의 제약 위반 - 무결성 제약 위반시 발생
-			if (e.getErrorCode() == 1400) {
+			if (e.getErrorCode() == 1) { // ORA-00001, 기본키 중복
+				System.out.println("이미 입력된 정보입니다. ");
+			} else if (e.getErrorCode() == 1400) { // NOT NULL
 				System.out.println("필수 입력 사항을 입력하지 않았습니다. ");
+			} else if (e.getErrorCode() == 1840 || e.getErrorCode() == 1861) { // 날짜 입력 오류
+				System.out.println("날짜 형식 오류입니다. ");
 			} else {
 				System.out.println(e.toString());
 			}
+			throw e;
+			// 기본키 제약 위반, NOT NULL 등의 제약 위반 - 무결성 제약 위반시 발생
+		} catch (SQLDataException e) {
+
+			if (e.getErrorCode() == 1840 || e.getErrorCode() == 1861) {
+				System.out.println("날짜 입력 형식 오류입니다.");
+			} else {
+				System.out.println(e.toString());
+			}
+			throw e;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
 		} catch (Exception e) {
 			System.out.println("평가수정 에러");
 			e.printStackTrace();
-
+			throw e;
 		} finally {
 			if (pstmt != null) {
 				try {
 					pstmt.close();
 				} catch (Exception e2) {
-
 				}
 			}
 
-			if (rs != null) {
-				try {
-					rs.close();
-				} catch (Exception e2) {
-
-				}
-			}
 		}
-		return null;
+		return result;
 	}
 
 	@Override
-	public EvaluationDTO DeleteGrade(int year, String id) {
+	public int DeleteGrade(int year, String id) throws SQLException {
 		PreparedStatement pstmt = null;
-		ResultSet rs = null;
+		int result = 0;
 		String sql;
 		try {
 			sql = "DELETE FROM evaluation WHERE perYear = ? AND id = ? ";
@@ -205,23 +210,33 @@ public class EvaluationDAOImpl implements EvaluationDAO {
 			pstmt.setInt(1, year);
 			pstmt.setString(2, id);
 
-			rs = pstmt.executeQuery();
+			result = pstmt.executeUpdate();
 
 		} catch (SQLIntegrityConstraintViolationException e) {
-			try {
-				conn.rollback();
-			} catch (Exception e2) {
-			}
-
-			// 기본키 제약 위반, NOT NULL 등의 제약 위반 - 무결성 제약 위반시 발생
-			if (e.getErrorCode() == 1400) {
+			if (e.getErrorCode() == 1) { // ORA-00001, 기본키 중복
+				System.out.println("이미 입력된 정보입니다. ");
+			} else if (e.getErrorCode() == 1400) { // NOT NULL
 				System.out.println("필수 입력 사항을 입력하지 않았습니다. ");
+			} else if (e.getErrorCode() == 1840 || e.getErrorCode() == 1861) { // 날짜 입력 오류
+				System.out.println("날짜 형식 오류입니다. ");
+			} else {
+				System.out.println(e.toString());
+			} throw e;
+		} catch (SQLDataException e) {
+
+			if (e.getErrorCode() == 1840 || e.getErrorCode() == 1861) {
+				System.out.println("날짜 입력 형식 오류입니다.");
 			} else {
 				System.out.println(e.toString());
 			}
+			throw e;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
 		} catch (Exception e) {
 			System.out.println("평가삭제 에러");
 			e.printStackTrace();
+			throw e;
 		} finally {
 			if (pstmt != null) {
 				try {
@@ -230,16 +245,8 @@ public class EvaluationDAOImpl implements EvaluationDAO {
 
 				}
 			}
-
-			if (rs != null) {
-				try {
-					rs.close();
-				} catch (Exception e2) {
-
-				}
-			}
 		}
-		return null;
+		return result;
 	}
 
 	@Override
@@ -272,14 +279,14 @@ public class EvaluationDAOImpl implements EvaluationDAO {
 			}
 
 		} catch (SQLIntegrityConstraintViolationException e) {
-			try {
-				conn.rollback();
-			} catch (Exception e2) {
-			}
 
 			// 기본키 제약 위반, NOT NULL 등의 제약 위반 - 무결성 제약 위반시 발생
-			if (e.getErrorCode() == 1400) {
+			if (e.getErrorCode() == 1) { // ORA-00001, 기본키 중복
+				System.out.println("이미 입력된 정보입니다. ");
+			} else if (e.getErrorCode() == 1400) { // NOT NULL
 				System.out.println("필수 입력 사항을 입력하지 않았습니다. ");
+			} else if (e.getErrorCode() == 1840 || e.getErrorCode() == 1861) { // 날짜 입력 오류
+				System.out.println("날짜 형식 오류입니다. ");
 			} else {
 				System.out.println(e.toString());
 			}
@@ -294,7 +301,6 @@ public class EvaluationDAOImpl implements EvaluationDAO {
 
 				}
 			}
-
 			if (rs != null) {
 				try {
 					rs.close();

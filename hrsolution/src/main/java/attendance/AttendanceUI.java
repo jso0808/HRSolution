@@ -5,13 +5,14 @@ import java.io.InputStreamReader;
 import java.util.List;
 
 import com.main.LoginDTO;
+import com.main.ValidCheck;
 
 
 public class AttendanceUI {
 	private BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	private AttendanceDAO dao = new AttendanceDAOImpl();
 	private LoginDTO logindto = null;
-	
+	private ValidCheck valchk = new ValidCheck();
 	public void attendancemenu(LoginDTO loginEmp) {
 		logindto = loginEmp;
 		int ch;
@@ -84,10 +85,23 @@ public class AttendanceUI {
 		System.out.println("[출퇴근시간 등록]");
 		
 		try {
-			AttendanceDTO dto = new AttendanceDTO();
+			String id;
 			
-			System.out.print("등록할 사번을 입력하세요 => ");
-			dto.setId(br.readLine());
+			AttendanceDTO dto = new AttendanceDTO();
+			while(true) {
+				System.out.print("등록할 사번을 입력하세요 => ");
+				id = br.readLine();
+				
+				if(valchk.isNumber(id)==false) {
+					System.out.println("숫자만 입력 가능합니다. 다시 입력해주세요. \n");
+					continue;
+				} else {
+					dto.setId(id);
+					break;
+				}
+			}
+			
+			
 
 			System.out.print("출근시간을 입력하세요(YYYYMMDD HH24:MI) => ");
 			dto.setCIN(br.readLine());
@@ -112,10 +126,21 @@ public class AttendanceUI {
 		System.out.println("\n[출퇴근시간 수정]");
 		
 		try {
+			String attNo;
 			AttendanceDTO dto = new AttendanceDTO();
 			
-			System.out.print("시간을 수정할 근태번호를 입력하세요 => ");
-			dto.setAttNo(br.readLine());
+			while(true) {
+				System.out.print("시간을 수정할 근태번호를 입력하세요 => ");
+				attNo = br.readLine();
+				
+				if(valchk.isNumber(attNo)==false) {
+					System.out.println("숫자만 입력 가능합니다. 다시 입력해주세요. \n");
+					continue;
+				} else {
+					dto.setAttNo(attNo);
+					break;
+				}
+			}
 			
 			System.out.print("출근시간을 새로 입력하세요(YYYYMMDD HH24:MI) => ");
 			dto.setCIN(br.readLine());
@@ -125,7 +150,7 @@ public class AttendanceUI {
 			
 			System.out.print("기타 사항이 있습니까? (외출, 외출복귀, 휴가, 조퇴 / 없으면 생략 가능 ) => ");
 			dto.setMEMO(br.readLine());
-		
+			
 			int result = dao.updateAttendance(dto);
 			if(result == 0) {
 				System.out.println("조회되는 근태번호가 없습니다. ");
@@ -146,9 +171,20 @@ public class AttendanceUI {
 		String attNo;
 		
 		try {
-			System.out.print("삭제가 필요한 근태번호를 입력하세요 => ");
-			attNo = br.readLine();
+			AttendanceDTO dto = new AttendanceDTO();
 			
+			while(true) {
+				System.out.print("삭제가 필요한 근태번호를 입력하세요 => ");
+				attNo = br.readLine();
+				
+				if(valchk.isNumber(attNo)==false) {
+					System.out.println("숫자만 입력 가능합니다. 다시 입력해주세요. \n");
+					continue;
+				} else {
+					dto.setAttNo(attNo);
+					break;
+				}
+			}
 			int result = dao.deleteAttendance(attNo);
 			
 			if(result == 0) {
@@ -206,8 +242,17 @@ public class AttendanceUI {
 			String id, date;
 			int workingMins= 0;
 
-			System.out.print("사번을 입력하세요 => ");
-			id = br.readLine();
+
+			while(true) {
+				System.out.print("사번을 입력하세요 => ");
+				id = br.readLine();
+				
+				if(valchk.isNumber(id)==false) {
+					System.out.println("숫자만 입력 가능합니다. 다시 입력해주세요. \n");
+				} else {
+					break;
+				}
+			}
 			
 			if (!(logindto.getId().equals(id) || (logindto.getDeptno().equals("300")))) {
 				System.out.println("총무부 소속이 아닐 경우, 본인 근무이력만 확인 가능합니다. ");
