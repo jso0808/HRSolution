@@ -14,7 +14,7 @@ public class App {
         String str;
         while ((str =in.readLine()) != null) {
             System.out.println(str);
-            Thread.sleep(150);
+            Thread.sleep(90);
         }
 		
         System.out.println();
