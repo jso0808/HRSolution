@@ -13,6 +13,8 @@ public interface EmployeeDAO {
 	public int updateWorker(EmployeeDTO dto) throws SQLException;
 	public EmployeeDTO readEmployee(String id);
 	public EmployeeDTO readMember(String id);
+	public List<EmployeeDTO> listWork();
+	
 	public List<EmployeeDTO> listWork(String id);
 }
 

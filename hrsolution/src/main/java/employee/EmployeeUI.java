@@ -44,9 +44,6 @@ public class EmployeeUI {
 				case 5:
 					work();
 					break;
-				case 6:
-					returntomain();
-					break;
 				}
 			} catch (Exception e) {
 			}
@@ -62,7 +59,7 @@ public class EmployeeUI {
 			return;
 		}
 		try {
-			String pwd,tel,emp;
+			String tel,emp;
 			
 			EmployeeDTO dto = new EmployeeDTO();
 
@@ -84,6 +81,12 @@ public class EmployeeUI {
 			emp = tel;
 			
 		    dto.setPwd(emp.substring(9));
+		    
+		    System.out.print("부서코드를 입력하세요");
+			dto.setDept(br.readLine());
+			
+			System.out.print("직급코드를 입력하세요");
+			dto.setPos(br.readLine());
 
 			System.out.print("고용형태를 입력하세요");
 			dto.setFt(br.readLine());
@@ -135,6 +138,12 @@ public class EmployeeUI {
 			System.out.print("새로운 전화번호를 입력하세요.");
 			dto.setTel(br.readLine());
 
+			System.out.print("새로운 부서를 입력하세요.");
+			dto.setDept(br.readLine());
+			
+			System.out.print("새로운 직급을 입력하세요.");
+			dto.setPos(br.readLine());
+			
 			System.out.print("변경된 고용형태를 입력하세요.");
 			dto.setFt(br.readLine());
 
@@ -147,7 +156,7 @@ public class EmployeeUI {
 			System.out.print("변경된 근무상태를 입력하세요.");
 			dto.setNoWorking(br.readLine());
 
-			int result =+ dao.updateEmployee(dto);
+			int result = dao.updateEmployee(dto);
 			
 			if (result == 0) {
 				System.out.println("등록된 사원정보가 없습니다");
@@ -175,7 +184,7 @@ public class EmployeeUI {
 				return;
 			}
 
-			// System.out.println("아이디\t이름 t\t이름\t생년월일\t이메일\t전화번호");
+			// System.out.println("아이디\t이름t\주민등록번호t\이메일t\전화번호t\부서\t직급\t고용형태\t입사날짜 \t퇴사날짜 \t 근무상태);
 			// System.out.println("--------------------------------------------------");
 			System.out.print(dto.getId() + "\t");
 			System.out.print(dto.getName() + "\t");
@@ -240,10 +249,7 @@ public class EmployeeUI {
 				case 2:
 					updatework();
 					break;
-				case 3:
-					returntomain();
 
-					break;
 
 				}
 			} catch (Exception e) {
@@ -302,7 +308,6 @@ public class EmployeeUI {
 
 		try {
 		     String id;
-			EmployeeDTO dto = new EmployeeDTO();
 			
 			System.out.print("담당사원번호를 입력하세요.");
 			id = br.readLine();
@@ -314,13 +319,13 @@ public class EmployeeUI {
 			}
 			*/
 			
-			List<EmployeeDTO> elist = dto.listWork();
+			List<EmployeeDTO> list = dao.listWork(id);
 			
 			System.out.println(id+"님의 업무 기록 ");
 			System.out.println("★업무번호★\t사번\t이름\t업무내용\t업무시작\t업무종료\t업무진행상황");
 			System.out.println("------------------------------------------------------------------------");
 			
-			for (EmployeeDTO empdao : elist) {
+			for (EmployeeDTO empdao : list) {
 				System.out.print("★" + empdao.getWorkNo() + "★\t");
 				System.out.print(empdao.getId() + "\t");
 				System.out.print(empdao.getName() + "\t");
@@ -331,7 +336,7 @@ public class EmployeeUI {
 			}
 			System.out.println("------------------------------------------------------------------------");
 		
-
+			EmployeeDTO dto = new EmployeeDTO();
 			dto.setId(id);
 			System.out.print("수정할 데이터의 업무번호는 ? ");
 			dto.setWorkNo(br.readLine());
@@ -358,12 +363,6 @@ public class EmployeeUI {
 			e.printStackTrace();
 		}
 	}
+}
 
-
-
-	protected void returntomain() {
-
-	}
-		
-	}
 

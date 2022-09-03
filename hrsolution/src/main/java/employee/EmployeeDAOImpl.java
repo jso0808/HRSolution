@@ -87,8 +87,19 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 			pstmt.setString(8, dto.getHireDate());
 			pstmt.setString(9, dto.getLeaveDate());
 			pstmt.setString(10, dto.getNoWorking());
-	
 			result = pstmt.executeUpdate();
+			pstmt.close();
+			pstmt = null;
+			
+			sql = "INSERT INTO employee_history(deptNo,posNo) values (?,?)";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, dto.getDept());
+			pstmt.setString(2, dto.getPos());
+			pstmt.close();
+
+	
+	
 		} catch (SQLIntegrityConstraintViolationException e) {
 			
 			if(e.getErrorCode() == 1) {
@@ -152,6 +163,22 @@ public int updateEmployee(EmployeeDTO dto) throws SQLException {
 		pstmt.setString(9,dto.getNoWorking());
 		pstmt.setString(10,dto.getId());
 		result = pstmt.executeUpdate();
+		pstmt.close();
+		pstmt = null;
+		
+		sql = "UPDATE Employee_history SET deptNo=?,positionNo=? where id = ? "; //물음표 위치가 틀리면 안돼 
+		
+		pstmt = conn.prepareStatement(sql);
+		pstmt.setString(1, dto.getDept());
+		pstmt.setString(2, dto.getPos());
+		pstmt.setString(3, dto.getId());
+		
+		result=pstmt.executeUpdate();
+		pstmt.close();
+		
+		
+		
+		
 		
 	} catch (SQLIntegrityConstraintViolationException e) {
 		if (e.getErrorCode() == 1400) {
@@ -187,7 +214,7 @@ public int updateEmployee(EmployeeDTO dto) throws SQLException {
 }
 
 
-@Override
+@Override 
 public EmployeeDTO readEmployee(String id) {
 	List<EmployeeDTO> list = new ArrayList<>();
 	EmployeeDTO dto = null;
@@ -202,7 +229,7 @@ try {
 			 + " JOIN Employee e ON e.id = emp_his.id"
 			 + " LEFT OUTER JOIN department d ON d.deptNum = emp_his.deptNo"
 			 + " LEFT OUTER JOIN position p ON p.positionNo = emp_his.positionNo"
-			 + " WHERE pd=1";
+			 + " WHERE e.id=?";
 								
 	/*
 				+ " FROM (Select positionNo,id,deptNo From employee_history)employee e"
@@ -213,6 +240,7 @@ try {
 				+ " ORDER BY e.id DESC";
 		*/
 		pstmt = conn.prepareStatement(sql);
+		pstmt.setString(1, id);
 		rs = pstmt.executeQuery();
 		
 		while (rs.next()) {
@@ -375,7 +403,9 @@ public int updateWorker(EmployeeDTO dto) throws SQLException {
 	String sql;
 
 	try {
-		// UPDATE 테이블명 SET 컬럼=값, 컬럼=값 WHERE 조건
+		
+		conn.setAutoCommit(false);
+		// 업무리스트 수정하기 
 		sql = "UPDATE worker SET workNo=?, proTitle=?,proStart=?,proEnd=?,proRate=?,project=? where workerNo=?  "; //물음표 위치가 틀리면 안돼 
 		//workNo, proTitle,proStart,proEnd,proRate,project
 		// 담당 업무 수정. workNo, workerNo 혼동 주의
@@ -435,32 +465,35 @@ public int updateWorker(EmployeeDTO dto) throws SQLException {
 
 @Override //업무이력리스트 
 public List<EmployeeDTO> listWork(String id) {
-		EmployeeDTO dto = null;
-		List<EmployeeDTO> eList = new ArrayList<>();
+		List<EmployeeDTO> list = new ArrayList<>();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		String sql;
 		
 		try {
 		
-			sql = "SELECT getWorkNo,id,project,prostart,proend,project"
-					+ " From Worker";
+			sql = "SELECT workNo,e.id,name, protitle,prostart,proend,project"
+					+ " From Worker w "
+					+  " JOIN employee e ON w.id = e.id "
+					+ " WHERE w.id = ?";
 			
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, id);
 			rs = pstmt.executeQuery();
 			
 			while(rs.next()) {
-				dto = new EmployeeDTO();
 				
-				dto.setWorkNo(rs.getString("Workid"));
+			    EmployeeDTO dto = new EmployeeDTO();
+				
+				dto.setWorkNo(rs.getString("workNo"));
 				dto.setId(rs.getString("id"));
+				dto.setName(rs.getString("name"));
 				dto.setProTitle(rs.getString("protitle"));
 				dto.setProStart(rs.getString("proStart"));
 				dto.setProEnd(rs.getString("proEnd"));
 				dto.setProject(rs.getString("project"));
 				
-				eList.add(dto);
+				list.add(dto);
 			}
 
 		} catch (Exception e) {
@@ -481,8 +514,56 @@ public List<EmployeeDTO> listWork(String id) {
 			}
 		}
 
-		return eList;
+		return list;
 
 }
+public List<EmployeeDTO> listWork() {
+	List<EmployeeDTO> list = new ArrayList<>();
+	PreparedStatement pstmt = null;
+	ResultSet rs = null;
+	String sql;
+	
+	try {
+	
+		sql = "SELECT workNo,id,protitle,prostart,proend,project"
+				+ " From Worker ";
+		
+		pstmt = conn.prepareStatement(sql);
+		rs = pstmt.executeQuery();
+		
+		while(rs.next()) {
+			
+		    EmployeeDTO dto = new EmployeeDTO();
+			
+			dto.setWorkNo(rs.getString("workNo"));
+			dto.setId(rs.getString("id"));
+			dto.setProTitle(rs.getString("protitle"));
+			dto.setProStart(rs.getString("proStart"));
+			dto.setProEnd(rs.getString("proEnd"));
+			dto.setProject(rs.getString("project"));
+			
+			list.add(dto);
+		}
 
+	} catch (Exception e) {
+		e.printStackTrace();
+	} finally {
+		if (pstmt != null) {
+			try {
+				pstmt.close();
+			} catch (Exception e2) {
+			}
+		}
+
+		if (rs != null) {
+			try {
+				rs.close();
+			} catch (Exception e2) {
+			}
+		}
+	}
+
+	return list;
+
+}
 }
