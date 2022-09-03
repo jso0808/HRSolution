@@ -12,6 +12,8 @@ import java.util.Scanner;
 
 import com.util.DBConn;
 
+import salary.SalaryDTO;
+
 
 public class EmployeeDAOImpl implements EmployeeDAO {
 	
@@ -374,8 +376,10 @@ public int updateWorker(EmployeeDTO dto) throws SQLException {
 
 	try {
 		// UPDATE 테이블명 SET 컬럼=값, 컬럼=값 WHERE 조건
-		sql = "UPDATE worker SET workNo=?, proTitle=?,proStart=?,proEnd=?,proRate=?,project=? where id=?  "; //물음표 위치가 틀리면 안돼 
+		sql = "UPDATE worker SET workNo=?, proTitle=?,proStart=?,proEnd=?,proRate=?,project=? where workerNo=?  "; //물음표 위치가 틀리면 안돼 
 		//workNo, proTitle,proStart,proEnd,proRate,project
+		// 담당 업무 수정. workNo, workerNo 혼동 주의
+	
 		pstmt = conn.prepareStatement(sql);
 		
 		pstmt.setString(1,dto.getWorkNo());
@@ -383,7 +387,7 @@ public int updateWorker(EmployeeDTO dto) throws SQLException {
 		pstmt.setString(3,dto.getProStart());
 		pstmt.setString(4,dto.getProEnd());
 		pstmt.setString(5,dto.getProject());
-		pstmt.setString(6,dto.getId());
+		pstmt.setString(6,dto.getWorkNo());
 		
 		result = pstmt.executeUpdate();
 		pstmt.close();
@@ -399,13 +403,14 @@ public int updateWorker(EmployeeDTO dto) throws SQLException {
 		} catch (Exception e2) {
 		}
 		
-		
-		if(e.getErrorCode() == 1400) { //not null
+		 if (e.getErrorCode() == 1400) { // NOT NULL
 			System.out.println("필수 입력 사항을 입력하지 않았습니다. ");
+		} else if(e.getErrorCode() == 1840 || e.getErrorCode() == 1861) { // 날짜 입력 오류
+			System.out.println("날짜 형식 오류입니다. ");
 		} else {
 			System.out.println(e.toString());
 		}
-		
+
 		throw e;
 			
 	} catch (Exception e) {
@@ -422,15 +427,62 @@ public int updateWorker(EmployeeDTO dto) throws SQLException {
 			conn.setAutoCommit(true);
 		} catch (Exception e2) {
 		}
+
 	}
 	return result;
+
 }
 
-@Override
-public List<EmployeeDTO> listWork() {
+@Override //업무이력리스트 
+public List<EmployeeDTO> listWork(String id) {
+		EmployeeDTO dto = null;
+		List<EmployeeDTO> eList = new ArrayList<>();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql;
+		
+		try {
+		
+			sql = "SELECT getWorkNo,id,project,prostart,proend,project"
+					+ " From Worker";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, id);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				dto = new EmployeeDTO();
+				
+				dto.setWorkNo(rs.getString("Workid"));
+				dto.setId(rs.getString("id"));
+				dto.setProTitle(rs.getString("protitle"));
+				dto.setProStart(rs.getString("proStart"));
+				dto.setProEnd(rs.getString("proEnd"));
+				dto.setProject(rs.getString("project"));
+				
+				eList.add(dto);
+			}
 
-	// TODO Auto-generated method stub
-	return null;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+				}
+			}
+
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (Exception e2) {
+				}
+			}
+		}
+
+		return eList;
+
 }
 
 }

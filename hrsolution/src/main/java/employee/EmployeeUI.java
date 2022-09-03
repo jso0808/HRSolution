@@ -298,7 +298,6 @@ public class EmployeeUI {
 
 	protected void updatework() {
 		
-	
 		System.out.println("\n**** 업무이력 수정 **** ");
 
 		try {
@@ -306,13 +305,14 @@ public class EmployeeUI {
 			EmployeeDTO dto = new EmployeeDTO();
 			
 			System.out.print("담당사원번호를 입력하세요.");
-			
 			id = br.readLine();
 			
-			if (Integer.parseInt(loginEmp.getPositionno()) < 3 && !(loginEmp.getId().equals(dto.getId()))) {
+			
+			/*if (Integer.parseInt(loginEmp.getPositionno()) < 3 && !(loginEmp.getId().equals(dto.getId()))) {
 				System.out.println("접근 권한이 없습니다. \n");
 				return;
 			}
+			*/
 			
 			List<EmployeeDTO> elist = dto.listWork();
 			
@@ -352,19 +352,11 @@ public class EmployeeUI {
 			
 			System.out.println("업무이력 수정 완료 !!! ");
 			
-
-			int result = dao.updateWorker(dto);
-			
-			if (result == 0) {
-				System.out.println("등록된 사원정보가 없습니다");
-			} else {
-				System.out.println("업무이력이 수정되었습니다.");
-			}
+			System.out.println();
 
 		} catch (Exception e) {
-			System.out.println("등록된 업무이력이 없습니다.");
+			e.printStackTrace();
 		}
-		System.out.println();
 	}
 
 
@@ -372,70 +364,6 @@ public class EmployeeUI {
 	protected void returntomain() {
 
 	}
-
-}
-
-/*@Override
-	public void updateSalary(SalaryDTO sdto) throws SQLException {
-		PreparedStatement pstmt = null;
-		int rs = 0;
-		String sql = null;
-		
-		
-		try {	
-
-			// 자동 커밋되지 않도록
-			conn.setAutoCommit(false);
-			// 현재 연봉 정보 수정
-			sql = "UPDATE Salary SET sal=?,salStart=?,salEnd=?,memo=? "
-					+ " WHERE salno=(SELECT MAX(salNo) FROM Salary WHERE salNo=?)";
-
-			pstmt = conn.prepareStatement(sql);
-
-			pstmt.setString(1, sdto.getSal());
-			pstmt.setString(2, sdto.getSalStart());
-			pstmt.setString(3, sdto.getSalEnd());
-			pstmt.setString(4, sdto.getMemo());
-			pstmt.setString(5, sdto.getSalNo());
-
-			rs = pstmt.executeUpdate();
-			pstmt.close();
-			
-			// 커밋 
-			conn.commit();
-			
-			System.out.println("연봉 수정 완료 !!! ");
-			
-		} catch (SQLIntegrityConstraintViolationException e) {
-			try {
-				conn.rollback();
-			} catch (Exception e2) {
-			}
-			
-			
-			if(e.getErrorCode() == 1400) { // NOT NULL
-				System.out.println("필수 입력 사항을 입력하지 않았습니다. ");
-			} else {
-				System.out.println(e.toString());
-			}
-			
-			throw e;
-				
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if(pstmt != null) {
-				try {
-					pstmt.close();
-				} catch (Exception e2) {
-				}
-			}
-			
-			try {
-				conn.setAutoCommit(true);
-			} catch (Exception e2) {
-			}
-		}
 		
 	}
-*/
+
