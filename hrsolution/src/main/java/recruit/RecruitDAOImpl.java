@@ -44,7 +44,7 @@ public  class RecruitDAOImpl implements RecruitDAO{
 		} catch (SQLIntegrityConstraintViolationException e) {
 			// 기본키 제약 위반, NOT NULL 등의 제약 위반 - 무결성 제약 위반시 발생
 						if(e.getErrorCode() == 1) { // ORA-00001, 기본키 중복
-							System.out.println("급여 번호 중복으로 등록 불가능합니다. ");
+							System.out.println("  중복으로 등록 불가능합니다. ");
 						}else if(e.getErrorCode()==1400){ 
 				System.out.println("필수 입력사항을 입력하지 않았습니다.");
 			} else {
@@ -104,7 +104,7 @@ public  class RecruitDAOImpl implements RecruitDAO{
 
 		} catch (SQLIntegrityConstraintViolationException e) {
 			if(e.getErrorCode() == 1) { // ORA-00001, 기본키 중복
-				System.out.println("급여 번호 중복으로 등록 불가능합니다. ");
+				System.out.println(" 중복으로 등록 불가능합니다. ");
 			}else if(e.getErrorCode()==1400){ 
 				System.out.println("필수 입력사항을 입력하지 않았습니다.");
 			} else {
@@ -177,7 +177,8 @@ public  class RecruitDAOImpl implements RecruitDAO{
 		
 			
 			sql = "SELECT po.posNo, posNum, pos, TO_CHAR(posStart,'YYYY-MM-DD')posStart,TO_CHAR(posEnd,'YYYY-MM-DD')posEnd, posMeans, posPro, deptNo, po.id poid, posTitle, "
-					+ " ap.apNo, apName, TO_CHAR(apBirth,'YYYY-MM-DD')apBirth, TO_CHAR(apDate,'YYYY-MM-DD')apDate, TO_CHAR(apInterview,'YYYY-MM-DD')apInterview, apRoute, apResult1, apResult2, apResult3, apTel, "
+					//+ " ap.apNo, apName, TO_CHAR(apBirth,'YYYY-MM-DD')apBirth, TO_CHAR(apDate,'YYYY-MM-DD')apDate, TO_CHAR(apInterview,'YYYY-MM-DD')apInterview, apRoute,  NVL(apResult1 , 'x')apResult1, NVL(apResult1 , 'x')apResult2, NVL(apResult1 , 'x')apResult3,  NVL(apTel, 'x')apTel," 
+					+ " ap.apNo, apName, TO_CHAR(apBirth,'YYYY-MM-DD')apBirth, TO_CHAR(apDate,'YYYY-MM-DD')apDate, TO_CHAR(apInterview,'YYYY-MM-DD')apInterview, apRoute, NVL(apResult1 , 'x')apResult1,NVL(apResult2 , 'x')apResult2, NVL(apResult3 , 'x')apResult3, NVL(apTel , 'x')apTel, "
 					+ " evNo, ev.id evid, evGrade1, evGrade2, evGrade3, evReason"
 					+ " From Posting po"
 					+ " LEFT OUTER JOIN Applicant ap ON po.posNo=ap.posNo"
@@ -253,14 +254,21 @@ public  class RecruitDAOImpl implements RecruitDAO{
 		String sql;
 		
 		try {
-			
+			/*
 			 sql = "SELECT po.posNo, posNum, pos, TO_CHAR(posStart,'YYYY-MM-DD')posStart,TO_CHAR(posEnd,'YYYY-MM-DD')posEnd, posMeans, posPro, deptNo, po.id poid, posTitle, "
 					+ " ap.apNo, apName, TO_CHAR(apBirth,'YYYY-MM-DD')apBirth, TO_CHAR(apDate,'YYYY-MM-DD')apDate, TO_CHAR(apInterview,'YYYY-MM-DD')apInterview, apRoute, apResult1, apResult2, apResult3, apTel, "
 					+ " evNo, ev.id evid, evGrade1, evGrade2, evGrade3, evReason"
 					+ " From Posting po"
 					+ " LEFT OUTER JOIN Applicant ap ON po.posNo=ap.posNo"
 					+ " LEFT OUTER JOIN Evaluator ev ON ap.apNo=ev.apNo";
-			 
+			 */
+			 sql = "SELECT po.posNo,posNum, pos, TO_CHAR(posStart,'YYYY-MM-DD')posStart,TO_CHAR(posEnd,'YYYY-MM-DD')posEnd, posMeans, posPro, deptNo, po.id poid, posTitle, " 			            
+						+ " ap.apNo, NVL(apName , 'x')apName, TO_CHAR(apBirth,'YYYY-MM-DD')apBirth, TO_CHAR(apDate,'YYYY-MM-DD')apDate, TO_CHAR(apInterview,'YYYY-MM-DD')apInterview, NVL(apRoute, 'x')apRoute, NVL(apResult1 , 'x')apResult1,NVL(apResult2 , 'x')apResult2, NVL(apResult3 , 'x')apResult3, NVL(apTel, 'x')apTel, "
+						+ " NVL(evNo , 'x')evNo, NVL(ev.id , 'x')evid, evGrade1, evGrade2, evGrade3, NVL(evReason , 'x')evReason"
+						+ " From Posting po"
+						+ " LEFT OUTER JOIN Applicant ap ON po.posNo=ap.posNo"
+						+ " LEFT OUTER JOIN Evaluator ev ON ap.apNo=ev.apNo";
+			
 			pstmt = conn.prepareStatement(sql);
 		
 			rs = pstmt.executeQuery();
@@ -327,14 +335,23 @@ public  class RecruitDAOImpl implements RecruitDAO{
 		String sql;
 
 		try {
-			 sql = "SELECT po.posNo, posNum, pos, TO_CHAR(posStart,'YYYY-MM-DD')posStart,TO_CHAR(posEnd,'YYYY-MM-DD')posEnd, posMeans, posPro, deptNo, po.id poid, posTitle, "
+			/*
+			sql = "SELECT po.posNo, posNum, pos, TO_CHAR(posStart,'YYYY-MM-DD')posStart,TO_CHAR(posEnd,'YYYY-MM-DD')posEnd, posMeans, posPro, deptNo, po.id poid, posTitle, "
 						+ " ap.apNo, apName, TO_CHAR(apBirth,'YYYY-MM-DD')apBirth, TO_CHAR(apDate,'YYYY-MM-DD')apDate, TO_CHAR(apInterview,'YYYY-MM-DD')apInterview, apRoute, apResult1, apResult2, apResult3, apTel, "
 						+ " evNo, ev.id evid, evGrade1, evGrade2, evGrade3, evReason"
 						+ " From Posting po"
 						+ " LEFT OUTER JOIN Applicant ap ON po.posNo=ap.posNo"
 						+ " LEFT OUTER JOIN Evaluator ev ON ap.apNo=ev.apNo"
-			            + " WHERE INSTR(apName, ?)>=1";
+			            + " WHERE INSTR(apName, ?)>=1";*/
 			 
+			sql = "SELECT po.posNo, posNum, pos, TO_CHAR(posStart,'YYYY-MM-DD')posStart,TO_CHAR(posEnd,'YYYY-MM-DD')posEnd, posMeans, posPro, deptNo, po.id poid, posTitle, "
+					+ " ap.apNo, apName, TO_CHAR(apBirth,'YYYY-MM-DD')apBirth, TO_CHAR(apDate,'YYYY-MM-DD')apDate, TO_CHAR(apInterview,'YYYY-MM-DD')apInterview, apRoute, NVL(apResult1 , 'x')apResult1,NVL(apResult2 , 'x')apResult2, NVL(apResult3 , 'x')apResult3, NVL(apTel , 'x')apTel, "
+					+ " NVL(evNo , 'x')evNo, NVL(ev.id , 'x')evid, evGrade1,evGrade2, evGrade3, NVL(evReason , 'x')evReason"
+					+ " From Posting po"
+					+ " LEFT OUTER JOIN Applicant ap ON po.posNo=ap.posNo"
+					+ " LEFT OUTER JOIN Evaluator ev ON ap.apNo=ev.apNo"
+		            + " WHERE INSTR(apName, ?)>=1";
+			//NVL(evNo , '1'),ev.id evid
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, apName);
 
@@ -416,7 +433,7 @@ public  class RecruitDAOImpl implements RecruitDAO{
 		
 		} catch (SQLIntegrityConstraintViolationException e) {
 			if(e.getErrorCode() == 1) { // ORA-00001, 기본키 중복
-				System.out.println("급여 번호 중복으로 등록 불가능합니다. ");
+				System.out.println(" 중복으로 등록 불가능합니다. ");
 			}else if(e.getErrorCode()==1400){ 
 				System.out.println("필수 입력사항을 입력하지 않았습니다.");
 			} else {
