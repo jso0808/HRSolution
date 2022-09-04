@@ -141,7 +141,7 @@ public class EmployeeUI {
 			System.out.print("새로운 직급번호를 입력하세요." + "\n(인턴:1/사원:2/대리:3/과장:4/차장:5/부장:6/본부장:7/대표이사:8)");
 			dto.setPos(br.readLine());
 			
-			System.out.print("변경된 고용형태를 입력하세요.");
+			System.out.print("변경된 고용형태를 입력하세요."+ "(계약직/정규직)");
 			dto.setFt(br.readLine());
 
 			System.out.print("변경된 입사날짜를 입력하세요.");
@@ -150,7 +150,8 @@ public class EmployeeUI {
 			System.out.print("새로운 퇴사날짜를 입력하세요.");
 			dto.setLeaveDate(br.readLine());
 
-			System.out.print("변경된 근무상태를 입력하세요.");
+			System.out.print("변경된 근무상태를 입력하세요."+"(재직중/퇴사)");
+			
 			dto.setNoWorking(br.readLine());
 
 			int result = dao.updateEmployee(dto);
