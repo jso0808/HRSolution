@@ -261,7 +261,7 @@ public class RecruitUI {
 		System.out.println("---------------------------------------------------------------------");
 		
 		for (RecruitDTO dto : list) {
-			System.out.println("\t["+dto.getPosTitle()+"]");
+			System.out.println("\t["+dto.getPosTitle()+"]" + "                 채용공고번호 : " + dto.getPosNo() );
 			System.out.println("채용 부서:    "+dto.getDept());
 			System.out.println("채용 인원:    "+dto.getPosNum());
 			System.out.println("소개: "+dto.getPos());
