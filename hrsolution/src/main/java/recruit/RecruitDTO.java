@@ -9,6 +9,7 @@ private String posEnd;
 private String PosMeans;
 private String PosPro;
 private String deptNo;
+private String dept;
 private String id;
 private String posTitle;
 
@@ -195,5 +196,11 @@ public String getPosTitle() {
 }
 public void setPosTitle(String posTitle) {
 	this.posTitle = posTitle;
+}
+public String getDept() {
+	return dept;
+}
+public void setDept(String dept) {
+	this.dept = dept;
 }
 }

@@ -177,13 +177,25 @@ public  class RecruitDAOImpl implements RecruitDAO{
 		
 			
 			sql = "SELECT po.posNo, posNum, pos, TO_CHAR(posStart,'YYYY-MM-DD')posStart,TO_CHAR(posEnd,'YYYY-MM-DD')posEnd, posMeans, posPro, deptNo, po.id poid, posTitle, "
-					//+ " ap.apNo, apName, TO_CHAR(apBirth,'YYYY-MM-DD')apBirth, TO_CHAR(apDate,'YYYY-MM-DD')apDate, TO_CHAR(apInterview,'YYYY-MM-DD')apInterview, apRoute,  NVL(apResult1 , 'x')apResult1, NVL(apResult1 , 'x')apResult2, NVL(apResult1 , 'x')apResult3,  NVL(apTel, 'x')apTel," 
 					+ " ap.apNo, apName, TO_CHAR(apBirth,'YYYY-MM-DD')apBirth, TO_CHAR(apDate,'YYYY-MM-DD')apDate, TO_CHAR(apInterview,'YYYY-MM-DD')apInterview, apRoute, NVL(apResult1 , 'x')apResult1,NVL(apResult2 , 'x')apResult2, NVL(apResult3 , 'x')apResult3, NVL(apTel , 'x')apTel, "
-					+ " evNo, ev.id evid, evGrade1, evGrade2, evGrade3, evReason"
+					+ " NVL(evNo , 'x')evNo, NVL(ev.id , 'x')evid, evGrade1,evGrade2, evGrade3, NVL(evReason , 'x')evReason"
 					+ " From Posting po"
 					+ " LEFT OUTER JOIN Applicant ap ON po.posNo=ap.posNo"
 					+ " LEFT OUTER JOIN Evaluator ev ON ap.apNo=ev.apNo"
 			        + " WHERE INSTR(posTitle, ?)>=1";
+			
+			/*
+			sql = "SELECT posno, dept, postitle, posnum, NVL(pos,' '), TO_CHAR(posend,'YYYY-MM-DD') posmeans, pospro"
+					+ " FROM posting p"
+					+ " LEFT OUTER JOIN department d ON d.deptNum=p.deptNo";
+					*/
+			/* "SELECT po.posNo, posNum, pos, TO_CHAR(posStart,'YYYY-MM-DD')posStart,TO_CHAR(posEnd,'YYYY-MM-DD')posEnd, posMeans, posPro, deptNo, po.id poid, posTitle, "
+					+ " ap.apNo, apName, TO_CHAR(apBirth,'YYYY-MM-DD')apBirth, TO_CHAR(apDate,'YYYY-MM-DD')apDate, TO_CHAR(apInterview,'YYYY-MM-DD')apInterview, apRoute, NVL(apResult1 , 'x')apResult1,NVL(apResult2 , 'x')apResult2, NVL(apResult3 , 'x')apResult3, NVL(apTel , 'x')apTel, "
+					+ " NVL(evNo , 'x')evNo, NVL(ev.id , 'x')evid, evGrade1,evGrade2, evGrade3, NVL(evReason , 'x')evReason"
+					+ " From Posting po"
+					+ " LEFT OUTER JOIN Applicant ap ON po.posNo=ap.posNo"
+					+ " LEFT OUTER JOIN Evaluator ev ON ap.apNo=ev.apNo"
+					*/
 			
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, posTitle);
@@ -262,12 +274,19 @@ public  class RecruitDAOImpl implements RecruitDAO{
 					+ " LEFT OUTER JOIN Applicant ap ON po.posNo=ap.posNo"
 					+ " LEFT OUTER JOIN Evaluator ev ON ap.apNo=ev.apNo";
 			 */
+			/*
 			 sql = "SELECT po.posNo,posNum, pos, TO_CHAR(posStart,'YYYY-MM-DD')posStart,TO_CHAR(posEnd,'YYYY-MM-DD')posEnd, posMeans, posPro, deptNo, po.id poid, posTitle, " 			            
 						+ " ap.apNo, NVL(apName , 'x')apName, TO_CHAR(apBirth,'YYYY-MM-DD')apBirth, TO_CHAR(apDate,'YYYY-MM-DD')apDate, TO_CHAR(apInterview,'YYYY-MM-DD')apInterview, NVL(apRoute, 'x')apRoute, NVL(apResult1 , 'x')apResult1,NVL(apResult2 , 'x')apResult2, NVL(apResult3 , 'x')apResult3, NVL(apTel, 'x')apTel, "
 						+ " NVL(evNo , 'x')evNo, NVL(ev.id , 'x')evid, evGrade1, evGrade2, evGrade3, NVL(evReason , 'x')evReason"
 						+ " From Posting po"
 						+ " LEFT OUTER JOIN Applicant ap ON po.posNo=ap.posNo"
 						+ " LEFT OUTER JOIN Evaluator ev ON ap.apNo=ev.apNo";
+					*/
+			
+			sql = "SELECT posno, dept, postitle, posnum, NVL(pos,' ')pos, TO_CHAR(posStart,'YYYY-MM-DD')posStart,"
+					+ " TO_CHAR(posend,'YYYY-MM-DD')posend, posmeans, pospro"
+					+ " FROM posting p"
+					+ " LEFT OUTER JOIN department d ON d.deptNum=p.deptNo";
 			
 			pstmt = conn.prepareStatement(sql);
 		
@@ -283,27 +302,8 @@ public  class RecruitDAOImpl implements RecruitDAO{
 				dto.setPosEnd(rs.getString("posEnd"));
 				dto.setPosMeans(rs.getString("posMeans"));
 				dto.setPosPro(rs.getString("posPro"));
-				dto.setDeptNo(rs.getString("deptNo"));
-				dto.setId(rs.getString("Poid"));
 				dto.setPosTitle(rs.getString("posTitle"));
-				//위에는 채용공고테이블 
-				dto.setApNo(rs.getString("apNo"));
-				dto.setApName(rs.getString("apName"));
-				dto.setApBirth(rs.getString("apBirth"));
-				dto.setApDate(rs.getString("apDate"));
-				dto.setApInterview(rs.getString("apInterview"));
-				dto.setApRoute(rs.getString("apRoute"));
-				dto.setApResult1(rs.getString("apResult1"));
-				dto.setApResult2(rs.getString("apResult2"));
-				dto.setApResult3(rs.getString("apResult2"));
-				dto.setApTel(rs.getString("apTel"));
-												
-				dto.setEvNo(rs.getString("EvNo"));
-				dto.setId(rs.getString("Evid"));
-				dto.setEvGrade1(rs.getInt("EvGrade1"));
-				dto.setEvGrade2(rs.getInt("EvGrade1"));
-				dto.setEvGrade3(rs.getInt("EvGrade1"));
-				dto.setEvReason(rs.getString("EvReason"));
+				dto.setDept(rs.getString("dept"));
 				
 				list.add(dto);
 			}

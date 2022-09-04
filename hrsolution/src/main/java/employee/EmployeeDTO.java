@@ -18,6 +18,8 @@ public class EmployeeDTO {
 	private String dept;
     private String workNo;
     private String workerNo;
+    private String paReason;
+    
     public String getWorkerNo() {
 		return workerNo;
 	}
@@ -143,6 +145,12 @@ public class EmployeeDTO {
 	public List<EmployeeDTO> listWork() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	public String getPaReason() {
+		return paReason;
+	}
+	public void setPaReason(String paReason) {
+		this.paReason = paReason;
 	}
 	
 		

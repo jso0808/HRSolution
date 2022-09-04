@@ -8,7 +8,7 @@ public class App {
 
 	public static void main(String[] args) throws IOException, InterruptedException {		
 		String path = App.class.getResource("").getPath(); 
-		String filename = ".//HR.txt";
+		String filename = ".\\HR.txt";
 		BufferedReader in= new BufferedReader(new FileReader(path+filename));
 		
         String str;

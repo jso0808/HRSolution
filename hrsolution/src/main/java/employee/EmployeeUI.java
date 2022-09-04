@@ -5,12 +5,14 @@ import java.io.InputStreamReader;
 import java.util.List;
 
 import com.main.LoginDTO;
+import com.main.ValidCheck;
 import com.util.DBConn;
 
 public class EmployeeUI {
 	private BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	private EmployeeDAO dao = new EmployeeDAOImpl();
 	private LoginDTO loginEmp;
+	private ValidCheck valchk = new ValidCheck();
 
 	public void employeemenu(LoginDTO loginEmp) {
 		this.loginEmp = loginEmp;
@@ -60,27 +62,89 @@ public class EmployeeUI {
 		}
 		try {
 			String tel,emp;
+			String id, name, rrn, email, pareason;
 			
 			EmployeeDTO dto = new EmployeeDTO();
-
-			System.out.print("사원번호를 입력하세요.");
-			dto.setId(br.readLine());
-
-			System.out.print("이름을 입력하세요");
-			dto.setName(br.readLine());
-
-			System.out.print("주민번호를 입력하세요");
-			dto.setRrn(br.readLine());
-
-			System.out.print("이메일을 입력하세요");
-			dto.setEmail(br.readLine());
-
-			System.out.print("전화번호를 입력하세요");
-			tel = br.readLine();
-			dto.setTel(tel);
-			emp = tel;
 			
-		    dto.setPwd(emp.substring(9));
+			/*
+			System.out.println("         [ 부서코드 참고 ]");
+			System.out.println("재무부:100 인사부:200 총무부:300 개발부: 400");
+			System.out.println("마게팅부:500 기획부:600 유통부:700");
+			*/
+			
+			while(true) {
+				System.out.print("등록될 사원번호를 입력하세요 > ");
+				id = br.readLine();
+				
+				if(valchk.isNumber(id)==false) {
+					System.out.println("숫자만 입력 가능합니다. 다시 입력해주세요. \n");
+				} else {
+					dto.setId(id);
+					break;
+				}
+			}
+			
+			while(true) {
+				System.out.print("등록 사유를 입력하세요 (ex.입사) > ");
+				pareason = br.readLine();
+				
+				if(valchk.isKorean(pareason)==false) {
+					System.out.println("한글만 입력 가능합니다. 다시 입력해주세요. \n");
+				} else {
+					dto.setPaReason(pareason);
+					break;
+				}
+			}
+			
+			while(true) {
+				System.out.print("이름을 입력하세요 > ");
+				name = br.readLine();
+				
+				if(valchk.isKorean(name)==false) {
+					System.out.println("한글만 입력 가능합니다. 다시 입력해주세요. \n");
+				} else {
+					dto.setName(name);
+					break;
+				}
+			}
+			
+			while(true) {
+				System.out.print("주민번호를 입력하세요 > ");
+				rrn = br.readLine();
+				
+				if(valchk.isPersonalID(rrn)==false) {
+					System.out.println("주민번호 형식 오류. 다시 입력해주세요. \n");
+				} else {
+					dto.setRrn(rrn);
+					break;
+				}
+			}
+			
+			while(true) {
+				System.out.print("이메일을 입력하세요 > ");
+				email = br.readLine();
+				
+				if(valchk.isEmail(email)==false) {
+					System.out.println("이메일 형식 오류. 다시 입력해주세요. \n");
+				} else {
+					dto.setEmail(email);
+					break;
+				}
+			}
+			
+			while(true) {
+				System.out.print("휴대폰 번호를 입력하세요 (-포함) > ");
+				tel = br.readLine();
+				
+				if(valchk.isTel(tel)==false) {
+					System.out.println("숫자만 입력 가능합니다. 다시 입력해주세요. \n");
+				} else {
+					dto.setTel(tel);
+					emp = tel;
+					dto.setPwd(emp.substring(9));
+					break;
+				}
+			}
 		    
 		    System.out.print("부서코드를 입력하세요" + "\n(재무부:100/인사부:200/총무부:300/개발부:400/마케팅부:500/기획부:600/유통부:700)");
 			dto.setDept(br.readLine());
@@ -113,9 +177,19 @@ public class EmployeeUI {
 		System.out.println("\n**** 사원정보 수정 **** ");
 
 		try {
+			String id;
 			EmployeeDTO dto = new EmployeeDTO();
-			System.out.print("수정할 사원번호를 입력하세요.");
-			dto.setId(br.readLine());
+			while(true) {
+				System.out.print("수정할 사원번호를 입력하세요.");
+				id = br.readLine();
+				
+				if(valchk.isNumber(id)==false) {
+					System.out.println("숫자만 입력 가능합니다. 다시 입력해주세요. \n");
+				} else {
+					dto.setId(id);
+					break;
+				}
+			}
 
 			if (Integer.parseInt(loginEmp.getPositionno()) < 3 && !(loginEmp.getId().equals(dto.getId()))) {
 				System.out.println("접근 권한이 없습니다. \n");
@@ -172,10 +246,20 @@ public class EmployeeUI {
 	protected void findByid() {
 		System.out.println("\n**** 인사 기록 확인 ****");
 		String id;
+		EmployeeDTO dto = null;
 		try {
-			System.out.print("검색할 사번을 입력하세요\n");
-			id = br.readLine();
-			EmployeeDTO dto = dao.readEmployee(id);
+			
+			while(true) {
+				System.out.print("검색할 사번을 입력하세요\n");
+				id = br.readLine();
+				
+				if(valchk.isNumber(id)==false) {
+					System.out.println("숫자만 입력 가능합니다. 다시 입력해주세요. \n");
+				} else {
+					dto = dao.readEmployee(id);
+					break;
+				}
+			}
 
 			if (dto == null) {
 				System.out.println("등록된 사원정보가 없습니다.\n");

@@ -169,8 +169,17 @@ public class SalaryUI {
 			// String nowDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
 			String payNo = null; // 급여지급번호
 
-			System.out.print("급여를 지급할 사번 ? ");
-			id = br.readLine();
+			while(true) {
+				System.out.print("급여를 지급할 사번 ? ");
+				id = br.readLine();
+				
+				if(valchk.isNumber(id)==false) {
+					System.out.println("숫자만 입력 가능합니다. 다시 입력해주세요. \n");
+				} else {
+					break;
+				}
+			}
+
 			System.out.print("급여가 지급될 날짜 ? [형식: YYYY-MM-01]");
 			payDate = br.readLine();
 			System.out.print("몇월의 급여 ?  [형식: 8월->08] ? ");
@@ -224,28 +233,29 @@ public class SalaryUI {
 			longinsur = (int) (medicinsur * 0.1227);
 			employeeinsur = (int) (normal * 0.009);
 
-			if (Integer.parseInt(saldto.getSal()) <= 12_000_000) {
-				gapfee = (int) (Integer.parseInt(saldto.getSal())*0.006);
-			} else if (Integer.parseInt(saldto.getSal()) <= 46_000_000) {
-				gapfee = (int) (720_000+(Integer.parseInt(saldto.getSal())-12_000_000)*0.015);
-			} else if (Integer.parseInt(saldto.getSal()) <= 88_000_000) {
-				gapfee = (int) (5_820_000+(Integer.parseInt(saldto.getSal())-12_000_000)*0.024);
-			} else if (Integer.parseInt(saldto.getSal()) <= 3_500_000) {
+			// 공제대상가족수 2인 기준
+			if (normal <= 2_000_000) {
+				gapfee = 20_560;
+			} else if (normal <= 2_500_000) {
+				gapfee = 45_530;
+			} else if (normal <= 3_000_000) {
+				gapfee = 87_880;
+			} else if (normal <= 3_500_000) {
 				gapfee = 146_560;
-			} else if (Integer.parseInt(saldto.getSal()) <= 4_000_000) {
+			} else if (normal <= 4_000_000) {
 				gapfee = 214_810;
-			} else if (Integer.parseInt(saldto.getSal()) <= 4_500_000) {
+			} else if (normal <= 4_500_000) {
 				gapfee = 285_440;
-			} else if (Integer.parseInt(saldto.getSal()) <= 5_000_000) {
+			} else if (normal <= 5_000_000) {
 				gapfee = 335_190;
-			} else if (Integer.parseInt(saldto.getSal()) <= 5_500_000) {
+			} else if (normal <= 5_500_000) {
 				gapfee = 424_940;
-			} else if (Integer.parseInt(saldto.getSal()) <= 6_000_000) {
+			} else if (normal <= 6_000_000) {
 				gapfee = 562_350;
 			} else {
 				gapfee = normal / 10;
 			}
-			
+
 			gapfee /= 12;
 			// 주민세 = 소득세 x 10%
 			citizenfee = gapfee / 10;
@@ -287,9 +297,18 @@ public class SalaryUI {
 			String id, m;
 			String payNo = null; // 급여지급번호
 
-			System.out.print("급여를 수정할 사번 ? ");
-			id = br.readLine();
-			System.out.print("수정할 월일 ?  [형식: yyyy-MM] ? ");
+			while(true) {
+				System.out.print("급여를 수정할 사번 ? ");
+				id = br.readLine();
+				
+				if(valchk.isNumber(id)==false) {
+					System.out.println("숫자만 입력 가능합니다. 다시 입력해주세요. \n");
+				} else {
+					break;
+				}
+			}
+			
+			System.out.print("수정할 급여정보의 년월 ?  [형식: yyyy-MM] ? ");
 			m = br.readLine();
 
 			saldto = saldao.listSalaryNowEmp(id);
@@ -353,14 +372,16 @@ public class SalaryUI {
 		try {
 			String id;
 
-			System.out.print("급여 리스트 출력할 사번 ? ");
-			id = br.readLine();
-
-			/*
-			 * if (Integer.parseInt(loginEmp.getPositionno()) < 3 &&
-			 * !(loginEmp.getId().equals(dto.getId()))) {
-			 * System.out.println("접근 권한이 없습니다. \n"); return; }
-			 */
+			while(true) {
+				System.out.print("급여명세서를 출력할 사번 ? ");
+				id = br.readLine();
+				
+				if(valchk.isNumber(id)==false) {
+					System.out.println("숫자만 입력 가능합니다. 다시 입력해주세요. \n");
+				} else {
+					break;
+				}
+			}
 
 			// 본인이 아니고 재무부 사원이 아니면
 			if (!(logindto.getId().equals(id)) && !(logindto.getDeptno().equals("100"))) {
@@ -465,14 +486,24 @@ public class SalaryUI {
 
 		try {
 			SalaryDTO saldto = new SalaryDTO();
+			String id;
+			
+			while(true) {
+				System.out.print("협상할 사번 ? ");
+				id = br.readLine();
+				
+				if(valchk.isNumber(id)==false) {
+					System.out.println("숫자만 입력 가능합니다. 다시 입력해주세요. \n");
+				} else {
+					saldto.setId(id);
+					break;
+				}
+			}
 
-			System.out.print("협상할 사번 ? ");
-			saldto.setId(br.readLine());
-
-			System.out.print("수정할 연봉 ? ");
+			System.out.print("새로 협상된 연봉 ? ");
 			saldto.setSal(br.readLine());
 
-			System.out.print("연봉 시작일 ? ");
+			System.out.print("협상된 연봉의 시작일 ? ");
 			saldto.setSalStart(br.readLine());
 
 			System.out.print("메모 ? ");
@@ -497,8 +528,16 @@ public class SalaryUI {
 			String id;
 			SalaryDTO newsaldto = new SalaryDTO();
 
-			System.out.print("연봉을 수정할 사번 ? ");
-			id = br.readLine();
+			while(true) {
+				System.out.print("연봉을 수정할 사번 ? ");
+				id = br.readLine();
+				
+				if(valchk.isNumber(id)==false) {
+					System.out.println("숫자만 입력 가능합니다. 다시 입력해주세요. \n");
+				} else {
+					break;
+				}
+			}
 			
 			List<SalaryDTO> slist = saldao.listSalaryHisEmp(id);
 
@@ -516,7 +555,7 @@ public class SalaryUI {
 			System.out.println("------------------------------------------------------------------------");
 			
 			newsaldto.setId(id);
-			System.out.print("수정할 데이터의 연봉번호는 ? ");
+			System.out.print("수정할 연봉의 연봉번호는 ? ");
 			newsaldto.setSalNo(br.readLine());
 			
 			System.out.print("수정할 연봉 금액 ? ");
@@ -561,7 +600,7 @@ public class SalaryUI {
 
 			SalaryDTO sdto = saldao.listSalaryNowEmp(id);
 
-			if(sdto==null ) {
+			if(sdto== null ) {
 				System.out.println("데이터가 존재하지 않습니다. ");
 				return;
 			}
