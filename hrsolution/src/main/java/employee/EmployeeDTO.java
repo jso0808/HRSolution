@@ -17,7 +17,14 @@ public class EmployeeDTO {
 	private String pos;
 	private String dept;
     private String workNo;
-    private String proTitle;
+    private String workerNo;
+    public String getWorkerNo() {
+		return workerNo;
+	}
+	public void setWorkerNo(String workerNo) {
+		this.workerNo = workerNo;
+	}
+	private String proTitle;
     private String proStart;
     private String proEnd;
     private String proRate;

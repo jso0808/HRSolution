@@ -88,7 +88,7 @@ public class AttendanceDAOImpl implements AttendanceDAO{
 			result = pstmt.executeUpdate();
 		
 		} catch (SQLIntegrityConstraintViolationException e) {
-			if(e.getErrorCode() == 14000) {
+			if(e.getErrorCode() == 1400) {
 				System.out.println("필수 입력 사항을 입력 하지 않았습니다.");
 			} else {
 				System.out.println(e.toString());
@@ -150,7 +150,7 @@ public class AttendanceDAOImpl implements AttendanceDAO{
 	}
 	
 	@Override
-	public List<AttendanceDTO> listAttendance(String date) throws SQLException {
+	public List<AttendanceDTO> listAttendance(String date) {
 		List<AttendanceDTO> list = new ArrayList<>();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -205,7 +205,7 @@ public class AttendanceDAOImpl implements AttendanceDAO{
 	}
 
 	@Override
-	public List<AttendanceDTO> readAttendacne(String id, String date) throws SQLException {
+	public List<AttendanceDTO> readAttendacne(String id, String date) {
 		List<AttendanceDTO> list = new ArrayList<>();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -234,9 +234,10 @@ public class AttendanceDAOImpl implements AttendanceDAO{
 			}
 			
 		} catch (SQLException e) {
-			throw e;	
+			e.printStackTrace();	
 		} catch (Exception e) {
 			e.printStackTrace();
+		
 		} finally {
 			if(rs != null) {
 				try {
