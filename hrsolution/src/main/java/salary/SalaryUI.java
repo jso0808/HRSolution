@@ -294,7 +294,7 @@ public class SalaryUI {
 		try {
 			PayDTO paydto = new PayDTO();
 			SalaryDTO saldto = new SalaryDTO();
-			String id, m;
+			String id, year, m;
 			String payNo = null; // 급여지급번호
 
 			while(true) {
@@ -308,7 +308,10 @@ public class SalaryUI {
 				}
 			}
 			
-			System.out.print("수정할 급여정보의 년월 ?  [형식: yyyy-MM] ? ");
+			System.out.print("수정할 급여정보의 년도 ?  [형식: yyyy] ? ");
+			year = br.readLine();
+			
+			System.out.print("수정할 급여정보의 월 [형식: 8월->08] ? ");
 			m = br.readLine();
 
 			saldto = saldao.listSalaryNowEmp(id);
@@ -318,7 +321,7 @@ public class SalaryUI {
 			}
 
 			// 사번 + 년도뒷2자리 + 월일
-			payNo = id + "-" + m.substring(2, 3) + m.substring(5, 6);
+			payNo = id + "-" + year.substring(2, 4) + m;
 			System.out.println(payNo);
 
 			paydto.setPaywelfare(0);
@@ -346,7 +349,7 @@ public class SalaryUI {
 			System.out.print("주민세 ? ");
 			paydto.setPayextra(Integer.parseInt(br.readLine()));
 
-			// [급여번호 형식:사번-월 ex)10001-08 ]
+			// [급여번호 형식:사번-월 ex)10001-yy08 ]
 			paydto.setId(saldto.getId());
 			paydto.setPayno(payNo);
 

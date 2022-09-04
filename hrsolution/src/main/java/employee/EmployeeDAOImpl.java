@@ -92,14 +92,15 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 			pstmt = null;
 			
 			sql = "INSERT INTO employee_history(paNo, id, paDate, deptNo, positionNo, paReason) "
-					+ " values (his_seq.NEXTVAL,?,?,?,?,?)";
+					+ " VALUES (his_seq.NEXTVAL,?,to_date(?,'rrrr-mm-dd'),?,?,?)";
 			// 1사번 2변경일 3부서번호 4직급번호 5사유
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, dto.getId());
 			pstmt.setString(2, dto.getHireDate());
 			pstmt.setString(3, dto.getDept());
 			pstmt.setString(4, dto.getPos()); // 직급코드:사원
-			pstmt.setString(5, "입사");
+			pstmt.setString(5, dto.getPaReason());
+			result = pstmt.executeUpdate();
 			pstmt.close();
 
 		} catch (SQLIntegrityConstraintViolationException e) {

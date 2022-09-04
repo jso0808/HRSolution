@@ -17,6 +17,9 @@ public class ValidCheck {
 		return Pattern.matches("정규직|계약직", str);
 	}
 	//날짜형태 검사 ? 어떤형식임?
+	public boolean isDate(String str) {
+		return Pattern.matches("[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01]) ([01][0-9]|2[0-3]):([0-5][0-9]) ", str);
+	}
 	
 	//근무형태 검사
 	public boolean isWorking(String str) {

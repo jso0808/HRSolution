@@ -775,7 +775,7 @@ public class SalaryDAOImpl implements SalaryDAO{
 					+ " NVL(citizenfee,0)citizenfee, NVL(accidantinsur,0)accidantinsur"
 					+ " FROM pay WHERE id=? ";
 			*/
-			sql = "SELECT emp_his.id, name, dept, position, paDate(YYYY-MM)paDate, payNo,paydate,paynormal,"
+			sql = "SELECT emp_his.id, name, dept, position, TO_CHAR(paDate,'YYYY-MM')paDate, payNo,paydate,paynormal,"
 					+ " NVL(nationpen,0)nationpen, NVL(medicinsur,0)medicinsur,"
 					+ " NVL(longinsur,0)longinsur,NVL(employeeinsur,0)employeeinsur,NVL(paymeal,0)paymeal,"
 					+ " NVL(paywelfare,0)paywelfare,NVL(payextra,0)payextra, NVL(bonus,0)bonus,"
