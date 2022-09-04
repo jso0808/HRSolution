@@ -199,7 +199,7 @@ public class RecruitUI {
 	public void delete() {
 		System.out.println("채용공고 삭제");				
 		String posNo;
-		String id;
+		// String id;
 		int result=0;
 		try {
 			
@@ -209,16 +209,16 @@ public class RecruitUI {
 			
 			for (RecruitDTO dto : list) {
 				System.out.println("공고번호\t채용부서\t채용공고명");
-				System.out.print("★"+dto.getPosNo()+"★");
-				System.out.print(dto.getDept());
-				System.out.println(dto.getPosTitle());
+				System.out.print("★"+dto.getPosNo()+"★\t");
+				System.out.print(dto.getDept()+"\t");
+				System.out.println(dto.getPosTitle()+"\t");
 			}
 			
 			System.out.println("---------------------------------------------------------------------");
-			
+			/*
 			System.out.print("채용공고를 삭제할 사번 ? ");
 			id=br.readLine();
-			
+			*/
 			while(true) {
 				System.out.print("삭제할 ★채용공고번호★ ? ");
 				posNo=br.readLine();

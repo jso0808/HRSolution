@@ -2,6 +2,7 @@ package com.main;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.List;
 
 import com.util.DBConn;
 
@@ -20,6 +21,7 @@ public class MainUI {
 	private BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	
 	private LoginProcess loginprocess = new LoginProcess();
+	private ValidCheck valchk = new ValidCheck();
 	
 	private EmployeeUI employeeUI = new EmployeeUI();
 	private AttendanceUI attendanceUI = new AttendanceUI();
@@ -147,12 +149,33 @@ public class MainUI {
 		System.out.println("입사 지원 등록");
 		
 		try {
-			RecruitDTO dto=new RecruitDTO();
+			RecruitDTO dto = new RecruitDTO();
 			//System.out.println("접수번호");
 			//dto.setApNo(br.readLine());
+			String name, posno,aproute,aptel;
 			
-			System.out.print("이름 ? ");
-			dto.setApName(br.readLine());
+			List<RecruitDTO> list = dao.listRecruit();
+			System.out.println();
+			System.out.println("---------------------------------------------------------------------");
+			for (RecruitDTO ldto : list) {
+				System.out.println("공고번호\t채용부서\t채용공고명");
+				System.out.print("★"+ldto.getPosNo()+"★\t");
+				System.out.print(ldto.getDept()+"\t");
+				System.out.println(ldto.getPosTitle()+"\t");
+			}
+			System.out.println("---------------------------------------------------------------------");
+			
+			while(true) {
+				System.out.print("이름 ? ");
+				name = br.readLine();
+				
+				if(valchk.isKorean(name)==false) {
+					System.out.println("한글 입력 가능합니다. 다시 입력해주세요. \n");
+				} else {
+					dto.setApName(name);
+					break;
+				}
+			}
 			
 			System.out.print("생년월일 ? ");
 			dto.setApBirth(br.readLine());
@@ -160,18 +183,46 @@ public class MainUI {
 			System.out.print("접수일자 ? ");
 			dto.setApDate(br.readLine());
 			
-			System.out.print("지원경로 ? ");
-			dto.setApRoute(br.readLine());
+			while(true) {
+				System.out.print("지원경로 ? ");
+				aproute = br.readLine();
+				
+				if(valchk.isKorean(aproute)==false) {
+					System.out.println("한글 입력 가능합니다. 다시 입력해주세요. \n");
+				} else {
+					dto.setApRoute(aproute);
+					break;
+				}
+			}
 			
-			System.out.print("채용공고번호 ? ");
-			dto.setPosNo(br.readLine());
+			while(true) {
+				System.out.print("채옹공고번호 ? ");
+				posno = br.readLine();
+				
+				if(valchk.isNumber(posno)==false) {
+					System.out.println("숫가만 입력 가능합니다. 다시 입력해주세요. \n");
+				} else {
+					dto.setPosNo(posno);
+					break;
+				}
+			}
 			
-			System.out.print("전화번호 ? ");
-			dto.setApTel(br.readLine());
+			while(true) {
+				System.out.print("휴대폰 전화번호 ? ");
+				aptel = br.readLine();
+				
+				if(valchk.isTel(aptel)==false) {
+					System.out.println("입력 형식 오류. 다시 입력해주세요. \n");
+				} else {
+					dto.setApTel(aptel);
+					break;
+				}
+			}
 			
 			dao.insertApplicant(dto);
 					
-			System.out.println("접수가 완료되었습니다");
+			System.out.println(name+"님의 접수가 완료되었습니다 ! ");
+			System.out.println();
 		} catch (Exception e) {
 			System.out.println("접수가 실패했습니다");
 		}
