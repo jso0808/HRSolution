@@ -209,16 +209,16 @@ public class SalaryUI {
 				break;
 			case 1:
 				System.out.print("복리후생비 ? ");
-				paydto.setPaywelfare(br.read());
+				paydto.setPaywelfare(Integer.parseInt(br.readLine()));
 
 				System.out.print("기타 지급 금액 ? ");
-				paydto.setPayextra(br.read());
-
+				
+				paydto.setPayextra(Integer.parseInt(br.readLine()));
 				System.out.print("지급할 상여금 ? ");
-				paydto.setBonus(br.read());
+				paydto.setBonus(Integer.parseInt(br.readLine()));
 
 				System.out.print("지급할 시간 외 수당 ? ");
-				paydto.setPayover(br.read());
+				paydto.setPayover(Integer.parseInt(br.readLine()));
 
 				break;
 			}
@@ -288,8 +288,8 @@ public class SalaryUI {
 
 	// 1-2
 	public void updatePay() {
-		System.out.println("\t\t[급여 정보 수정]");
-		System.out.println("\t\t[4대보험 이외의 공제내역, 추가수당 수정] \n");
+		System.out.println("\n\t\t[급여 정보 수정]");
+		System.out.println("\t[4대보험 이외의 공제내역, 추가수당 수정] \n");
 
 		try {
 			PayDTO paydto = new PayDTO();
@@ -329,22 +329,22 @@ public class SalaryUI {
 			paydto.setPayextra(0);
 
 			System.out.print("복리후생비 ? ");
-			paydto.setPaywelfare(br.read());
+			paydto.setPaywelfare(Integer.parseInt(br.readLine()));
 
 			System.out.print("기타 지급 금액 ? ");
-			paydto.setPayextra(br.read());
+			paydto.setPayextra(Integer.parseInt(br.readLine()));
 
 			System.out.print("지급할 상여금 ? ");
-			paydto.setBonus(br.read());
+			paydto.setBonus(Integer.parseInt(br.readLine()));
 
 			System.out.print("지급할 시간 외 수당 ? ");
-			paydto.setPayover(br.read());
+			paydto.setPayover(Integer.parseInt(br.readLine()));
 
 			System.out.print("갑근세 ? ");
-			paydto.setGapfee(br.read());
+			paydto.setGapfee(Integer.parseInt(br.readLine()));
 
 			System.out.print("주민세 ? ");
-			paydto.setPayextra(br.read());
+			paydto.setPayextra(Integer.parseInt(br.readLine()));
 
 			// [급여번호 형식:사번-월 ex)10001-08 ]
 			paydto.setId(saldto.getId());
@@ -352,9 +352,9 @@ public class SalaryUI {
 
 			paydto.setAccidantinsur(0);
 
-			saldao.insertPay(paydto);
+			saldao.updatePay(paydto);
 
-			System.out.println(saldto.getId() + " 사번의 " + m + "월분 급여 지급 완료 !!! ");
+			System.out.println(saldto.getId() + " 사번의 " + m + "월분 급여 수정 완료 !!! ");
 
 			System.out.println();
 
@@ -373,6 +373,8 @@ public class SalaryUI {
 			String id;
 
 			while(true) {
+				String nowDate = new SimpleDateFormat("yyyy-mm").format(new Date());
+				
 				System.out.print("급여명세서를 출력할 사번 ? ");
 				id = br.readLine();
 				
@@ -509,9 +511,9 @@ public class SalaryUI {
 			System.out.print("메모 ? ");
 			saldto.setMemo(br.readLine());
 
-			saldao.updateSalary(saldto);
+			saldao.insertSal(saldto);
 
-			System.out.println("연봉 정보 수정 완료 !!! ");
+			System.out.println("연봉 협상 완료 !!! ");
 			
 			System.out.println();
 
@@ -541,6 +543,10 @@ public class SalaryUI {
 			
 			List<SalaryDTO> slist = saldao.listSalaryHisEmp(id);
 
+			if(slist == null) {
+				System.out.println("연봉번호가 존재하지 않습니다. ");
+			}
+			
 			System.out.println(id+"님의 연봉 협상 기록");
 			System.out.println("★연봉번호★\t사번\t이름\t협상연봉\t\t연봉시작일\t\t메모");
 			System.out.println("------------------------------------------------------------------------");

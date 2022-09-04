@@ -112,11 +112,7 @@ public class SalaryDAOImpl implements SalaryDAO{
 			// 4대보험 이외의 수당,공제내역 수정
 			// UPDATE Pay SET PayNo = '10001-08' WHERE payno='7';
 			
-			sql = "INSERT INTO Pay(id, payNo, payDate, payNormal,nationpen,medicinsur,longinsur,employeeinsur,"
-					// 1.사번,2.급여번호,3.급여년월일,4.기본급, 5.국민연금,6.건강보험,7.장기요양보험,8.고용보험
-					+ " paymeal,paywelfare,payextra,bonus,payover,gapfee,citizenfee,accidantinsur) "
-					// 9.식대,10.복리후생비,11.기타지급,12.상여금, 13.시간외수당,14.갑근세,15.주민세,16.산재보험
-					+ " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+			// sql = "UPDATE SET pay(paywelfare,payextra,bonus,payover,gapfee,citizenfee) VALUES(?,?,?,?,?,?) WHERE id='10001';";
 			
 			sql = "UPDATE PAY SET paywelfare=?,payextra=?,bonus=?,payover=?,gapfee=?,citizenfee=? WHERE payNo=? ";
 			
@@ -779,7 +775,7 @@ public class SalaryDAOImpl implements SalaryDAO{
 					+ " NVL(citizenfee,0)citizenfee, NVL(accidantinsur,0)accidantinsur"
 					+ " FROM pay WHERE id=? ";
 			*/
-			sql = "SELECT emp_his.id, name, dept, position, paDate, payNo,paydate,paynormal,"
+			sql = "SELECT emp_his.id, name, dept, position, paDate(YYYY-MM)paDate, payNo,paydate,paynormal,"
 					+ " NVL(nationpen,0)nationpen, NVL(medicinsur,0)medicinsur,"
 					+ " NVL(longinsur,0)longinsur,NVL(employeeinsur,0)employeeinsur,NVL(paymeal,0)paymeal,"
 					+ " NVL(paywelfare,0)paywelfare,NVL(payextra,0)payextra, NVL(bonus,0)bonus,"
