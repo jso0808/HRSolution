@@ -33,7 +33,13 @@ private String evReason;
 
 private String idRe;
 private String ReNo;
-
+private String dept;
+public String getDept() {
+	return dept;
+}
+public void setDept(String dept) {
+	this.dept = dept;
+}
 public String getIdRe() {
 	return idRe;
 }

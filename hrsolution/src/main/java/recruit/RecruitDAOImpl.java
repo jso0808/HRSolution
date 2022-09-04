@@ -175,7 +175,7 @@ public  class RecruitDAOImpl implements RecruitDAO{
 	
 		try {
 		
-			
+			/*
 			sql = "SELECT po.posNo, posNum, pos, TO_CHAR(posStart,'YYYY-MM-DD')posStart,TO_CHAR(posEnd,'YYYY-MM-DD')posEnd, posMeans, posPro, deptNo, po.id poid, posTitle, "
 					//+ " ap.apNo, apName, TO_CHAR(apBirth,'YYYY-MM-DD')apBirth, TO_CHAR(apDate,'YYYY-MM-DD')apDate, TO_CHAR(apInterview,'YYYY-MM-DD')apInterview, apRoute,  NVL(apResult1 , 'x')apResult1, NVL(apResult1 , 'x')apResult2, NVL(apResult1 , 'x')apResult3,  NVL(apTel, 'x')apTel," 
 					+ " ap.apNo, apName, TO_CHAR(apBirth,'YYYY-MM-DD')apBirth, TO_CHAR(apDate,'YYYY-MM-DD')apDate, TO_CHAR(apInterview,'YYYY-MM-DD')apInterview, apRoute, NVL(apResult1 , 'x')apResult1,NVL(apResult2 , 'x')apResult2, NVL(apResult3 , 'x')apResult3, NVL(apTel , 'x')apTel, "
@@ -184,14 +184,21 @@ public  class RecruitDAOImpl implements RecruitDAO{
 					+ " LEFT OUTER JOIN Applicant ap ON po.posNo=ap.posNo"
 					+ " LEFT OUTER JOIN Evaluator ev ON ap.apNo=ev.apNo"
 			        + " WHERE INSTR(posTitle, ?)>=1";
-			
+			        */
+		  sql=  "SELECT  posTitle, "		            
+			+ " ap.apNo, NVL(apName , 'x')apName, TO_CHAR(apBirth,'YYYY-MM-DD')apBirth, TO_CHAR(apDate,'YYYY-MM-DD')apDate, TO_CHAR(apInterview,'YYYY-MM-DD')apInterview, NVL(apRoute, 'x')apRoute, NVL(apResult1 , 'x')apResult1,NVL(apResult2 , 'x')apResult2, NVL(apResult3 , 'x')apResult3, NVL(apTel, 'x')apTel, "
+		    + " NVL(evNo , 'x')evNo, NVL(ev.id , 'x')evid, evGrade1, evGrade2, evGrade3, NVL(evReason , 'x')evReason "
+			+ " From Posting po "
+			+ " LEFT OUTER JOIN Applicant ap ON po.posNo=ap.posNo "
+			+ " LEFT OUTER JOIN Evaluator ev ON ap.apNo=ev.apNo "
+            + "WHERE INSTR(postitle, ?)>=1 ";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, posTitle);
 
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
 				dto = new RecruitDTO();
-
+/*
 				dto.setPosNo(rs.getString("posNo"));
 				dto.setPosNum(rs.getInt("posNum"));
 				dto.setPos(rs.getString("pos"));
@@ -201,8 +208,10 @@ public  class RecruitDAOImpl implements RecruitDAO{
 				dto.setPosPro(rs.getString("posPro"));
 				dto.setDeptNo(rs.getString("deptNo"));
 				dto.setId(rs.getString("Poid"));
+				*/
 				dto.setPosTitle(rs.getString("posTitle"));
 				//위에는 채용공고테이블 
+				
 				dto.setApNo(rs.getString("apNo"));
 				dto.setApName(rs.getString("apName"));
 				dto.setApBirth(rs.getString("apBirth"));
@@ -254,20 +263,23 @@ public  class RecruitDAOImpl implements RecruitDAO{
 		String sql;
 		
 		try {
+			sql= "SELECT posNo, dept, posTitle, posNum, NVL(pos,' ')pos,TO_CHAR(posStart,'YYYY-MM-DD')posStart,TO_CHAR(posEnd,'YYYY-MM-DD')posEnd ,posmeans, pospro"
+			+ " FROM posting p "
+			+ "  LEFT OUTER JOIN department d ON d.deptNum=p.deptNo ";
+			 //sql = "SELECT po.posNo, posNum, pos, TO_CHAR(posStart,'YYYY-MM-DD')posStart,TO_CHAR(posEnd,'YYYY-MM-DD')posEnd, posMeans, posPro, deptNo, po.id poid, posTitle, "
+					//+ " ap.apNo, apName, TO_CHAR(apBirth,'YYYY-MM-DD')apBirth, TO_CHAR(apDate,'YYYY-MM-DD')apDate, TO_CHAR(apInterview,'YYYY-MM-DD')apInterview, apRoute, apResult1, apResult2, apResult3, apTel, "
+					//+ " evNo, ev.id evid, evGrade1, evGrade2, evGrade3, evReason"
+					//+ " From Posting po";
+					//+ " LEFT OUTER JOIN Applicant ap ON po.posNo=ap.posNo"
+					//+ " LEFT OUTER JOIN Evaluator ev ON ap.apNo=ev.apNo";
+			 
 			/*
-			 sql = "SELECT po.posNo, posNum, pos, TO_CHAR(posStart,'YYYY-MM-DD')posStart,TO_CHAR(posEnd,'YYYY-MM-DD')posEnd, posMeans, posPro, deptNo, po.id poid, posTitle, "
-					+ " ap.apNo, apName, TO_CHAR(apBirth,'YYYY-MM-DD')apBirth, TO_CHAR(apDate,'YYYY-MM-DD')apDate, TO_CHAR(apInterview,'YYYY-MM-DD')apInterview, apRoute, apResult1, apResult2, apResult3, apTel, "
-					+ " evNo, ev.id evid, evGrade1, evGrade2, evGrade3, evReason"
-					+ " From Posting po"
-					+ " LEFT OUTER JOIN Applicant ap ON po.posNo=ap.posNo"
-					+ " LEFT OUTER JOIN Evaluator ev ON ap.apNo=ev.apNo";
-			 */
 			 sql = "SELECT po.posNo,posNum, pos, TO_CHAR(posStart,'YYYY-MM-DD')posStart,TO_CHAR(posEnd,'YYYY-MM-DD')posEnd, posMeans, posPro, deptNo, po.id poid, posTitle, " 			            
 						+ " ap.apNo, NVL(apName , 'x')apName, TO_CHAR(apBirth,'YYYY-MM-DD')apBirth, TO_CHAR(apDate,'YYYY-MM-DD')apDate, TO_CHAR(apInterview,'YYYY-MM-DD')apInterview, NVL(apRoute, 'x')apRoute, NVL(apResult1 , 'x')apResult1,NVL(apResult2 , 'x')apResult2, NVL(apResult3 , 'x')apResult3, NVL(apTel, 'x')apTel, "
 						+ " NVL(evNo , 'x')evNo, NVL(ev.id , 'x')evid, evGrade1, evGrade2, evGrade3, NVL(evReason , 'x')evReason"
 						+ " From Posting po"
 						+ " LEFT OUTER JOIN Applicant ap ON po.posNo=ap.posNo"
-						+ " LEFT OUTER JOIN Evaluator ev ON ap.apNo=ev.apNo";
+						+ " LEFT OUTER JOIN Evaluator ev ON ap.apNo=ev.apNo";*/
 			
 			pstmt = conn.prepareStatement(sql);
 		
@@ -275,18 +287,30 @@ public  class RecruitDAOImpl implements RecruitDAO{
 
 			while (rs.next()) {
 				RecruitDTO dto = new RecruitDTO();
-
+ 
 				dto.setPosNo(rs.getString("posNo"));
+				dto.setDept(rs.getString("dept"));
+				dto.setPosTitle(rs.getString("posTitle"));
 				dto.setPosNum(rs.getInt("posNum"));
 				dto.setPos(rs.getString("pos"));
 				dto.setPosStart(rs.getString("posStart"));
 				dto.setPosEnd(rs.getString("posEnd"));
 				dto.setPosMeans(rs.getString("posMeans"));
-				dto.setPosPro(rs.getString("posPro"));
+				dto.setPosPro(rs.getString("posPro"));	
+				/*
+				dto.setPosNo(rs.getString("posNo"));
 				dto.setDeptNo(rs.getString("deptNo"));
-				dto.setId(rs.getString("Poid"));
 				dto.setPosTitle(rs.getString("posTitle"));
+				dto.setPosNum(rs.getInt("posNum"));
+				dto.setPos(rs.getString("pos"));
+				dto.setPosStart(rs.getString("posStart"));
+				dto.setPosEnd(rs.getString("posEnd"));
+				dto.setPosMeans(rs.getString("posMeans"));
+				dto.setPosPro(rs.getString("posPro"));		
+				dto.setId(rs.getString("Poid"));
+				*/
 				//위에는 채용공고테이블 
+				/*
 				dto.setApNo(rs.getString("apNo"));
 				dto.setApName(rs.getString("apName"));
 				dto.setApBirth(rs.getString("apBirth"));
@@ -304,7 +328,7 @@ public  class RecruitDAOImpl implements RecruitDAO{
 				dto.setEvGrade2(rs.getInt("EvGrade1"));
 				dto.setEvGrade3(rs.getInt("EvGrade1"));
 				dto.setEvReason(rs.getString("EvReason"));
-				
+				*/
 				list.add(dto);
 			}
 		} catch (SQLException e) {
@@ -343,7 +367,7 @@ public  class RecruitDAOImpl implements RecruitDAO{
 						+ " LEFT OUTER JOIN Applicant ap ON po.posNo=ap.posNo"
 						+ " LEFT OUTER JOIN Evaluator ev ON ap.apNo=ev.apNo"
 			            + " WHERE INSTR(apName, ?)>=1";*/
-			 
+			 /*
 			sql = "SELECT po.posNo, posNum, pos, TO_CHAR(posStart,'YYYY-MM-DD')posStart,TO_CHAR(posEnd,'YYYY-MM-DD')posEnd, posMeans, posPro, deptNo, po.id poid, posTitle, "
 					+ " ap.apNo, apName, TO_CHAR(apBirth,'YYYY-MM-DD')apBirth, TO_CHAR(apDate,'YYYY-MM-DD')apDate, TO_CHAR(apInterview,'YYYY-MM-DD')apInterview, apRoute, NVL(apResult1 , 'x')apResult1,NVL(apResult2 , 'x')apResult2, NVL(apResult3 , 'x')apResult3, NVL(apTel , 'x')apTel, "
 					+ " NVL(evNo , 'x')evNo, NVL(ev.id , 'x')evid, evGrade1,evGrade2, evGrade3, NVL(evReason , 'x')evReason"
@@ -351,7 +375,13 @@ public  class RecruitDAOImpl implements RecruitDAO{
 					+ " LEFT OUTER JOIN Applicant ap ON po.posNo=ap.posNo"
 					+ " LEFT OUTER JOIN Evaluator ev ON ap.apNo=ev.apNo"
 		            + " WHERE INSTR(apName, ?)>=1";
+		            */
 			//NVL(evNo , '1'),ev.id evid
+			sql="SELECT postitle, apNo, apName, TO_CHAR(apBirth,'YYYY-MM-DD')apBirth, TO_CHAR(apdate,'YYYY-MM-DD')apDate, TO_CHAR(apInterview,'YYYY-MM-DD')apInterview, "
+		    + " NVL(apResult1 , 'x')apResult1,NVL(apResult2 , 'x')apResult2, NVL(apResult3 , 'x')apResult3, NVL(apTel , 'x')apTel"
+		    + " FROM applicant a "
+		    + " LEFT OUTER JOIN posting p ON p.posNo = a.posNo "
+		    + " WHERE INSTR(apname, ?)>=1 ";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, apName);
 
@@ -359,7 +389,7 @@ public  class RecruitDAOImpl implements RecruitDAO{
 
 			while (rs.next()) {
 				RecruitDTO dto = new RecruitDTO();
-	           
+	           /*
 				dto.setPosNo(rs.getString("posNo"));
 				dto.setPosNum(rs.getInt("posNum"));
 				dto.setPos(rs.getString("pos"));
@@ -388,7 +418,17 @@ public  class RecruitDAOImpl implements RecruitDAO{
 				dto.setEvGrade2(rs.getInt("EvGrade1"));
 				dto.setEvGrade3(rs.getInt("EvGrade1"));
 				dto.setEvReason(rs.getString("EvReason"));
-				
+				*/
+				dto.setPosTitle(rs.getString("posTitle"));
+				dto.setApNo(rs.getString("apNo"));
+				dto.setApName(rs.getString("apName"));
+				dto.setApBirth(rs.getString("apBirth"));
+				dto.setApDate(rs.getString("apDate"));
+				dto.setApInterview(rs.getString("apInterview"));				
+				dto.setApResult1(rs.getString("apResult1"));
+				dto.setApResult2(rs.getString("apResult2"));
+				dto.setApResult3(rs.getString("apResult2"));
+				dto.setApTel(rs.getString("apTel"));
 				list.add(dto);
 			}
 

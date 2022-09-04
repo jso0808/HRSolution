@@ -233,20 +233,25 @@ public class RecruitUI {
 		System.out.println("전체리스트");
 		
 		List<RecruitDTO>list=dao.listRecruit();
+		System.out.println("---------------------------------------------------------------------------------------------------------------");
+		System.out.println("채용공고번호 \t 부서 \t\t 공고제목 \t\t\t 채용인원 \t 소개 \t\t 채용시작일자 \t\t채용마지막날 \t\t신청방법\t\t\t절차" );
 		for (RecruitDTO dto : list) {
-			System.out.println("---------------------------------------------------------------------------------------------------------------");
-			System.out.println("채용공고번호 \t 채용인원 \t 소개 \t접수시작일 \t접수마감일 \t접수방법 \t전형절차 \t부서코드\t사번_채용담당 \t 채용공고명" );
-			System.out.print(dto.getPosNo()+"\t");
+			
+			
+			System.out.print(dto.getPosNo()+"\t\t");
+			System.out.print(dto.getDept()+"\t\t");
+			System.out.print(dto.getPosTitle()+"\t");		
 			System.out.print(dto.getPosNum()+"\t");
-			System.out.print(dto.getPos()+"\t");
-			System.out.print(dto.getPosStart()+"\t");
-			System.out.print(dto.getPosEnd()+"\t");
-			System.out.print(dto.getPosMeans()+"\t");
-			System.out.print(dto.getPosPro()+"\t");
-			System.out.print(dto.getDeptNo()+"\t");
-			System.out.print(dto.getId()+"\t");
-			System.out.println(dto.getPosTitle());		
-			System.out.println();
+			System.out.print(dto.getPos()+"\t\t");
+			System.out.print(dto.getPosStart()+"\t\t");
+			System.out.print(dto.getPosEnd()+"\t\t");
+			System.out.print(dto.getPosMeans()+"\t\t");
+			System.out.println(dto.getPosPro());
+			
+		
+			
+			
+			/*System.out.println();
 			System.out.println("채용접수번호 \t 이름 \t 생년월일 \t접수일자 \t면접날짜 \t지원경로  \t서류합격여부\t1차합격여부 \t 2차합격여부 \t전화번호" );
 			System.out.print(dto.getApNo()+"\t");
 			System.out.print(dto.getApName()+"\t");
@@ -268,7 +273,7 @@ public class RecruitUI {
 			System.out.print(dto.getEvGrade1()+"\t");
 			System.out.print(dto.getEvGrade2()+"\t");
 			System.out.print(dto.getEvGrade3()+"\t");
-			System.out.println(dto.getEvReason());
+			System.out.println(dto.getEvReason());*/
 			
 		}
 		System.out.println();
@@ -359,6 +364,12 @@ public class RecruitUI {
 		}
 		}
 		
+	private String Apdate(String ApInterview) {
+		if(ApInterview==null) {
+			return "미정";
+		}
+		return ApInterview;
+	}
 	/*
 	private String APpass1(String ApResult1) {
 		if(ApResult1.equals("1")){
@@ -395,13 +406,13 @@ public class RecruitUI {
 		try {
 			System.out.print("검색할 이름 ? ");
 			apName = br.readLine();
-			
+			System.out.println("---------------------------------------------------------------------------------------------------------------");
+				System.out.println("채용공고제목 \t\t 채용접수번호 \t 접수자이름 \t접수자생일 \t접수일자 \t\t면접날짜 \t\t서류합격여부 \t1차합격여부\t2차합격여부 \t 전화번호" );
 			List<RecruitDTO>list=dao.listRecruit(apName);
 			for (RecruitDTO dto : list) {
 				
 				
-				System.out.println("---------------------------------------------------------------------------------------------------------------");
-				System.out.println("채용공고번호 \t 채용인원 \t 소개 \t접수시작일 \t접수마감일 \t접수방법 \t전형절차 \t부서코드\t사번_채용담당 \t 채용공고명" );
+				/*
 				System.out.print(dto.getPosNo()+"\t");
 				System.out.print(dto.getPosNum()+"\t");
 				System.out.print(dto.getPos()+"\t");
@@ -412,29 +423,34 @@ public class RecruitUI {
 				System.out.print(dto.getDeptNo()+"\t");
 				System.out.print(dto.getId()+"\t");
 				System.out.println(dto.getPosTitle());		
-				System.out.println();
-				System.out.println("채용접수번호 \t 이름 \t 생년월일 \t접수일자 \t면접날짜 \t지원경로  \t서류합격여부\t1차합격여부 \t 2차합격여부 \t전화번호" );
-				System.out.print(dto.getApNo()+"\t");
-				System.out.print(dto.getApName()+"\t");
+				*/
+				
+				//System.out.println();
+				//System.out.println("채용접수번호 \t 이름 \t 생년월일 \t접수일자 \t면접날짜 \t지원경로  \t서류합격여부\t1차합격여부 \t 2차합격여부 \t전화번호" );
+				System.out.print(Apdate(dto.getPosTitle())+"\t");	
+				System.out.print(dto.getApNo()+"\t\t");
+				System.out.print(dto.getApName()+"\t\t");
 				System.out.print(dto.getApBirth()+"\t");
 				System.out.print(dto.getApDate()+"\t");
 				System.out.print(dto.getApInterview()+"\t");
-				System.out.print(dto.getApRoute()+"\t");
+				//System.out.print(dto.getApRoute()+"\t");
 				//System.out.print(dto.getApResult1()+"\t");
-				System.out.print(APpass1(dto.getApResult1())+"\t");
+				System.out.print(APpass1(dto.getApResult1())+"\t\t");
 				//System.out.print(dto.getApResult2()+"\t");
-				System.out.print(APpass2(dto.getApResult2())+"\t");
+				System.out.print(APpass2(dto.getApResult2())+"\t\t");
 				//System.out.print(dto.getApResult3()+"\t");
-				System.out.print(APpass3(dto.getApResult3())+"\t");
+				System.out.print(APpass3(dto.getApResult3())+"\t\t");
 				System.out.println(dto.getApTel());			
 				System.out.println();
-				System.out.println("채용평가자번호 \t 평가자사번 \t 서류평가점수 \t1차평가점수 \t2차평가점수 \t평가사유  " );
+				
+				/*System.out.println("채용평가자번호 \t 평가자사번 \t 서류평가점수 \t1차평가점수 \t2차평가점수 \t평가사유  " );
 				System.out.print(dto.getEvNo()+"\t");
 				System.out.print(dto.getId()+"\t");
 				System.out.print(dto.getEvGrade1()+"\t");
 				System.out.print(dto.getEvGrade2()+"\t");
 				System.out.print(dto.getEvGrade3()+"\t");
 				System.out.println(dto.getEvReason());
+				*/
 			}
 			System.out.println();
 		
@@ -452,12 +468,13 @@ public class RecruitUI {
 		try {
 			System.out.print("검색할 공고제목 ? ");
 			posTitle = br.readLine();
-			
+			System.out.println("---------------------------------------------------------------------------------------------------------------");
 			List<RecruitDTO> list=dao.listRecruitTitle(posTitle);
 			for (RecruitDTO dto : list) {
 			
-				System.out.println("---------------------------------------------------------------------------------------------------------------");
-				System.out.println("채용공고번호 \t 채용인원 \t 소개 \t접수시작일 \t접수마감일 \t접수방법 \t전형절차 \t부서코드\t사번_채용담당 \t 채용공고명" );
+				
+				//System.out.println("채용공고번호 \t 채용인원 \t 소개 \t접수시작일 \t접수마감일 \t접수방법 \t전형절차 \t부서코드\t사번_채용담당 \t 채용공고명" );
+				/*
 				System.out.print(dto.getPosNo()+"\t");
 				System.out.print(dto.getPosNum()+"\t");
 				System.out.print(dto.getPos()+"\t");
@@ -467,30 +484,33 @@ public class RecruitUI {
 				System.out.print(dto.getPosPro()+"\t");
 				System.out.print(dto.getDeptNo()+"\t");
 				System.out.print(dto.getId()+"\t");
-				System.out.println(dto.getPosTitle());		
-				System.out.println();
-				System.out.println("채용접수번호 \t 이름 \t 생년월일 \t접수일자 \t면접날짜 \t지원경로  \t서류합격여부\t1차합격여부 \t 2차합격여부 \t전화번호" );
-				System.out.print(dto.getApNo()+"\t");
+				*/
+					
+				//System.out.println();
+				System.out.println("채용공고명 \t\t 채용접수번호 \t 이름 \t 생년월일 \t\t접수일자 \t\t면접날짜 \t\t지원경로  \t서류합격여부\t1차합격여부 \t 2차합격여부 \t전화번호" );
+				System.out.print(dto.getPosTitle()+"\t");	
+				System.out.print(dto.getApNo()+"\t\t");
 				System.out.print(dto.getApName()+"\t");
 				System.out.print(dto.getApBirth()+"\t");
 				System.out.print(dto.getApDate()+"\t");
 				System.out.print(dto.getApInterview()+"\t");
 				System.out.print(dto.getApRoute()+"\t");
 				//System.out.print(dto.getApResult1()+"\t");
-				System.out.print(APpass1(dto.getApResult1())+"\t");
+				System.out.print(APpass1(dto.getApResult1())+"\t\t");
 			    //System.out.print(dto.getApResult2()+"\t");
-				System.out.print(APpass2(dto.getApResult2())+"\t");
+				System.out.print(APpass2(dto.getApResult2())+"\t\t");
 				//System.out.print(dto.getApResult3()+"\t");
-				System.out.print(APpass3(dto.getApResult3())+"\t");
+				System.out.print(APpass3(dto.getApResult3())+"\t\t");
 				System.out.println(dto.getApTel());			
-				System.out.println();
+			
 				System.out.println("채용평가자번호 \t 평가자사번 \t 서류평가점수 \t1차평가점수 \t2차평가점수 \t평가사유  " );
-				System.out.print(dto.getEvNo()+"\t");
-				System.out.print(dto.getId()+"\t");
-				System.out.print(dto.getEvGrade1()+"\t");
-				System.out.print(dto.getEvGrade2()+"\t");
-				System.out.print(dto.getEvGrade3()+"\t");
+				System.out.print(dto.getEvNo()+"\t\t");
+				System.out.print(dto.getId()+"\t\t");
+				System.out.print(dto.getEvGrade1()+"\t\t");
+				System.out.print(dto.getEvGrade2()+"\t\t");
+				System.out.print(dto.getEvGrade3()+"\t\t");
 				System.out.println(dto.getEvReason());
+				System.out.println();
 			/*if(dto==null) {
 				System.out.println("공고가 없습니다.");
 				return;
