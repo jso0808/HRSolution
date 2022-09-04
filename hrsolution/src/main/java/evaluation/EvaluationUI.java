@@ -36,12 +36,12 @@ public class EvaluationUI {
 				}
 				switch (ch) {
 				case 1:
-					readGrade();
+					readGradeUI();
 					break;
 
 				case 2:
 					if (loginEmp.getDeptno().equals("200")) {
-						insertGrade();
+						insertGradeUI();
 					} else {
 						System.out.println("인사부만 접근할 수 있습니다.");
 					}
@@ -49,7 +49,7 @@ public class EvaluationUI {
 
 				case 3:
 					if (loginEmp.getDeptno().equals("200")) {
-						updateGrade();
+						updateGradeUI();
 					} else {
 						System.out.println("인사부만 접근할 수 있습니다.");
 					}
@@ -57,7 +57,7 @@ public class EvaluationUI {
 
 				case 4:
 					if (loginEmp.getDeptno().equals("200")) {
-						deleteGrade();
+						deleteGradeUI();
 					} else {
 						System.out.println("인사부만 접근할 수 있습니다.");
 					}
@@ -131,7 +131,7 @@ public class EvaluationUI {
 		}
 	}
 
-	private void readGrade() {
+	private void readGradeUI() {
 		System.out.println();
 		System.out.println(
 				"------------------------------------------------------------------------------------------------------------------------");
@@ -214,7 +214,7 @@ public class EvaluationUI {
 	}
 
 	// 사원번호, 이름, 년도별 등급
-	private void insertGrade() {
+	private void insertGradeUI() {
 		System.out.println();
 		System.out.println(
 				"------------------------------------------------------------------------------------------------------------------------");
@@ -228,10 +228,10 @@ public class EvaluationUI {
 				try {
 					String year= null;
 					String id =null;
-					System.out.println("등록할 평가연도 ?");
+					System.out.println("등록할? 평가연도 ?");
 					year =br.readLine();
 					if(valchk.isYear(year)==false) {
-						System.out.println("숫자만 입력 가능합니다. 다시 입력해주세요. \n");
+						System.out.println("연도만 입력 가능합니다. 다시 입력해주세요. \n");
 						continue;
 					} else {
 						dto.setYear(Integer.parseInt(year));
@@ -246,7 +246,7 @@ public class EvaluationUI {
 					}
 					break;
 				} catch (NumberFormatException e) {
-					System.out.println("평가연도입력이 잘못되었습니다.");
+					System.out.println("평가연도 입력이 잘못되었습니다.");
 					System.out.println("다시 입력하세요");
 				} catch (Exception e) {
 					System.out.println("일치하는 정보가 없습니다.");
@@ -271,7 +271,7 @@ public class EvaluationUI {
 					break;
 
 				} catch (NumberFormatException e) {
-					System.out.println("평가점수이 잘못되었습니다.");
+					System.out.println("평가점수가 잘못되었습니다.");
 					System.out.println("다시 입력하세요");
 				} catch (Exception e) {
 					System.out.println("잘못된 입력정보입니다.");
@@ -293,7 +293,7 @@ public class EvaluationUI {
 		}
 	}
 
-	private void updateGrade() {
+	private void updateGradeUI() {
 		System.out.println();
 		System.out.println(
 				"------------------------------------------------------------------------------------------------------------------------");
@@ -361,7 +361,7 @@ public class EvaluationUI {
 
 	}
 
-	private void deleteGrade() {
+	private void deleteGradeUI() {
 		System.out.println();
 		System.out.println(
 				"------------------------------------------------------------------------------------------------------------------------");
