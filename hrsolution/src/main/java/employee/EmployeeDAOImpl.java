@@ -230,15 +230,7 @@ try {
 			 + " LEFT OUTER JOIN department d ON d.deptNum = emp_his.deptNo"
 			 + " LEFT OUTER JOIN position p ON p.positionNo = emp_his.positionNo"
 			 + " WHERE e.id=?";
-								
-	/*
-				+ " FROM (Select positionNo,id,deptNo From employee_history)employee e"
-				+ " JOIN employee_history h ON e.id=h.id"
-				+ " JOIN department d ON d.deptNum=h.deptNo"
-				+ " JOIN position p ON p.positionNo = h.positionNo"
-				+ " WHERE e.id=? "
-				+ " ORDER BY e.id DESC";
-		*/
+
 		pstmt = conn.prepareStatement(sql);
 		pstmt.setString(1, id);
 		rs = pstmt.executeQuery();
@@ -256,7 +248,7 @@ try {
 			dto.setFt(rs.getString("Ft"));
 			dto.setHireDate(rs.getString("hireDate"));
 			dto.setLeaveDate(rs.getString("leaveDate"));
-			dto.setLeaveDate(rs.getString("noWorking"));
+			dto.setNoWorking(rs.getString("noworking"));
 			
 			list.add(dto);
 			
@@ -416,8 +408,9 @@ public int updateWorker(EmployeeDTO dto) throws SQLException {
 		pstmt.setString(2,dto.getProTitle());
 		pstmt.setString(3,dto.getProStart());
 		pstmt.setString(4,dto.getProEnd());
-		pstmt.setString(5,dto.getProject());
-		pstmt.setString(6,dto.getWorkNo());
+		pstmt.setString(5,dto.getProRate());
+		pstmt.setString(6,dto.getProject());
+		pstmt.setString(7,dto.getWorkerNo());
 		
 		result = pstmt.executeUpdate();
 		pstmt.close();
@@ -472,7 +465,7 @@ public List<EmployeeDTO> listWork(String id) {
 		
 		try {
 		
-			sql = "SELECT workNo,e.id,name, protitle,prostart,proend,project"
+			sql = "SELECT workerNo,workNo,e.id,name,PROTITLE,prostart,proend,proRate"
 					+ " From Worker w "
 					+  " JOIN employee e ON w.id = e.id "
 					+ " WHERE w.id = ?";
@@ -485,13 +478,14 @@ public List<EmployeeDTO> listWork(String id) {
 				
 			    EmployeeDTO dto = new EmployeeDTO();
 				
+				dto.setWorkerNo(rs.getString("workerNo"));
 				dto.setWorkNo(rs.getString("workNo"));
 				dto.setId(rs.getString("id"));
 				dto.setName(rs.getString("name"));
 				dto.setProTitle(rs.getString("protitle"));
 				dto.setProStart(rs.getString("proStart"));
 				dto.setProEnd(rs.getString("proEnd"));
-				dto.setProject(rs.getString("project"));
+				dto.setProRate(rs.getString("proRate"));
 				
 				list.add(dto);
 			}
@@ -525,7 +519,7 @@ public List<EmployeeDTO> listWork() {
 	
 	try {
 	
-		sql = "SELECT workNo,id,protitle,prostart,proend,project"
+		sql = "SELECT workerNo,id,protitle,prostart,proend,project"
 				+ " From Worker ";
 		
 		pstmt = conn.prepareStatement(sql);
@@ -535,7 +529,7 @@ public List<EmployeeDTO> listWork() {
 			
 		    EmployeeDTO dto = new EmployeeDTO();
 			
-			dto.setWorkNo(rs.getString("workNo"));
+			dto.setWorkerNo(rs.getString("workerNo"));
 			dto.setId(rs.getString("id"));
 			dto.setProTitle(rs.getString("protitle"));
 			dto.setProStart(rs.getString("proStart"));

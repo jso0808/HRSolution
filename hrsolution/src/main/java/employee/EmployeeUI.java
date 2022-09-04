@@ -82,13 +82,12 @@ public class EmployeeUI {
 			
 		    dto.setPwd(emp.substring(9));
 		    
-		    System.out.print("부서코드를 입력하세요");
+		    System.out.print("부서코드를 입력하세요" + "\n(재무부:100/인사부:200/총무부:300/개발부:400/마케팅부:500/기획부:600/유통부:700)");
 			dto.setDept(br.readLine());
 			
-			System.out.print("직급코드를 입력하세요");
+			System.out.print("직급코드를 입력하세요" + "\n(인턴:1/사원:2/대리:3/과장:4/차장:5/부장:6/본부장:7/대표이사:8)");
 			dto.setPos(br.readLine());
-
-			System.out.print("고용형태를 입력하세요");
+			System.out.print("고용형태를 입력하세요" + "\t(정규직/계약직)");
 			dto.setFt(br.readLine());
 
 			System.out.print("입사날짜를 입력하세요");
@@ -97,7 +96,7 @@ public class EmployeeUI {
 			System.out.print("퇴사날짜를 입력하세요");
 			dto.setLeaveDate(br.readLine());
 
-			System.out.print("근무상태를 입력하세요");
+			System.out.print("근무상태를 입력하세요"+ "\t재직중/퇴사");
 			dto.setNoWorking(br.readLine());
 
 			dao.insertEmployee(dto);
@@ -135,10 +134,11 @@ public class EmployeeUI {
 			System.out.print("새로운 전화번호를 입력하세요.");
 			dto.setTel(br.readLine());
 
-			System.out.print("새로운 부서를 입력하세요.");
+			System.out.print("새로운 부서번호를 입력하세요." + "\n(재무부:100/인사부:200/총무부:300/개발부:400/마케팅부:500/기획부:600/유통부:700)");
+			
 			dto.setDept(br.readLine());
 			
-			System.out.print("새로운 직급을 입력하세요.");
+			System.out.print("새로운 직급번호를 입력하세요." + "\n(인턴:1/사원:2/대리:3/과장:4/차장:5/부장:6/본부장:7/대표이사:8)");
 			dto.setPos(br.readLine());
 			
 			System.out.print("변경된 고용형태를 입력하세요.");
@@ -172,7 +172,7 @@ public class EmployeeUI {
 		System.out.println("\n**** 인사 기록 확인 ****");
 		String id;
 		try {
-			System.out.print("검색할 사번을 입력하세요");
+			System.out.print("검색할 사번을 입력하세요\n");
 			id = br.readLine();
 			EmployeeDTO dto = dao.readEmployee(id);
 
@@ -180,15 +180,14 @@ public class EmployeeUI {
 				System.out.println("등록된 사원정보가 없습니다.\n");
 				return;
 			}
-
-			// System.out.println("아이디\t이름t\주민등록번호t\이메일t\전화번호t\부서\t직급\t고용형태\t입사날짜 \t퇴사날짜 \t 근무상태);
-			// System.out.println("--------------------------------------------------");
+			System.out.println("--------------------------------------------------------------------------------------------------------------------");
+			System.out.println("*사원번호*\t 이름\t이메일\t            전화번호 \t\t부서\t직급\t고용형태\t입사날짜\t\t\t퇴사날짜\t근무상태");
+			System.out.println("--------------------------------------------------------------------------------------------------------------------");
 			System.out.print(dto.getId() + "\t");
 			System.out.print(dto.getName() + "\t");
-			System.out.print(dto.getRrn() + "\t");
-			System.out.print(dto.getEmail() + "\t");
-			System.out.print(dto.getTel() + "\t");
-			System.out.print(dto.getDept() + "\t");
+			System.out.print(dto.getEmail() + "   ");
+			System.out.print(dto.getTel()+"   ");
+			System.out.print("   "+dto.getDept() + "\t");
 			System.out.print(dto.getPos() + "\t");
 			System.out.print(dto.getFt() + "\t");
 			System.out.print(dto.getHireDate() + "\t");
@@ -283,7 +282,7 @@ public class EmployeeUI {
 			System.out.print("업무종료일을 입력하세요");
 			dto.setProEnd(br.readLine());
 			
-			System.out.print("업무진행상황을 입력하세요");
+			System.out.print("업무진행상황을 입력하세요 (진행중/완료) ");
 			dto.setProRate(br.readLine());
 
 			System.out.print("*** 담당업무에 대한 설명 **** ");
@@ -305,47 +304,58 @@ public class EmployeeUI {
 
 		try {
 		     String id;
+		     EmployeeDTO dto = new EmployeeDTO();
 			
 			System.out.print("담당사원번호를 입력하세요.");
 			id = br.readLine();
 			
 			
-			/*if (Integer.parseInt(loginEmp.getPositionno()) < 3 && !(loginEmp.getId().equals(dto.getId()))) {
+			if (
+				Integer.parseInt(loginEmp.getPositionno()) < 3 && !(loginEmp.getId().equals(dto.getId()))) {
 				System.out.println("접근 권한이 없습니다. \n");
 				return;
 			}
-			*/
+			
 			
 			List<EmployeeDTO> list = dao.listWork(id);
 			
 			System.out.println(id+"님의 업무 기록 ");
-			System.out.println("★업무번호★\t사번\t이름\t업무내용\t업무시작\t업무종료\t업무진행상황");
-			System.out.println("------------------------------------------------------------------------");
+			System.out.println("★실무자번호★   업무번호\t사번\t 이름\t업무내용\t\t    업무시작일\t\t업무종료일\t\t업무진행상황");
+			System.out.println("------------------------------------------------------------------------------------------------------------------");
 			
 			for (EmployeeDTO empdao : list) {
-				System.out.print("★" + empdao.getWorkNo() + "★\t");
-				System.out.print(empdao.getId() + "\t");
+				System.out.print("  ");
+				System.out.print("★" + empdao.getWorkerNo() + "★\t");
+				System.out.print("    "+empdao.getWorkNo()+"\t");
+				System.out.print("      "+empdao.getId() + "     ");
 				System.out.print(empdao.getName() + "\t");
-				System.out.print(empdao.getProject()+ "\t");
-				System.out.print(empdao.getProStart() + "\t");
+				System.out.print(empdao.getProTitle()+ "\t"+"    ");
+				System.out.print("     "+empdao.getProStart() + "\t");
 				System.out.print(empdao.getProEnd() + "\t");
-				System.out.println(empdao.getProject());
+				System.out.println(empdao.getProRate());
 			}
-			System.out.println("------------------------------------------------------------------------");
+			System.out.println("------------------------------------------------------------------------------------------------------------------");
+
 		
-			EmployeeDTO dto = new EmployeeDTO();
+		//	EmployeeDTO dto = new EmployeeDTO();
 			dto.setId(id);
-			System.out.print("수정할 데이터의 업무번호는 ? ");
+			System.out.print("수정할 업무이력의 실무자번호를 입력하세요. ");
+			dto.setWorkerNo(br.readLine());
+		
+			System.out.print("새로운 업무번호를 입력하세요. ");
 			dto.setWorkNo(br.readLine());
 			
-			System.out.print("새로운 담당업무를 입력하세요. ");
+			System.out.print("새로운 업무내용 입력하세요. ");
 			dto.setProTitle(br.readLine());
+			
 			System.out.print("변경할 업무시작일을 입력하세요. ");
 			dto.setProStart(br.readLine());
 			
 			System.out.print("변경할 업무종료일을 입력하세요. ");
 		    dto.setProEnd(br.readLine());
 			
+		    System.out.print("업무진행상황 (진행중/완료) ");
+		    dto.setProRate(br.readLine());
 			
 			System.out.print("**** 변경된 담당업무에 대한 설명 ****");
 			dto.setProject(br.readLine());
