@@ -12,7 +12,7 @@ public class ValidCheck {
 
 	// 년도 검사
 	public boolean isYear(String str) {
-		return Pattern.matches("^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$", str);
+		return Pattern.matches("^[0-9]{4}$", str);
 	}
 
 	// 한글 검사

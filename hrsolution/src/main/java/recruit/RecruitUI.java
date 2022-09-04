@@ -210,8 +210,8 @@ public class RecruitUI {
 			
 			for (RecruitDTO dto : list) {
 				System.out.println("공고번호\t채용부서\t채용공고명");
-				System.out.print("★"+dto.getPosNo()+"★\t");
-				System.out.print(dto.getDept()+"\t");
+				System.out.print("★"+dto.getPosNo()+"★");
+				System.out.print(dto.getDept());
 				System.out.println(dto.getPosTitle());
 			}
 			
