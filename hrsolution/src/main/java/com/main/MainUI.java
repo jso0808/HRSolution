@@ -4,14 +4,11 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
 import com.util.DBConn;
-import com.main.LoginDTO; 
+
 import attendance.AttendanceUI;
-import employee.EmployeeDAO;
-import employee.EmployeeDAOImpl;
 import employee.EmployeeUI;
 import evaluation.EvaluationUI;
 import management.ManagementUI;
-
 import recruit.RecruitDAO;
 import recruit.RecruitDAOImpl;
 import recruit.RecruitDTO;

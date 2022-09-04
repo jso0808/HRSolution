@@ -6,7 +6,6 @@ import java.util.List;
 
 import com.main.LoginDTO;
 import com.main.ValidCheck;
-import com.util.DBConn;
 
 public class EmployeeUI {
 	private BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -62,7 +61,7 @@ public class EmployeeUI {
 		}
 		try {
 			String tel,emp;
-			String id, name, rrn, email, pareason;
+			String id, name, rrn, email, pareason,dept,pos,ft,sdate,edate,working;
 			
 			EmployeeDTO dto = new EmployeeDTO();
 			
@@ -146,22 +145,76 @@ public class EmployeeUI {
 				}
 			}
 		    
-		    System.out.print("부서코드를 입력하세요" + "\n(재무부:100/인사부:200/총무부:300/개발부:400/마케팅부:500/기획부:600/유통부:700)");
-			dto.setDept(br.readLine());
+			while(true) {
+				System.out.print("부서코드를 입력하세요" + "\n(재무부:100/인사부:200/총무부:300/개발부:400/마케팅부:500/기획부:600/유통부:700)");
+				dept = br.readLine();
+				
+				if(valchk.isDept(dept)==false) {
+					System.out.println("부서코드만 입력 가능합니다. 다시 입력해주세요. \n");
+				} else {
+					dto.setDept(dept);
+					break;
+				}
+			}
 			
-			System.out.print("직급코드를 입력하세요" + "\n(인턴:1/사원:2/대리:3/과장:4/차장:5/부장:6/본부장:7/대표이사:8)");
-			dto.setPos(br.readLine());
-			System.out.print("고용형태를 입력하세요" + "\t(정규직/계약직)");
-			dto.setFt(br.readLine());
-
-			System.out.print("입사날짜를 입력하세요");
-			dto.setHireDate(br.readLine());
-
-			System.out.print("퇴사날짜를 입력하세요");
-			dto.setLeaveDate(br.readLine());
-
-			System.out.print("근무상태를 입력하세요"+ "\t재직중/퇴사");
-			dto.setNoWorking(br.readLine());
+			while(true) {
+				System.out.print("직급코드를 입력하세요" + "\n(인턴:1/사원:2/대리:3/과장:4/차장:5/부장:6/본부장:7/대표이사:8)");
+				pos = br.readLine();
+				
+				if(valchk.isPos(pos)==false) {
+					System.out.println("직급코드만 입력 가능합니다. 다시 입력해주세요. \n");
+				} else {
+					dto.setPos(pos);
+					break;
+				}
+			}
+			
+			while(true) {
+				System.out.print("고용형태를 입력하세요" + "\t(정규직/계약직)");
+				ft = br.readLine();
+				
+				if(valchk.isFt(ft)==false) {
+					System.out.println("고용형태만 입력 가능합니다. 다시 입력해주세요. \n");
+				} else {
+					dto.setFt(ft);
+					break;
+				}
+			}
+			
+			while(true) {
+				System.out.print("입사날짜를 입력하세요");
+				sdate = br.readLine();
+				
+				if(valchk.isDate(sdate)==false) {
+					System.out.println("날짜형식만 입력 가능합니다. 다시 입력해주세요. \n");
+				} else {
+					dto.setHireDate(sdate);
+					break;
+				}
+			}
+			while(true) {
+				System.out.print("퇴사날짜를 입력하세요");
+				edate = br.readLine();
+				
+				if(valchk.isDate(edate)==false) {
+					System.out.println("날짜형식만 입력 가능합니다. 다시 입력해주세요. \n");
+				} else {
+					dto.setLeaveDate(edate);
+					break;
+				}
+			}
+			
+			while(true) {
+				System.out.print("근무상태를 입력하세요"+ "\t재직중/퇴사");
+				working = br.readLine();
+				
+				if(valchk.isWorking(working)==false) {
+					System.out.println("군무형태(재직중/퇴사)만 입력 가능합니다. 다시 입력해주세요. \n");
+				} else {
+					dto.setNoWorking(working);
+					break;
+				}
+			}
 
 			dao.insertEmployee(dto);
 
@@ -175,9 +228,10 @@ public class EmployeeUI {
 
 	protected void update() {
 		System.out.println("\n**** 사원정보 수정 **** ");
-
+		String tel,emp;
+		String id, name, rrn, email,dept,pos,ft,working;
 		try {
-			String id;
+			
 			EmployeeDTO dto = new EmployeeDTO();
 			while(true) {
 				System.out.print("수정할 사원번호를 입력하세요.");
@@ -196,36 +250,110 @@ public class EmployeeUI {
 				return;
 			}
 
-			System.out.print("새로운 이름을 입력하세요.");
-			dto.setName(br.readLine());
-
-			System.out.print("새로운 주민등록번호를 입력하세요.");
-			dto.setRrn(br.readLine());
-
-			System.out.print("새로운 이메일을 입력하세요.");
-			dto.setEmail(br.readLine());
-
-			System.out.print("새로운 전화번호를 입력하세요.");
-			dto.setTel(br.readLine());
-
-			System.out.print("새로운 부서번호를 입력하세요." + "\n(재무부:100/인사부:200/총무부:300/개발부:400/마케팅부:500/기획부:600/유통부:700)");
+			while(true) {
+				System.out.print("이름을 입력하세요 > ");
+				name = br.readLine();
+				
+				if(valchk.isKorean(name)==false) {
+					System.out.println("한글만 입력 가능합니다. 다시 입력해주세요. \n");
+				} else {
+					dto.setName(name);
+					break;
+				}
+			}
 			
-			dto.setDept(br.readLine());
+			while(true) {
+				System.out.print("주민번호를 입력하세요 > ");
+				rrn = br.readLine();
+				
+				if(valchk.isPersonalID(rrn)==false) {
+					System.out.println("주민번호 형식 오류. 다시 입력해주세요. \n");
+				} else {
+					dto.setRrn(rrn);
+					break;
+				}
+			}
 			
-			System.out.print("새로운 직급번호를 입력하세요." + "\n(인턴:1/사원:2/대리:3/과장:4/차장:5/부장:6/본부장:7/대표이사:8)");
-			dto.setPos(br.readLine());
+			while(true) {
+				System.out.print("이메일을 입력하세요 > ");
+				email = br.readLine();
+				
+				if(valchk.isEmail(email)==false) {
+					System.out.println("이메일 형식 오류. 다시 입력해주세요. \n");
+				} else {
+					dto.setEmail(email);
+					break;
+				}
+			}
 			
-			System.out.print("변경된 고용형태를 입력하세요."+ "(계약직/정규직)");
-			dto.setFt(br.readLine());
-
-			System.out.print("변경된 입사날짜를 입력하세요.");
+			while(true) {
+				System.out.print("휴대폰 번호를 입력하세요 (-포함) > ");
+				tel = br.readLine();
+				
+				if(valchk.isTel(tel)==false) {
+					System.out.println("숫자만 입력 가능합니다. 다시 입력해주세요. \n");
+				} else {
+					dto.setTel(tel);
+					emp = tel;
+					dto.setPwd(emp.substring(9));
+					break;
+				}
+			}
+			while(true) {
+				System.out.print("부서코드를 입력하세요" + "\n(재무부:100/인사부:200/총무부:300/개발부:400/마케팅부:500/기획부:600/유통부:700)");
+				dept = br.readLine();
+				
+				if(valchk.isDept(dept)==false) {
+					System.out.println("부서코드만 입력 가능합니다. 다시 입력해주세요. \n");
+				} else {
+					dto.setDept(dept);
+					break;
+				}
+			}
+			
+			while(true) {
+				System.out.print("직급코드를 입력하세요" + "\n(인턴:1/사원:2/대리:3/과장:4/차장:5/부장:6/본부장:7/대표이사:8)");
+				pos = br.readLine();
+				
+				if(valchk.isPos(pos)==false) {
+					System.out.println("직급코드만 입력 가능합니다. 다시 입력해주세요. \n");
+				} else {
+					dto.setPos(pos);
+					break;
+				}
+			}
+			
+			while(true) {
+				System.out.print("고용형태를 입력하세요" + "\t(정규직/계약직)");
+				ft = br.readLine();
+				
+				if(valchk.isFt(ft)==false) {
+					System.out.println("고용형태만 입력 가능합니다. 다시 입력해주세요. \n");
+				} else {
+					dto.setFt(ft);
+					break;
+				}
+			}
+			
+			System.out.print("입사날짜를 입력하세요");
 			dto.setHireDate(br.readLine());
-
-			System.out.print("새로운 퇴사날짜를 입력하세요.");
-			dto.setLeaveDate(br.readLine());
-
-			System.out.print("변경된 근무상태를 입력하세요."+"(재직중/퇴사)");
 			
+		
+			System.out.print("퇴사날짜를 입력하세요");
+			dto.setLeaveDate(br.readLine());
+			
+			
+			while(true) {
+				System.out.print("근무상태를 입력하세요"+ "\t재직중/퇴사");
+				working = br.readLine();
+				
+				if(valchk.isWorking(working)==false) {
+					System.out.println("군무형태(재직중/퇴사)만 입력 가능합니다. 다시 입력해주세요. \n");
+				} else {
+					dto.setNoWorking(working);
+					break;
+				}
+			}
 			dto.setNoWorking(br.readLine());
 
 			int result = dao.updateEmployee(dto);
@@ -295,16 +423,25 @@ public class EmployeeUI {
 		}
 		String id;
 		try {
-			System.out.print("삭제할 사원번호를 입력해주세요.");
-			id = br.readLine();
-			int result = dao.deleteEmployee(id);
+			while(true) {
+				System.out.print("삭제할 사원번호를 입력해주세요.");
+				id = br.readLine();
+				
+				if(valchk.isNumber(id)==false) {
+					System.out.println("숫자만 입력 가능합니다. 다시 입력해주세요. \n");
+				} else {
+					int result = dao.deleteEmployee(id);
+					if (result == 0) {
+						System.out.println("등록된 사원이 아닙니다.");
+					} else {
+						System.out.println("사원정보를 삭제 했습니다.");
+					}
 
-			if (result == 0) {
-				System.out.println("등록된 사원이 아닙니다.");
-			} else {
-				System.out.println("사원정보를 삭제 했습니다.");
+					break;
+				}
 			}
 
+			
 		} catch (Exception e) {
 			System.out.println("사원정보삭제 실패");
 		}
@@ -350,25 +487,53 @@ public class EmployeeUI {
 			}
 
 			EmployeeDTO dto = new EmployeeDTO();
-
-		
-			System.out.print("사원번호를 입력하세요.");
-			dto.setId(br.readLine());
+			String id,workno, prorate;
+			while(true) {
+				System.out.print("사원번호를 입력하세요.");
+				id = br.readLine();
+				
+				if(valchk.isNumber(id)==false) {
+					System.out.println("숫자만 입력 가능합니다. 다시 입력해주세요. \n");
+				} else {
+					dto.setId(id);
+					break;
+				}
+			}
 			
-			System.out.print("업무코드를 입력하세요");
-			dto.setWorkNo(br.readLine());
 
+			while(true) {
+				System.out.print("업무코드를 입력하세요");
+				workno = br.readLine();
+				
+				if(valchk.isNumber(workno)==false) {
+					System.out.println("숫자만 입력 가능합니다. 다시 입력해주세요. \n");
+				} else {
+					dto.setWorkNo(workno);
+					break;
+				}
+			}
 			System.out.print("담당업무 입력하세요");
 			dto.setProTitle(br.readLine());
-
-			System.out.print ("업무시작일을 입력하세요");
+			
+			//유효성변경하기
+			System.out.print("업무시작일을 입력하세요. ");
 			dto.setProStart(br.readLine());
-
-			System.out.print("업무종료일을 입력하세요");
+			
+			
+			System.out.print("업무종료일을 입력하세요. ");
 			dto.setProEnd(br.readLine());
 			
-			System.out.print("업무진행상황을 입력하세요 (진행중/완료) ");
-			dto.setProRate(br.readLine());
+			while(true) {
+				System.out.print("업무진행상황을 입력하세요 (진행중/완료) ");
+				prorate = br.readLine();
+				
+				if(valchk.isRate(prorate)==false) {
+					System.out.println("숫자만 입력 가능합니다. 다시 입력해주세요. \n");
+				} else {
+					dto.setProRate(prorate);
+					break;
+				}
+			}			
 
 			System.out.print("*** 담당업무에 대한 설명 **** ");
 			dto.setProject(br.readLine());
@@ -386,14 +551,23 @@ public class EmployeeUI {
 	protected void updatework() {
 		
 		System.out.println("\n**** 업무이력 수정 **** ");
-
+		String id,workno,workerno, prorate;
 		try {
-		     String id;
 		     EmployeeDTO dto = new EmployeeDTO();
-			
-			System.out.print("담당사원번호를 입력하세요.");
-			id = br.readLine();
-			
+		     
+
+		     while(true) {
+					System.out.print("사원번호를 입력하세요.");
+					id = br.readLine();
+					
+					if(valchk.isNumber(id)==false) {
+						System.out.println("숫자만 입력 가능합니다. 다시 입력해주세요. \n");
+					} else {
+						dto.setId(id);
+						break;
+					}
+				}
+				
 			
 			if (
 				Integer.parseInt(loginEmp.getPositionno()) < 3 && !(loginEmp.getId().equals(dto.getId()))) {
@@ -423,24 +597,55 @@ public class EmployeeUI {
 
 		
 		//	EmployeeDTO dto = new EmployeeDTO();
-			dto.setId(id);
-			System.out.print("수정할 업무이력의 실무자번호를 입력하세요. ");
-			dto.setWorkerNo(br.readLine());
+			
+			while(true) {
+				System.out.print("수정할 업무이력의 실무자번호를 입력하세요. ");
+				workerno = br.readLine();
+				
+				if(valchk.isNumber(workerno)==false) {
+					System.out.println("숫자만 입력 가능합니다. 다시 입력해주세요. \n");
+				} else {
+					dto.setWorkerNo(workerno);
+					break;
+				}
+			}
+			
 		
-			System.out.print("새로운 업무번호를 입력하세요. ");
-			dto.setWorkNo(br.readLine());
+			while(true) {
+				System.out.print("새로운 업무번호를 입력하세요. ");
+				workno = br.readLine();
+				
+				if(valchk.isNumber(workno)==false) {
+					System.out.println("숫자만 입력 가능합니다. 다시 입력해주세요. \n");
+				} else {
+					dto.setWorkNo(workno);
+					break;
+				}
+			}
 			
 			System.out.print("새로운 업무내용 입력하세요. ");
 			dto.setProTitle(br.readLine());
 			
+			//유효성변경하기
 			System.out.print("변경할 업무시작일을 입력하세요. ");
 			dto.setProStart(br.readLine());
 			
-			System.out.print("변경할 업무종료일을 입력하세요. ");
-		    dto.setProEnd(br.readLine());
 			
-		    System.out.print("업무진행상황 (진행중/완료) ");
-		    dto.setProRate(br.readLine());
+			System.out.print("변경할 업무종료일을 입력하세요. ");
+			dto.setProEnd(br.readLine());
+			
+			
+			while(true) {
+				System.out.print("업무진행상황을 입력하세요 (진행중/완료) ");
+				prorate = br.readLine();
+				
+				if(valchk.isRate(prorate)==false) {
+					System.out.println("숫자만 입력 가능합니다. 다시 입력해주세요. \n");
+				} else {
+					dto.setProRate(prorate);
+					break;
+				}
+			}			
 			
 			System.out.print("**** 변경된 담당업무에 대한 설명 ****");
 			dto.setProject(br.readLine());

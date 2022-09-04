@@ -24,7 +24,7 @@ public class ManagementDAOImpl implements ManagementDAO {
 					+ "	JOIN employee_history eh ON eh.id = em.id " + "	JOIN department dp ON dp.deptnum = eh.deptno "
 					+ "	JOIN POSITION pos ON pos.positionno = eh.positionno "
 					+ "	WHERE noWorking ='재직중' AND (eh.id ,pano) IN  (SELECT em.id ,MAX(pano) FROM employee_history GROUP BY employee_history.id)"
-					+ " ORDER BY dept";
+					+ " ORDER BY em.id";
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 

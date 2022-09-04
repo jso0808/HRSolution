@@ -4,13 +4,35 @@ import java.util.regex.*;
 
 // 입력 데이터의 유효성 검사
 public class ValidCheck {
-
+	//부서코드 검사
+	public boolean isDept(String str) {
+		return Pattern.matches("[1-9]00", str);
+	}
+	//직급코드 검사
+	public boolean isPos(String str) {
+		return Pattern.matches("[1-8]", str);
+	}
+	//고용형태 검사
+	public boolean isFt(String str) {
+		return Pattern.matches("정규직|계약직", str);
+	}
+	//날짜형태 검사 ? 어떤형식임?
+	public boolean isDate(String str) {
+		return Pattern.matches(".", str);
+	}
+	//근무형태 검사
+	public boolean isWorking(String str) {
+		return Pattern.matches("재직중|퇴사", str);
+	}
+	//업무진행 검사
+	public boolean isRate(String str) {
+		return Pattern.matches("진행중/완료", str);
+	}
 	// 숫자 검사
 	public boolean isNumber(String str) {
 		return Pattern.matches("^[0-9]*$", str);
 	}
-
-	// 년도 검사
+	//연도 검사
 	public boolean isYear(String str) {
 		return Pattern.matches("^[0-9]{4}$", str);
 	}
