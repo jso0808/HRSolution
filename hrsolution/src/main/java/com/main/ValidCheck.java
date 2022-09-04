@@ -17,9 +17,7 @@ public class ValidCheck {
 		return Pattern.matches("정규직|계약직", str);
 	}
 	//날짜형태 검사 ? 어떤형식임?
-	public boolean isDate(String str) {
-		return Pattern.matches(".", str);
-	}
+	
 	//근무형태 검사
 	public boolean isWorking(String str) {
 		return Pattern.matches("재직중|퇴사", str);

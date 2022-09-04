@@ -181,29 +181,12 @@ public class EmployeeUI {
 				}
 			}
 			
-			while(true) {
-				System.out.print("입사날짜를 입력하세요");
-				sdate = br.readLine();
-				
-				if(valchk.isDate(sdate)==false) {
-					System.out.println("날짜형식만 입력 가능합니다. 다시 입력해주세요. \n");
-				} else {
-					dto.setHireDate(sdate);
-					break;
-				}
-			}
-			while(true) {
-				System.out.print("퇴사날짜를 입력하세요");
-				edate = br.readLine();
-				
-				if(valchk.isDate(edate)==false) {
-					System.out.println("날짜형식만 입력 가능합니다. 다시 입력해주세요. \n");
-				} else {
-					dto.setLeaveDate(edate);
-					break;
-				}
-			}
+			System.out.print("입사날짜를 입력하세요");
+			dto.setHireDate(br.readLine());
 			
+			System.out.print("퇴사날짜를 입력하세요");
+			dto.setLeaveDate(br.readLine());
+		
 			while(true) {
 				System.out.print("근무상태를 입력하세요"+ "\t재직중/퇴사");
 				working = br.readLine();
