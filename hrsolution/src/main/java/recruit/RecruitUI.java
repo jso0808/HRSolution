@@ -2,7 +2,6 @@ package recruit;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.sql.SQLException;
 import java.util.List;
 
 import com.main.LoginDTO;
@@ -204,7 +203,7 @@ public class RecruitUI {
 		int result=0;
 		try {
 			
-			List<RecruitDTO>list=dao.listRecruit();
+			List<RecruitDTO> list = dao.listRecruit();
 			System.out.println();
 			System.out.println("---------------------------------------------------------------------");
 			
@@ -261,7 +260,8 @@ public class RecruitUI {
 		System.out.println("---------------------------------------------------------------------");
 		
 		for (RecruitDTO dto : list) {
-			System.out.println("\t["+dto.getPosTitle()+"]" + "                 채용공고번호 : " + dto.getPosNo() );
+			System.out.println("\t["+dto.getPosTitle()+"]");
+			System.out.println("채용공고번호:  "+dto.getPosNo());
 			System.out.println("채용 부서:    "+dto.getDept());
 			System.out.println("채용 인원:    "+dto.getPosNum());
 			System.out.println("소개: "+dto.getPos());
