@@ -61,7 +61,7 @@ public class EmployeeUI {
 		}
 		try {
 			String tel,emp;
-			String id, name, rrn, email, pareason,dept,pos,ft,sdate,edate,working;
+			String id, name, rrn, email, pareason,dept,pos,ft,working;
 			
 			EmployeeDTO dto = new EmployeeDTO();
 			
@@ -617,18 +617,9 @@ public class EmployeeUI {
 			System.out.print("변경할 업무종료일을 입력하세요. ");
 			dto.setProEnd(br.readLine());
 			
-			
-			while(true) {
-				System.out.print("업무진행상황을 입력하세요 (진행중/완료) ");
-				prorate = br.readLine();
-				
-				if(valchk.isRate(prorate)==false) {
-					System.out.println("숫자만 입력 가능합니다. 다시 입력해주세요. \n");
-				} else {
-					dto.setProRate(prorate);
-					break;
-				}
-			}			
+			System.out.print("업무진행상황을 입력하세요 (진행중/완료) ");
+			prorate = br.readLine();
+			dto.setProRate(prorate);	
 			
 			System.out.print("**** 변경된 담당업무에 대한 설명 ****");
 			dto.setProject(br.readLine());

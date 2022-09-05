@@ -376,7 +376,7 @@ public class SalaryUI {
 			String id;
 
 			while(true) {
-				String nowDate = new SimpleDateFormat("yyyy-mm").format(new Date());
+				// String nowDate = new SimpleDateFormat("yyyy-mm").format(new Date());
 				
 				System.out.print("급여명세서를 출력할 사번 ? ");
 				id = br.readLine();
