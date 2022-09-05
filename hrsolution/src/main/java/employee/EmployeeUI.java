@@ -331,13 +331,12 @@ public class EmployeeUI {
 				working = br.readLine();
 				
 				if(valchk.isWorking(working)==false) {
-					System.out.println("군무형태(재직중/퇴사)만 입력 가능합니다. 다시 입력해주세요. \n");
+					System.out.println("근무형태(재직중/퇴사)만 입력 가능합니다. 다시 입력해주세요. \n");
 				} else {
 					dto.setNoWorking(working);
 					break;
 				}
 			}
-			dto.setNoWorking(br.readLine());
 
 			int result = dao.updateEmployee(dto);
 			

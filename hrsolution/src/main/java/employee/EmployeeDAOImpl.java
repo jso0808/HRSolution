@@ -295,37 +295,102 @@ WHERE pd=1;
 	return dto;
 }
 
-
 @Override
 public int deleteEmployee(String id) throws SQLException {
-	//DELETE FROM 테이블명 WHERE 조건
+
 	int result = 0;
 	PreparedStatement pstmt = null;
 	String sql;
 	try {
-	sql = "DELETE FROM Employee  Where id = ?";
-    pstmt = conn.prepareStatement(sql);
-    pstmt.setString(1,id);
-    
-	result = pstmt.executeUpdate();	
-	
+		conn.setAutoCommit(false);
+		sql = "DELETE FROM Worker  Where id = ?";
+		pstmt = conn.prepareStatement(sql);
+		pstmt.setString(1, id);
+		pstmt.executeUpdate();
+		pstmt.close();
+
+		sql = "DELETE FROM Manager Where id = ?";
+		pstmt = conn.prepareStatement(sql);
+		pstmt.setString(1, id);
+		pstmt.executeUpdate();
+		pstmt.close();
+
+		sql = "DELETE FROM salary Where id = ?";
+		pstmt = conn.prepareStatement(sql);
+		pstmt.setString(1, id);
+		pstmt.executeUpdate();
+		pstmt.close();
+
+		sql = "DELETE FROM attendance  Where id = ?";
+		pstmt = conn.prepareStatement(sql);
+		pstmt.setString(1, id);
+		pstmt.executeUpdate();
+		pstmt.close();
+
+		sql = "DELETE FROM evaluation  Where id = ?";
+		conn.prepareStatement(sql);
+		pstmt.setString(1, id);
+		result = pstmt.executeUpdate();
+		pstmt.close();
+
+		sql = "DELETE FROM employee_history Where id = ?";
+		pstmt = conn.prepareStatement(sql);
+		pstmt.setString(1, id);
+		pstmt.executeUpdate();
+		pstmt.close();
+
+		sql = "DELETE FROM evaluator  Where id = ?";
+		pstmt = conn.prepareStatement(sql);
+		pstmt.setString(1, id);
+		result = pstmt.executeUpdate();
+		pstmt.close();
+
+		sql = "DELETE FROM recruiter Where idRe = ?";
+		pstmt = conn.prepareStatement(sql);
+		pstmt.setString(1, id);
+		pstmt.executeUpdate();
+		pstmt.close();
+
+		sql = "DELETE FROM pay Where id = ?";
+		pstmt = conn.prepareStatement(sql);
+		pstmt.setString(1, id);
+		result = pstmt.executeUpdate();
+		pstmt.close();
+		// pstmt = null;
+
+		sql = "DELETE FROM employee  Where id = ?";
+		pstmt = conn.prepareStatement(sql);
+		pstmt.setString(1, id);
+		pstmt.executeUpdate();
+		pstmt.close();
+
+		result = 1;
+		conn.commit();
+
 	} catch (SQLException e) {
+		try {
+			conn.rollback();
+		} catch (Exception e2) {
+
+		}
+
 		e.printStackTrace();
-		
+
 		throw e;
-		
+
 	} finally {
-		if(pstmt != null) {
+		if (pstmt != null) {
 			try {
 				pstmt.close();
 			} catch (Exception e2) {
 			}
 		}
+
+		conn.setAutoCommit(true);
 	}
-	
+
 	return result;
 }
-
 
 @Override
 
